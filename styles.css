@@ -50,14 +50,16 @@ img{
     object-fit: cover;
 }
 
-#contenedor .fichas:hover img {
-    border: 1px solid red;
-}
-
 #contenedor .fichas:hover {
-    border: 1px solid green;
-
-    /* Cambiar el gradiente de adrian invertido en bg*/
+    color: white;
+    background: linear-gradient(
+    235deg,
+    #000000 0%,
+    #031b03 25%,
+    #0f3d0f 50%,
+    #1b5e20 75%,
+    #39FF14 100%
+);
 }
 
 /* FIN FICHAS */
