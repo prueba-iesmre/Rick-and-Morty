@@ -1,0 +1,14 @@
+.piedepagina{
+  background: linear-gradient(
+    135deg,
+    #000000 0%,
+    #031b03 25%,
+    #0f3d0f 50%,
+    #1b5e20 75%,
+    #39FF14 100%
+  );
+  color: #ffffff;
+  padding: 20px;
+  position: relative;
+  font-weight: bold;
+}
