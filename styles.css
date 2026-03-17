@@ -12,3 +12,55 @@
   position: relative;
   font-weight: bold;
 }
+/* --- RESET BÁSICO --- */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* --- ESTILOS DE LA CABECERA (Versión Estrecha) --- */
+.main-header {
+    text-align: center;
+    /* Reducimos el padding vertical de 3rem a 1.5rem */
+    padding: 1.5rem 1rem; 
+    border-bottom: 2px solid #333;
+}
+
+/* --- EFECTO DE CIELO ESTRELLADO (COMPACTO) --- */
+/* Usamos degradados radiales para crear "puntos" de estrellas */
+.space-bg {
+    background-color: #222; /* El gris oscuro base que pediste */
+    background-image: 
+        radial-gradient(white, rgba(255,255,255,.2) 2px, transparent 3px),
+        radial-gradient(white, rgba(255,255,255,.15) 1px, transparent 2px),
+        radial-gradient(white, rgba(255,255,255,.1) 2px, transparent 3px);
+    background-size: 550px 550px, 350px 350px, 250px 250px; /* Tamaños diferentes para variar */
+    background-position: 0 0, 40px 60px, 130px 270px; /* Posiciones diferentes */
+}
+
+.header-content {
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+/* Estilos para el Título (Compactos) */
+.main-header h1 {
+    font-family: 'Creepster', cursive;
+    font-size: 5rem; /* Un poco más grande para el tema espacial */
+    margin-bottom: 0.8rem;
+    letter-spacing: 2px;
+}
+
+/* Colores del Título (como tu referencia) */
+.t-green { color: #4caf50; }
+.t-and   { color: #38b2ac; } /* Color intermedio para el & */
+.t-cyan  { color: #00bcd4; }
+
+/* Estilos para el Subtítulo */
+.main-header p {
+    color: #a0a0a0; /* Gris claro para el texto */
+    font-size: 1.1rem;
+    font-weight: 300;
+    line-height: 1.6;
+}
