@@ -4,14 +4,23 @@
     <meta charset="utf-8">
     <title>RICK Y MORTY</title>
   </head>
+  <link href="https://fonts.googleapis.com/css2?family=Creepster&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="styles.css">
   <script src="script.js"></script>
   <body>
+  <div id="bienvenida" class="bienvenida">
+    <div class="contenido_bienvenida">
+      <h1>Bienvenido a la página web de Rick and Morty</h1>
+      <h3>¿Como quieres consultar la información?</h3>
+      <button onclick="usarAPI()">Usar API</button>
+      <button onclick="usarBBDD()">Usar BBDD</button>
+  </div>
+</div>
     <header class="main-header space-bg">
         <div class="header-content">
             <h1>
-                <span class="t-green">Rick</span> 
-                <span class="t-and">&</span> 
+                <span class="t-green">Rick</span>
+                <span class="t-and">&</span>
                 <span class="t-cyan">Morty</span>
             </h1>
             <p>Explora personajes, episodios y localizaciones del universo de Rick and Morty</p>
@@ -23,7 +32,8 @@
     </div>
     <script>ficha();</script>
     </main>
-    <footer></footer>
+    <footer>
+    </footer>
     <main></main>
     <footer></footer>
     <main></main>
