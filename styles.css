@@ -114,6 +114,16 @@ img{
 
 /* FIN FICHAS */
 
+/* BOTON PARA CAMBIAR VISTA FICHAS */
+
+#cambiar_ficha img{
+    width: 50px;
+    height: 50px;
+}
+
+.contendor_boton {
+    justify-self: end;
+}
 
 .piedepagina{
 background: linear-gradient(
