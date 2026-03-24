@@ -51,7 +51,7 @@
 
 /* FICHAS */
 
-#contenedor{
+.contenedor{
     display: grid;
     grid-template-columns: repeat(4, 1fr);
     gap: 30px;
@@ -121,9 +121,39 @@ img{
     height: 50px;
 }
 
-.contendor_boton {
+.contenedor_boton {
     justify-self: end;
 }
+
+/* FIN BOTON PARA CAMBIAR VISTA FICHAS */
+
+/* CSS MODO VISTA TOGGLE */
+
+.contenedorLista{
+    display: flex;
+    flex-direction: column;
+}
+
+.contenedorLista .fichas{
+    background-color: red;
+    display: flex;
+}
+
+.contenedorLista .fichas .imagen {
+    display: flex;
+    justify-content: flex-start;
+}
+
+.contenedorLista .info_fichas{
+    justify-content: space-evenly;
+}
+
+.contenedorLista .info_fichas p{
+    margin: 0;
+}
+
+/* FIN CSS MODO VISTA TOGGLE */
+
 
 .piedepagina{
 background: linear-gradient(

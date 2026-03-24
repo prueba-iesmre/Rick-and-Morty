@@ -32,3 +32,11 @@ function usarBBDD() {
 }
 /* FIN SCRIPT PARA SELECCIONAR TIPO DE BUSQUEDA  */
 
+
+
+/* SCRIPT PARA CAMBIAR VISTA DE FICHAS  */
+function cambiarVista() {
+    const contenido = document.getElementById("contenedor");
+    contenido.classList.toggle("contenedorLista");
+}
+/* FIN SCRIPT PARA SELECCIONAR TIPO DE BUSQUEDA  */
