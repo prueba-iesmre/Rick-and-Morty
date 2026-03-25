@@ -1,3 +1,10 @@
+/* SCRIPT PARA CAMBIAR VISTA DE FICHAS  */
+function cambiarVista() {
+    const contenedor = document.getElementById("contenedor");
+    contenedor.classList.toggle("contenedorLista");
+}
+/* FIN SCRIPT PARA SELECCIONAR TIPO DE BUSQUEDA  */
+
 /* SCRIPT PARA SELECCIONAR TIPO DE BUSQUEDA  */
 function usarAPI() {
     document.getElementById("bienvenida").style.display = "none";
@@ -11,14 +18,14 @@ function usarBBDD() {
 /* SCRIPT PARA HACER FICHAS DINAMICAS CON DATOS DE LA API */
 async function ficha() {
 
-  const contenedor = document.getElementById("contenedor");
+const contenedor = document.getElementById("contenedor");
 
-  const response = await fetch("https://rickandmortyapi.com/api/character");
-  const data = await response.json();
+const response = await fetch("https://rickandmortyapi.com/api/character");
+const data = await response.json();
 
-  contenedor.innerHTML = "";
+contenedor.innerHTML = "";
 
-  for (let i = 0; i < 12; i++) {
+for (let i = 0; i < 12; i++) {
 
     const char = data.results[i];
 
@@ -35,7 +42,7 @@ async function ficha() {
             '<p>Origen: ' + char.origin.name + '</p>' +
         '</div>' +
     '</div>';
-  }
+}
 }
 /* FIN SCRIPT FICHAS DINAMICAS CON DATOS DE LA API */
 
