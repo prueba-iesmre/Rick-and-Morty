@@ -12,3 +12,32 @@
   position: relative;
   font-weight: bold;
 }
+
+.buscador-container {
+  text-align: center;
+  margin: 20px;
+}
+
+#searchInput {
+  padding: 10px;
+  width: 300px;
+  border-radius: 10px;
+  border: none;
+  outline: none;
+}
+
+.grid-resultados {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 20px;
+}
+
+.card {
+  background-color: #1b1e20;
+  color: white;
+  padding: 15px;
+  border-radius: 10px;
+  text-align: center;
+  width: 200px;
+}
