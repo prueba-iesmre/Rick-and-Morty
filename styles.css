@@ -182,3 +182,12 @@ background: linear-gradient(
     line-height: 1.6;
 }
 
+.fondo{
+    background-image: url(img/rick-and-morty-portal-wynqhnx4q2jctd50.jpg);
+    background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  margin: 0;
+}
+
+
