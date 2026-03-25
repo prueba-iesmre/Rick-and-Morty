@@ -32,3 +32,55 @@ function usarBBDD() {
 }
 /* FIN SCRIPT PARA SELECCIONAR TIPO DE BUSQUEDA  */
 
+
+/*FILTROS*/
+const dropdown = document.querySelector(".dropdown");
+const btn = document.getElementById("dropdownBtn");
+const items = document.querySelectorAll(".item");
+const search = document.getElementById("search");
+const results = document.getElementById("results");
+
+let tipoActual = "characters";
+
+// Datos de prueba
+const data = {
+  characters: ["Rick", "Morty", "Summer", "Beth", "Jerry"],
+  locations: ["Earth", "Citadel of Ricks", "Gazorpazorp"],
+  episodes: ["Pilot", "Lawnmower Dog", "Pickle Rick"]
+};
+
+// Abrir/cerrar dropdown
+btn.addEventListener("click", () => {
+  dropdown.classList.toggle("active");
+});
+
+// Seleccionar tipo
+items.forEach(item => {
+  item.addEventListener("click", () => {
+    tipoActual = item.dataset.type;
+    btn.innerHTML = item.textContent + " ▼";
+    dropdown.classList.remove("active");
+    mostrarResultados();
+  });
+});
+
+// Buscar
+search.addEventListener("input", mostrarResultados);
+
+// Mostrar resultados
+function mostrarResultados() {
+  const texto = search.value.toLowerCase();
+  results.innerHTML = "";
+
+  const filtrados = data[tipoActual].filter(item =>
+    item.toLowerCase().includes(texto)
+  );
+
+  filtrados.forEach(item => {
+    results.innerHTML += `<div class="card">${item}</div>`;
+  });
+}
+
+// Inicial
+mostrarResultados();
+/*FIN FILTROS*/
