@@ -31,11 +31,11 @@ for (let i = 0; i < 12; i++) {
 
     contenedor.innerHTML +=
     '<div class="fichas">' +
+        '<p class="nombre">' + char.name + '</p>' +
         '<div class="imagen">' +
             '<img src="' + char.image + '">' +
         '</div>' +
         '<div class="info_fichas">' +
-            '<p>Nombre: ' + char.name + '</p>' +
             '<p>Genero: ' + char.gender + '</p>' +
             '<p>Especie: ' + char.species + '</p>' +
             '<p>Estado: ' + char.status + '</p>' +

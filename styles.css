@@ -67,6 +67,7 @@
     background-color: #39ff14;
     border-radius: 15px;
     box-shadow: 0 8px 3px rgba(0,0,0,0.2);
+    margin-bottom: 30px;
 }
 
 .info_fichas{
@@ -114,6 +115,13 @@ img{
 );
 }
 
+.nombre{
+    text-align: center;
+    margin-left: 0px;
+    font-family: 'Creepster', cursive;
+    font-size: 30px;
+}
+
 /* FIN FICHAS */
 
 /* BOTON PARA CAMBIAR VISTA FICHAS */
@@ -144,6 +152,7 @@ img{
 
 .contenedorLista .fichas{
     display: flex;
+    align-items: center;
 }
 
 .contenedorLista .fichas .imagen {
@@ -154,6 +163,8 @@ img{
 .contenedorLista .info_fichas{
     justify-content: center;
 }
+
+
 
 .contenedorLista .info_fichas p{
     margin: 14px;
