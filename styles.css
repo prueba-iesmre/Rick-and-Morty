@@ -26,14 +26,16 @@
 
 .contenido_bienvenida button {
     margin: 10px;
-    padding: 15px;
+    padding: 30px;
     border: none;
     border-radius: 8px;
     background-color: #39ff14;
     color: white;
     font-weight: bold;
-    font-size: 20px;
+    font-size: 25px;
     font-family: 'Creepster', cursive;
+    margin-top: 30px;
+    border: 2px solid #e905fe;
 }
 
 .contenido_bienvenida button:hover {
