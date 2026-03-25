@@ -185,7 +185,7 @@ background: linear-gradient(
 .main-header {
     text-align: center;
     /* Reducimos el padding vertical de 3rem a 1.5rem */
-    padding: 1.5rem 1rem;
+    padding: 0,5rem 1rem;
     border-bottom: 2px solid #333;
 }
 
@@ -210,8 +210,13 @@ background: linear-gradient(
 .main-header h1 {
     font-family: 'Creepster', cursive;
     font-size: 5rem; /* Un poco más grande para el tema espacial */
-    margin-bottom: 0.8rem;
+    margin-bottom: 0.5rem;
     letter-spacing: 2px;
+}
+.header-link {
+    text-decoration: none;
+    color: inherit; /* Hereda el color de los spans internos */
+    display: inline-block; /* Para que el área de click sea sólida */
 }
 
 /* Colores del Título (como tu referencia) */
@@ -219,11 +224,4 @@ background: linear-gradient(
 .t-and   { color: #38b2ac; } /* Color intermedio para el & */
 .t-cyan  { color: #00bcd4; }
 
-/* Estilos para el Subtítulo */
-.main-header p {
-    color: #a0a0a0; /* Gris claro para el texto */
-    font-size: 1.1rem;
-    font-weight: 300;
-    line-height: 1.6;
-}
 
