@@ -116,13 +116,19 @@ img{
 
 /* BOTON PARA CAMBIAR VISTA FICHAS */
 
-#cambiar_ficha img{
-    width: 50px;
-    height: 50px;
+#cambiar_ficha {
+    width: 70px;
+    height: 70px;
 }
 
 .contenedor_boton {
     justify-self: end;
+    margin-top: 10px;
+}
+
+#cambiar_ficha{
+    background-color: #39ff14;
+    border-radius: 8px;
 }
 
 /* FIN BOTON PARA CAMBIAR VISTA FICHAS */
@@ -135,7 +141,6 @@ img{
 }
 
 .contenedorLista .fichas{
-    background-color: red;
     display: flex;
 }
 
@@ -145,11 +150,11 @@ img{
 }
 
 .contenedorLista .info_fichas{
-    justify-content: space-evenly;
+    justify-content: center;
 }
 
 .contenedorLista .info_fichas p{
-    margin: 0;
+    margin: 14px;
 }
 
 /* FIN CSS MODO VISTA TOGGLE */
