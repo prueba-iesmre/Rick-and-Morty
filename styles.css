@@ -30,16 +30,19 @@
     border: none;
     border-radius: 8px;
     background-color: #39ff14;
-    color: white;
+    color: black;
     font-weight: bold;
     font-size: 25px;
     font-family: 'Creepster', cursive;
     margin-top: 30px;
     border: 2px solid #e905fe;
+    color: black;
+    -webkit-text-stroke: 1px white;
 }
 
 .contenido_bienvenida button:hover {
     color: white;
+    -webkit-text-stroke: 1px #e905fe;
     background: linear-gradient(
     150deg,
     #000000 0%,
