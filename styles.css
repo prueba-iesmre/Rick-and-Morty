@@ -353,11 +353,10 @@ input, select {
 }
 
 .contenedor_boton {
-    position: relative; /* Para que el centro sea relativo a esta barra */
+    position: center;
     display: flex;
     align-items: center;
     padding: 20px;
-    background: white; /* Como en tu imagen */
     min-height: 80px;
 }
 
