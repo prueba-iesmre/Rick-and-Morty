@@ -60,6 +60,8 @@
     width: 50%;
     justify-content: center;
     margin: auto;
+    margin-top: 50px;
+    margin-bottom: 50px;
 
 }
 
@@ -152,6 +154,8 @@ img{
 .contenedorLista{
     display: flex;
     flex-direction: column;
+    margin-top: 50px;
+    margin-bottom: 50px;
 }
 
 .contenedorLista .fichas{
@@ -159,6 +163,7 @@ img{
     align-items: center;
     flex-wrap: wrap;
     width: 600px;
+    margin: 0 auto;
 }
 
 .contenedorLista .fichas .imagen {
