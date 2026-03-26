@@ -47,28 +47,35 @@ for (let i = 0; i < 12; i++) {
 /* FIN SCRIPT FICHAS DINAMICAS CON DATOS DE LA API */
 
 /*FILTROS*/
-const searchInput = document.getElementById('searchInput');
-const filterType = document.getElementById('filterType');
+/* ============================= */
+/* BUSCADOR (FILTRO POR NOMBRE) */
+/* ============================= */
+function activarBuscador() {
+    const searchInput = document.getElementById("searchInput");
 
-// Eventos para actualizar la búsqueda en tiempo real
-searchInput.addEventListener('input', fetchData);
-filterType.addEventListener('change', fetchData);
+    searchInput.addEventListener("input", function () {
+        const texto = searchInput.value.toLowerCase();
+        const fichas = document.querySelectorAll(".fichas");
 
-searchInput.addEventListener("input", function () {
-    const texto = searchInput.value.toLowerCase();
-    const fichas = document.querySelectorAll(".fichas");
+        fichas.forEach(ficha => {
+            const nombre = ficha.querySelector(".nombre").textContent.toLowerCase();
 
-    fichas.forEach(ficha => {
-        const nombre = ficha.querySelector(".nombre").textContent.toLowerCase();
-
-        if (nombre.includes(texto)) {
-            ficha.style.display = "block";
-        } else {
-            ficha.style.display = "none";
-        }
+            if (nombre.includes(texto)) {
+                ficha.style.display = "";
+            } else {
+                ficha.style.display = "none";
+            }
+        });
     });
-});
-// Carga inicial
-fetchData();
+}
+
+
+/* ============================= */
+/* INICIO DE LA WEB */
+/* ============================= */
+window.onload = async function () {
+    await ficha();       // primero carga personajes
+    activarBuscador();   // luego activa el buscador
+};
 /*FIN FILTROS*/
 
