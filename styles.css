@@ -180,7 +180,7 @@ img{
 
 /* FIN CSS MODO VISTA TOGGLE */
 
-
+/* FOOTER */
 .piedepagina{
 background: linear-gradient(
     135deg,
@@ -194,7 +194,29 @@ background: linear-gradient(
   padding: 20px;
   position: relative;
   font-weight: bold;
+  text-align: center;
 }
+
+.redes{
+list-style: none;
+padding: 0;
+display: flex;
+gap: 15px;
+justify-content: center;
+margin-top: 10px;
+}
+
+.redes img {
+    width: 30px;
+    height: 30px;
+}
+
+.piedepagina p{
+margin-top: 15px;
+}
+
+/* FIN FOOTER */
+
 /* --- RESET BÁSICO --- */
 * {
     margin: 0;
