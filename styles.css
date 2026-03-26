@@ -26,14 +26,16 @@
 
 .contenido_bienvenida button {
     margin: 10px;
-    padding: 15px;
+    padding: 30px;
     border: none;
     border-radius: 8px;
     background-color: #39ff14;
     color: white;
     font-weight: bold;
-    font-size: 20px;
+    font-size: 25px;
     font-family: 'Creepster', cursive;
+    margin-top: 30px;
+    border: 2px solid #e905fe;
 }
 
 .contenido_bienvenida button:hover {
@@ -112,6 +114,13 @@ img{
 );
 }
 
+.nombre{
+    text-align: center;
+    margin-left: 0px;
+    font-family: 'Creepster', cursive;
+    font-size: 30px;
+}
+
 /* FIN FICHAS */
 
 /* BOTON PARA CAMBIAR VISTA FICHAS */
@@ -122,14 +131,19 @@ img{
 }
 
 .contenedor_boton {
-    justify-self: end;
-    margin-top: 10px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 15px;
+    margin-top: 20px;
 }
 
 #cambiar_ficha{
     background-color: #39ff14;
     border-radius: 8px;
+    margin-left: auto;
 }
+
 
 /* FIN BOTON PARA CAMBIAR VISTA FICHAS */
 
@@ -142,6 +156,9 @@ img{
 
 .contenedorLista .fichas{
     display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    width: 600px;
 }
 
 .contenedorLista .fichas .imagen {
@@ -155,6 +172,10 @@ img{
 
 .contenedorLista .info_fichas p{
     margin: 14px;
+}
+
+.contenedorLista .nombre{
+    width: 100%;
 }
 
 /* FIN CSS MODO VISTA TOGGLE */
@@ -181,42 +202,90 @@ background: linear-gradient(
     box-sizing: border-box;
 }
 
-/* --- ESTILOS DE LA CABECERA (Versión Estrecha) --- */
+/* --- ESTILOS DE LA CABECERA (Versión PRO) --- */
 .main-header {
     text-align: center;
-    /* Reducimos el padding vertical de 3rem a 1.5rem */
-    padding: 1.5rem 1rem;
+    padding: 0.5rem 1rem;
     border-bottom: 2px solid #333;
+
+    background:
+        linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.9)),
+        url('img/portal.jpg') center/cover no-repeat;
+
+    position: relative;
+    overflow: hidden;
 }
 
-/* --- EFECTO DE CIELO ESTRELLADO (COMPACTO) --- */
-/* Usamos degradados radiales para crear "puntos" de estrellas */
-.space-bg {
-    background-color: #222; /* El gris oscuro base que pediste */
-    background-image:
-        radial-gradient(white, rgba(255,255,255,.2) 2px, transparent 3px),
-        radial-gradient(white, rgba(255,255,255,.15) 1px, transparent 2px),
-        radial-gradient(white, rgba(255,255,255,.1) 2px, transparent 3px);
-    background-size: 550px 550px, 350px 350px, 250px 250px; /* Tamaños diferentes para variar */
-    background-position: 0 0, 40px 60px, 130px 270px; /* Posiciones diferentes */
+/* --- EFECTO ESTRELLAS --- */
+.main-header::before {
+    content: "";
+    position: absolute;
+    width: 200%;
+    height: 200%;
+    top: -50%;
+    left: -50%;
+
+    background-image: radial-gradient(white 1px, transparent 1px);
+    background-size: 50px 50px;
+
+    opacity: 0.2;
+    animation: starsMove 60s linear infinite;
 }
 
+@keyframes starsMove {
+    from { transform: translate(0, 0); }
+    to { transform: translate(100px, 100px); }
+}
+
+/* --- CONTENIDO --- */
 .header-content {
     max-width: 800px;
     margin: 0 auto;
+    position: relative;
+    z-index: 1;
 }
 
-/* Estilos para el Título (Compactos) */
+/* --- TÍTULO --- */
 .main-header h1 {
     font-family: 'Creepster', cursive;
-    font-size: 5rem; /* Un poco más grande para el tema espacial */
-    margin-bottom: 0.8rem;
+    font-size: 5rem;
+    margin-bottom: 0.5rem;
     letter-spacing: 2px;
+
+    /* Glow neón */
+    text-shadow:
+        0 0 10px #00ffcc,
+        0 0 20px #39ff14,
+        0 0 40px #00ffcc;
+
+    animation: glow 2s infinite alternate;
 }
 
-/* Colores del Título (como tu referencia) */
+/* --- ANIMACIÓN NEÓN --- */
+@keyframes glow {
+    from {
+        text-shadow:
+            0 0 10px #00ffcc,
+            0 0 20px #39ff14;
+    }
+    to {
+        text-shadow:
+            0 0 20px #00ffcc,
+            0 0 40px #39ff14,
+            0 0 60px #00ffcc;
+    }
+}
+
+/* --- LINK --- */
+.header-link {
+    text-decoration: none;
+    color: inherit;
+    display: inline-block;
+}
+
+/* --- COLORES DEL TÍTULO --- */
 .t-green { color: #4caf50; }
-.t-and   { color: #38b2ac; } /* Color intermedio para el & */
+.t-and   { color: #38b2ac; }
 .t-cyan  { color: #00bcd4; }
 
 /* Estilos para el Subtítulo */
@@ -227,6 +296,7 @@ background: linear-gradient(
     line-height: 1.6;
 }
 
+<<<<<<< HEAD
 .fondo{
     background-image: url(img/rick-and-morty-8k-jt.jpg);
     background-size: cover;
@@ -236,3 +306,87 @@ background: linear-gradient(
 }
 
 
+=======
+/*FILTRS*/
+.search-container {
+    margin-top: 1rem;
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+}
+
+input, select {
+    padding: 12px;
+    border-radius: 8px;
+    border: 2px solid var(--rm-green);
+    background: #39ff14; /*Color fondo*/
+    color: white; /*Color letras filtro*/
+    font-size: 1rem;
+}
+
+.grid-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: 20px;
+    padding: 20px;
+}
+
+.card {
+    background: #39ff14;
+    border-radius: 10px;
+    overflow: hidden;
+    transition: transform 0.2s;
+    border: 1px solid transparent;
+}
+
+.card:hover {
+    transform: translateY(-5px);
+    border-color: var(--rm-green);
+}
+
+.card img {
+    width: 100%;
+    display: block;
+}
+
+.card-info {
+    padding: 15px;
+}
+
+.card-info h3 {
+    margin: 0 0 10px 0;
+    color: var(--rm-yellow);
+}
+
+.card-info p {
+    font-size: 0.9rem;
+    margin: 5px 0;
+}
+
+.contenedor_boton {
+    position: relative; /* Para que el centro sea relativo a esta barra */
+    display: flex;
+    align-items: center;
+    padding: 20px;
+    background: white; /* Como en tu imagen */
+    min-height: 80px;
+}
+
+.search-container {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%); /* El truco para el centrado perfecto */
+    display: flex;
+    gap: 10px;
+}
+
+/* Forzar las 4 columnas */
+.contenedor {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr); /* 4 tarjetas exactas */
+    gap: 20px;
+    width: 90%; /* Ajusta el ancho para que no pegue a los bordes */
+    margin: auto;
+}
+/*FIN FILTROS*/
+>>>>>>> ab41c8f2015e28274cf5357d0a0339f6d8090e58
