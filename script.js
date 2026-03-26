@@ -19,9 +19,9 @@ function usarBBDD() {
 async function ficha() {
 
 const contenedor = document.getElementById("contenedor");
-
-const response = await fetch("https://rickandmortyapi.com/api/character");
+const response = await fetch("https://rickandmortyapi.com/api/character?page={0}");
 const data = await response.json();
+console.log(data);
 
 contenedor.innerHTML = "";
 
@@ -31,11 +31,11 @@ for (let i = 0; i < 12; i++) {
 
     contenedor.innerHTML +=
     '<div class="fichas">' +
+        '<p class="nombre">' + char.name + '</p>' +
         '<div class="imagen">' +
             '<img src="' + char.image + '">' +
         '</div>' +
         '<div class="info_fichas">' +
-            '<p>Nombre: ' + char.name + '</p>' +
             '<p>Genero: ' + char.gender + '</p>' +
             '<p>Especie: ' + char.species + '</p>' +
             '<p>Estado: ' + char.status + '</p>' +

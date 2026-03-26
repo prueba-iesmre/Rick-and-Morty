@@ -26,14 +26,16 @@
 
 .contenido_bienvenida button {
     margin: 10px;
-    padding: 15px;
+    padding: 30px;
     border: none;
     border-radius: 8px;
     background-color: #39ff14;
     color: white;
     font-weight: bold;
-    font-size: 20px;
+    font-size: 25px;
     font-family: 'Creepster', cursive;
+    margin-top: 30px;
+    border: 2px solid #e905fe;
 }
 
 .contenido_bienvenida button:hover {
@@ -112,6 +114,13 @@ img{
 );
 }
 
+.nombre{
+    text-align: center;
+    margin-left: 0px;
+    font-family: 'Creepster', cursive;
+    font-size: 30px;
+}
+
 /* FIN FICHAS */
 
 /* BOTON PARA CAMBIAR VISTA FICHAS */
@@ -131,6 +140,7 @@ img{
     border-radius: 8px;
 }
 
+
 /* FIN BOTON PARA CAMBIAR VISTA FICHAS */
 
 /* CSS MODO VISTA TOGGLE */
@@ -142,6 +152,9 @@ img{
 
 .contenedorLista .fichas{
     display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    width: 600px;
 }
 
 .contenedorLista .fichas .imagen {
@@ -155,6 +168,10 @@ img{
 
 .contenedorLista .info_fichas p{
     margin: 14px;
+}
+
+.contenedorLista .nombre{
+    width: 100%;
 }
 
 /* FIN CSS MODO VISTA TOGGLE */
