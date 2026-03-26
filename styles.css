@@ -51,7 +51,7 @@
 
 /* FICHAS */
 
-#contenedor{
+.contenedor{
     display: grid;
     grid-template-columns: repeat(4, 1fr);
     gap: 30px;
@@ -113,6 +113,51 @@ img{
 }
 
 /* FIN FICHAS */
+
+/* BOTON PARA CAMBIAR VISTA FICHAS */
+
+#cambiar_ficha {
+    width: 70px;
+    height: 70px;
+}
+
+.contenedor_boton {
+    justify-self: end;
+    margin-top: 10px;
+}
+
+#cambiar_ficha{
+    background-color: #39ff14;
+    border-radius: 8px;
+}
+
+/* FIN BOTON PARA CAMBIAR VISTA FICHAS */
+
+/* CSS MODO VISTA TOGGLE */
+
+.contenedorLista{
+    display: flex;
+    flex-direction: column;
+}
+
+.contenedorLista .fichas{
+    display: flex;
+}
+
+.contenedorLista .fichas .imagen {
+    display: flex;
+    justify-content: flex-start;
+}
+
+.contenedorLista .info_fichas{
+    justify-content: center;
+}
+
+.contenedorLista .info_fichas p{
+    margin: 14px;
+}
+
+/* FIN CSS MODO VISTA TOGGLE */
 
 
 .piedepagina{
