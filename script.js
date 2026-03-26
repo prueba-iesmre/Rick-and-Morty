@@ -19,9 +19,9 @@ function usarBBDD() {
 async function ficha() {
 
 const contenedor = document.getElementById("contenedor");
-
-const response = await fetch("https://rickandmortyapi.com/api/character");
+const response = await fetch("https://rickandmortyapi.com/api/character?page={0}");
 const data = await response.json();
+console.log(data);
 
 contenedor.innerHTML = "";
 

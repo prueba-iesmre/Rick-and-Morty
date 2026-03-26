@@ -67,7 +67,6 @@
     background-color: #39ff14;
     border-radius: 15px;
     box-shadow: 0 8px 3px rgba(0,0,0,0.2);
-    margin-bottom: 30px;
 }
 
 .info_fichas{
@@ -141,6 +140,7 @@ img{
     border-radius: 8px;
 }
 
+
 /* FIN BOTON PARA CAMBIAR VISTA FICHAS */
 
 /* CSS MODO VISTA TOGGLE */
@@ -153,6 +153,8 @@ img{
 .contenedorLista .fichas{
     display: flex;
     align-items: center;
+    flex-wrap: wrap;
+    width: 600px;
 }
 
 .contenedorLista .fichas .imagen {
@@ -164,10 +166,12 @@ img{
     justify-content: center;
 }
 
-
-
 .contenedorLista .info_fichas p{
     margin: 14px;
+}
+
+.contenedorLista .nombre{
+    width: 100%;
 }
 
 /* FIN CSS MODO VISTA TOGGLE */
