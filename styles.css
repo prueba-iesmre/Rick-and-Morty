@@ -296,17 +296,6 @@ background: linear-gradient(
     line-height: 1.6;
 }
 
-<<<<<<< HEAD
-.fondo{
-    background-image: url(img/rick-and-morty-8k-jt.jpg);
-    background-size: cover;
-  background-position: center;
-  background-repeat: no-repeat;
-  margin: 0;
-}
-
-
-=======
 /*FILTRS*/
 .search-container {
     margin-top: 1rem;
@@ -389,4 +378,15 @@ input, select {
     margin: auto;
 }
 /*FIN FILTROS*/
->>>>>>> ab41c8f2015e28274cf5357d0a0339f6d8090e58
+
+
+/*Imagen fondo principal*/
+body{
+    background-image: url(img/imagenfondo.jpg);
+    background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-attachment:fixed;
+  margin: 0;
+  height: 100vh;
+}
