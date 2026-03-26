@@ -357,7 +357,6 @@ input, select {
     display: flex;
     align-items: center;
     padding: 20px;
-    background: white; /* Como en tu imagen */
     min-height: 80px;
 }
 
@@ -367,15 +366,6 @@ input, select {
     transform: translateX(-50%); /* El truco para el centrado perfecto */
     display: flex;
     gap: 10px;
-}
-
-/* Forzar las 4 columnas */
-.contenedor {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr); /* 4 tarjetas exactas */
-    gap: 20px;
-    width: 90%; /* Ajusta el ancho para que no pegue a los bordes */
-    margin: auto;
 }
 /*FIN FILTROS*/
 
