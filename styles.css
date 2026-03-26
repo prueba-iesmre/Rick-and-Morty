@@ -190,6 +190,24 @@ img{
 
 /* FIN CSS MODO VISTA TOGGLE */
 
+/* BOTONES PAGINACION */
+    .botonesPaginacion{
+        display: flex;
+        justify-content: center;
+        gap: 30px;
+        margin-bottom: 30px;
+    }
+
+    .btn-icono{
+        background-color: black;
+        fill: #00bcd4;
+        -webkit-text-stroke: 1px ;
+        stroke: #39ff14;
+
+    }
+/* FIN BOTONES PAGINACION */
+
+
 /* FOOTER */
 .piedepagina{
     border-top: 2px solid #333;
