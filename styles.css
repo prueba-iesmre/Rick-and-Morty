@@ -245,7 +245,7 @@ margin-top: 15px;
     overflow: hidden;
 }
 
-/* --- EFECTO ESTRELLAS --- */
+/* --- EFECTO ESTRELLAS -- */
 .main-header::before {
     content: "";
     position: absolute;
