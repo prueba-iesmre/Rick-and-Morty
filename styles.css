@@ -192,14 +192,11 @@ img{
 
 /* FOOTER */
 .piedepagina{
-background: linear-gradient(
-    135deg,
-    #000000 0%,
-    #031b03 25%,
-    #0f3d0f 50%,
-    #1b5e20 75%,
-    #39FF14 100%
-);
+    border-top: 2px solid #333;
+
+    background:
+        linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.9)),
+        url('img/portal.jpg') center/cover no-repeat;
   color: #ffffff;
   padding: 20px;
   position: relative;
