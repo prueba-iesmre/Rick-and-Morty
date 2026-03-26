@@ -287,3 +287,94 @@ background: linear-gradient(
 .t-green { color: #4caf50; }
 .t-and   { color: #38b2ac; }
 .t-cyan  { color: #00bcd4; }
+
+/* Estilos para el Subtítulo */
+.main-header p {
+    color: #a0a0a0; /* Gris claro para el texto */
+    font-size: 1.1rem;
+    font-weight: 300;
+    line-height: 1.6;
+}
+
+/*FILTRS*/
+.search-container {
+    margin-top: 1rem;
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+}
+
+input, select {
+    padding: 12px;
+    border-radius: 8px;
+    border: 2px solid var(--rm-green);
+    background: #39ff14; /*Color fondo*/
+    color: white; /*Color letras filtro*/
+    font-size: 1rem;
+}
+
+.grid-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: 20px;
+    padding: 20px;
+}
+
+.card {
+    background: #39ff14;
+    border-radius: 10px;
+    overflow: hidden;
+    transition: transform 0.2s;
+    border: 1px solid transparent;
+}
+
+.card:hover {
+    transform: translateY(-5px);
+    border-color: var(--rm-green);
+}
+
+.card img {
+    width: 100%;
+    display: block;
+}
+
+.card-info {
+    padding: 15px;
+}
+
+.card-info h3 {
+    margin: 0 0 10px 0;
+    color: var(--rm-yellow);
+}
+
+.card-info p {
+    font-size: 0.9rem;
+    margin: 5px 0;
+}
+
+.contenedor_boton {
+    position: relative; /* Para que el centro sea relativo a esta barra */
+    display: flex;
+    align-items: center;
+    padding: 20px;
+    background: white; /* Como en tu imagen */
+    min-height: 80px;
+}
+
+.search-container {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%); /* El truco para el centrado perfecto */
+    display: flex;
+    gap: 10px;
+}
+
+/* Forzar las 4 columnas */
+.contenedor {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr); /* 4 tarjetas exactas */
+    gap: 20px;
+    width: 90%; /* Ajusta el ancho para que no pegue a los bordes */
+    margin: auto;
+}
+/*FIN FILTROS*/
