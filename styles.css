@@ -131,13 +131,17 @@ img{
 }
 
 .contenedor_boton {
-    justify-self: end;
-    margin-top: 10px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 15px;
+    margin-top: 20px;
 }
 
 #cambiar_ficha{
     background-color: #39ff14;
     border-radius: 8px;
+    margin-left: auto;
 }
 
 
@@ -204,7 +208,7 @@ background: linear-gradient(
     padding: 0.5rem 1rem;
     border-bottom: 2px solid #333;
 
-    background: 
+    background:
         linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.9)),
         url('img/portal.jpg') center/cover no-repeat;
 
@@ -220,10 +224,10 @@ background: linear-gradient(
     height: 200%;
     top: -50%;
     left: -50%;
-    
+
     background-image: radial-gradient(white 1px, transparent 1px);
     background-size: 50px 50px;
-    
+
     opacity: 0.2;
     animation: starsMove 60s linear infinite;
 }
