@@ -368,14 +368,6 @@ input, select {
     gap: 10px;
 }
 
-/* Forzar las 4 columnas */
-.contenedor {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr); /* 4 tarjetas exactas */
-    gap: 20px;
-    width: 90%; /* Ajusta el ancho para que no pegue a los bordes */
-    margin: auto;
-}
 /*FIN FILTROS*/
 
 
