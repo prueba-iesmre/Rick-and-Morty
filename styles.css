@@ -133,14 +133,14 @@ img{
 /* BOTON PARA CAMBIAR VISTA FICHAS */
 
 #cambiar_ficha {
-    width: 70px;
-    height: 70px;
+    width: 45px;
+    height: 45px;
 }
 
 .contenedor_boton {
     display: flex;
     justify-content: center;
-    align-items: center;
+    align-items: self-end;
     gap: 15px;
     margin-top: 20px;
 }
@@ -325,7 +325,15 @@ margin-top: 15px;
     line-height: 1.6;
 }
 
-/*FILTRS*/
+/* DROPDOWN */
+.contenedor-dropdown{
+    margin-top: 1rem;
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+}
+
+/*FILTROS*/
 .search-container {
     margin-top: 1rem;
     display: flex;
@@ -381,13 +389,14 @@ input, select {
     margin: 5px 0;
 }
 
-.contenedor_boton {
-    position: relative; /* Para que el centro sea relativo a esta barra */
+/*.contenedor_boton {
+    position: relative;
     display: flex;
-    align-items: center;
+    align-items: flex-end;
     padding: 20px;
     min-height: 80px;
-}
+}*/
+
 
 .search-container {
     position: absolute;
