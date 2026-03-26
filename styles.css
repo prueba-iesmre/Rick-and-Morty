@@ -208,14 +208,14 @@ img{
 list-style: none;
 padding: 0;
 display: flex;
-gap: 15px;
+gap: 50px;
 justify-content: center;
 margin-top: 10px;
 }
 
 .redes img {
-    width: 30px;
-    height: 30px;
+    width: 40px;
+    height: 40px;
 }
 
 .piedepagina p{
