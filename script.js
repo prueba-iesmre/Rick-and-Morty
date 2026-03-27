@@ -1,9 +1,26 @@
-
+/* SCRIPT PARA SELECCIONAR TIPO DE BUSQUEDA  */
 function cambiarVista() {
     const contenedor = document.getElementById("contenedor");
     contenedor.classList.toggle("contenedorLista");
 }
 /* FIN SCRIPT PARA SELECCIONAR TIPO DE BUSQUEDA  */
+
+/* SCRIPT PARA CAMBIAR DE PAGINA  */
+var numeroPagina = 1;
+function paginaSiguiente() {
+    numeroPagina ++
+    ficha();
+console.log("pagina siguiente")
+}
+
+function paginaAnterior(){
+console.log("pagina anterior")
+    if (numeroPagina > 1) {
+        numeroPagina--;
+        ficha();
+    }
+}
+/* FIN SCRIPT PARA CAMBIAR DE PAGINA  */
 
 /* SCRIPT PARA SELECCIONAR TIPO DE BUSQUEDA  */
 function usarAPI() {
@@ -19,7 +36,7 @@ function usarBBDD() {
 async function ficha() {
 
 const contenedor = document.getElementById("contenedor");
-const response = await fetch("https://rickandmortyapi.com/api/character?page={0}");
+const response = await fetch(`https://rickandmortyapi.com/api/character?page=${numeroPagina}`);
 const data = await response.json();
 console.log(data);
 
