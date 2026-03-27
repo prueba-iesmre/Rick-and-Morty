@@ -1,56 +1,107 @@
 <!DOCTYPE html>
 <html lang="es">
-  <head>
-    <meta charset="utf-8">
-    <title>RICK Y MORTY</title>
-  </head>
-  <link href="https://fonts.googleapis.com/css2?family=Creepster&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="styles.css">
-  <script src="script.js"></script>
-  <body>
+
+<head>
+  <meta charset="utf-8">
+  <title>RICK Y MORTY</title>
+</head>
+<link href="https://fonts.googleapis.com/css2?family=Creepster&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+<script src="script.js"></script>
+
+<body>
   <div id="bienvenida" class="bienvenida">
     <div class="contenido_bienvenida">
       <h1>Bienvenido a la página web de Rick and Morty</h1>
       <h3>¿Como quieres consultar la información?</h3>
       <button onclick="usarAPI()">Usar API</button>
       <button onclick="usarBBDD()">Usar BBDD</button>
+    </div>
   </div>
-</div>
-    <header class="main-header space-bg">
-        <div class="header-content">
-            <h1>
-                <span class="t-green">Rick</span>
-                <span class="t-and">&</span>
-                <span class="t-cyan">Morty</span>
-            </h1>
-            <p>Explora personajes, episodios y localizaciones del universo de Rick and Morty</p>
+  <header class="main-header space-bg">
+    <div class="header-content">
+      <h1>
+        <span class="t-green">Rick</span>
+        <span class="t-and">&</span>
+        <span class="t-cyan">Morty</span>
+      </h1>
+      <p>Explora personajes, episodios y localizaciones del universo de Rick and Morty</p>
+    </div>
+    <form action="" method="post">
+      <fieldset class="opcionesPersonajes">
+        <legend>Opciones de Personajes</legend>
+        <div>
+          <label for="estado">Estado:</label>
+          <div id="estado" class="estado"></div>
         </div>
-    </header>
-    <header></header>
-    <main>
-      <div class="contenedor_boton">
-        <button id="cambiar_ficha" onclick="cambiarVista()">
-  <svg class="icono" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16">
-    <path d="M3 1H1V3H3V1Z"/>
-    <path d="M3 5H1V7H3V5Z"/>
-    <path d="M1 9H3V11H1V9Z"/>
-    <path d="M3 13H1V15H3V13Z"/>
-    <path d="M15 1H5V3H15V1Z"/>
-    <path d="M15 5H5V7H15V5Z"/>
-    <path d="M5 9H15V11H5V9Z"/>
-    <path d="M15 13H5V15H15V13Z"/>
-  </svg>
-</button>
-      </div>
-      <div id="contenedor" class="contenedor">
+        <script>generarEstado();</script>
+        <div>
+          <label for="especie">Especie:</label>
+          <div id="especie" class="especie"></div>
+        </div>
+        <script>generarEspecie();</script>
+        <div>
+          <label for="tipoC">Tipo:</label>
+          <div id="tipoC" class="tipoC"></div>
+        </div>
+        <script>generarTipoC();</script>
+        <div>
+          <label for="genero">Genero:</label>
+          <div id="genero" class="genero"></div>
+        </div>
+        <script>generarGenero();</script>
+      </fieldset>
+      <fieldset class="opcionesUbicaciones">
+        <legend>Opciones de Ubicacion</legend>
+        <div>
+          <label for="tipoL">Tipo:</label>
+          <div id="tipoL" class="tipoL"></div>
+        </div>
+        <script>generarTipoL();</script>
+        <div>
+          <label for="dimension">Dimension:</label>
+          <div id="dimension" class="dimension"></div>
+        </div>
+        <script>generarDimension();</script>
+        <button type="submit">Buscar</button>
+      </fieldset>
+      <fieldset class="opcionesEpisodios">
+        <legend>Opciones de Episodios</legend>
+        <div>
+          <label for="episodio">Episodio:</label>
+          <div id="episodio" class="episodio"></div>
+        </div>
+        <script>generarEpisodio();</script>
+        <button type="submit">Buscar</button>
+      </fieldset>
+    </form>
+  </header>
+  <header></header>
+  <main>
+    <div class="contenedor_boton">
+      <button id="cambiar_ficha" onclick="cambiarVista()">
+        <svg class="icono" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16">
+          <path d="M3 1H1V3H3V1Z" />
+          <path d="M3 5H1V7H3V5Z" />
+          <path d="M1 9H3V11H1V9Z" />
+          <path d="M3 13H1V15H3V13Z" />
+          <path d="M15 1H5V3H15V1Z" />
+          <path d="M15 5H5V7H15V5Z" />
+          <path d="M5 9H15V11H5V9Z" />
+          <path d="M15 13H5V15H15V13Z" />
+        </svg>
+      </button>
+    </div>
+    <div id="contenedor" class="contenedor">
     </div>
     <script>ficha();</script>
-    </main>
-    <footer>
-    </footer>
-    <footer class="piedepagina">
-      <h2>Rick & Morty Web</h2>
-      <p>© 2026 Multiverse Web Page | Inspired by Rick & Morty</p>
-    </footer>
-  </body>
+  </main>
+  <footer>
+  </footer>
+  <footer class="piedepagina">
+    <h2>Rick & Morty Web</h2>
+    <p>© 2026 Multiverse Web Page | Inspired by Rick & Morty</p>
+  </footer>
+</body>
+
 </html>
