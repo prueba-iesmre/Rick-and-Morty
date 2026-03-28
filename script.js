@@ -25,6 +25,7 @@ console.log("pagina anterior")
 /* SCRIPT PARA SELECCIONAR TIPO DE BUSQUEDA  */
 function usarAPI() {
     document.getElementById("bienvenida").style.display = "none";
+    ficha();
 }
 
 function usarBBDD() {
