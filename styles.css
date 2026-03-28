@@ -364,12 +364,16 @@ margin-top: 15px;
     gap: 10px;
 }
 
+.search-container input::placeholder{
+    color: black;
+}
+
 input, select {
     padding: 12px;
     border-radius: 8px;
     border: 2px solid var(--rm-green);
     background: #39ff14; /*Color fondo*/
-    color: white; /*Color letras filtro*/
+    color: black; /*Color letras filtro*/
     font-size: 1rem;
 }
 
