@@ -10,14 +10,18 @@ var numeroPagina = 1;
 function paginaSiguiente() {
     numeroPagina ++
     ficha();
-console.log("pagina siguiente")
+    window.scrollTo({
+        top: 0,
+    });
 }
 
 function paginaAnterior(){
-console.log("pagina anterior")
     if (numeroPagina > 1) {
         numeroPagina--;
         ficha();
+        window.scrollTo({
+        top: 0,
+    });
     }
 }
 /* FIN SCRIPT PARA CAMBIAR DE PAGINA  */
