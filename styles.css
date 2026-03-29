@@ -356,6 +356,34 @@ margin-top: 15px;
     gap: 10px;
 }
 
+
+/* NAVBAR */
+ .contenedor-navbar{
+    background: rgba(57, 255, 20, 0.6);
+    padding: 10px;
+    display: flex;
+    justify-content: center;
+    box-shadow: 0 0 10px rgba(57,255,20,0.4);
+}
+
+.contenedor-navbar a{
+    text-decoration: none;
+    color: black;
+    margin-right: 20px;
+    padding:10px 20px;
+    border: 2px solid #39FF14;
+    border-radius: 20px;
+    box-shadow: 0 0 3px rgba(0,0,0,0.3);
+}
+
+.contenedor-navbar a:hover{
+    background: rgba(57, 255, 20, 1);
+    color: #00FFFF;
+    box-shadow: 0 0 5px black, 0 0 5px black;
+    text-shadow: 0 0 10px #00FFFF, 0 0 20px #00FFFF;
+}
+
+
 /*FILTROS*/
 .search-container {
     margin-top: 1rem;
