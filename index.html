@@ -31,13 +31,14 @@
     <main>
   <div class="contenedor_boton">
       <div class="contenedor-dropdown">
-    <select id="dropdown" onchange="window.location.href=this.value;" >
-      <option value="index.html">Inicio</option>
-      <option value="https://rickandmortyapi.com/">API</option>
-      <option value="Sobre_Nosotros">Sobre Nosotros</option>
-      <option value="Aviso_legal">Aviso Legal</option>
-      <option value="https://docs.google.com/document/d/1Ln-msqPSI5VURYl2V_Jo3vwCTMTNQOKzFCKvynF537g/edit?usp=sharing">Documentacion</option>
-    </select>
+    <select id="dropdown" onchange="abrirNuevaVentana(this.value);">
+    <option value="">-- Selecciona una opción --</option>
+    <option value="index.html">Inicio</option>
+    <option value="https://rickandmortyapi.com/">API</option>
+    <option value="Sobre_Nosotros.html">Sobre Nosotros</option>
+    <option value="Aviso_legal.html">Aviso Legal</option>
+    <option value="https://docs.google.com/document/d/1Ln-msqPSI5VURYl2V_Jo3vwCTMTNQOKzFCKvynF537g/edit?usp=sharing">Documentación</option>
+</select>
   </div>
     <div class="search-container">
         <input type="text" id="searchInput" placeholder="Escribe para buscar...">
