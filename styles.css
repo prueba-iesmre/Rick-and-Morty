@@ -57,7 +57,7 @@
 /* FICHAS */
 
 #contenedor{
-    /* FIX DE PAGINA VACIA ?*/
+    min-height: 484px;
 }
 
 .contenedor{
@@ -133,6 +133,14 @@ img{
     font-size: 30px;
 }
 
+.nombre2{
+    text-align: center;
+    margin-left: 0px;
+    font-family: 'Creepster', cursive;
+    font-size: 30px;
+    -webkit-text-stroke: 1px  black;
+    color: white;
+}
 /* FIN FICHAS */
 
 /* BOTON PARA CAMBIAR VISTA FICHAS */
@@ -213,11 +221,11 @@ img{
     background:
         linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.9)),
         url('img/portal.jpg') center/cover no-repeat;
-  color: #ffffff;
-  padding: 20px;
-  position: relative;
-  font-weight: bold;
-  text-align: center;
+        color: #ffffff;
+        padding: 20px;
+        position: relative;
+        font-weight: bold;
+        text-align: center;
 }
 
 .redes{
@@ -392,11 +400,11 @@ input, select {
 body{
     background-image: url(img/imagenfondo.jpg);
     background-size: cover;
-  background-position: center;
-  background-repeat: no-repeat;
-  background-attachment:fixed;
-  margin: 0;
-  height: 100vh;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-attachment:fixed;
+    margin: 0;
+    height: 100vh;
 }
 
 /* IMÁGENES EN HEADER */

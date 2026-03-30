@@ -96,7 +96,7 @@ async function fetchData() {
             renderCards(data.results, type);
         } else {
             // Si escribes algo que no existe, limpiamos la pantalla
-            contenedor.innerHTML = `<p class="nombre" style="grid-column: 1/-1;">No hay ningún "${query}" en este universo.</p>`;
+            contenedor.innerHTML = `<p class="nombre2" style="grid-column: 1/-1;">No hay ningún "${query}" en este universo.</p>`;
         }
     } catch (error) {
         console.error("Error buscando datos:", error);
@@ -134,8 +134,4 @@ function renderCards(items, type) {
             </div>`;
     });
 }
-
-// Eventos
-searchInput.addEventListener('input', fetchData);
-filterType.addEventListener('change', fetchData);
 /*FIN FILTROS*/
