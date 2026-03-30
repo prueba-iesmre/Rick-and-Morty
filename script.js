@@ -135,3 +135,9 @@ function renderCards(items, type) {
     });
 }
 /*FIN FILTROS*/
+
+function abrirNuevaVentana(url) {
+    if(url) {
+      window.open(url, '_blank'); // abre en nueva pestaña
+    }
+  }
