@@ -139,3 +139,9 @@ function renderCards(items, type) {
 searchInput.addEventListener('input', fetchData);
 filterType.addEventListener('change', fetchData);
 /*FIN FILTROS*/
+
+function abrirNuevaVentana(url) {
+    if(url) {
+      window.open(url, '_blank'); // abre en nueva pestaña
+    }
+  }
