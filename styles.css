@@ -140,14 +140,7 @@ img{
 #cambiar_ficha {
     width: 45px;
     height: 45px;
-}
-
-.contenedor_boton {
-    display: flex;
-    justify-content: center;
-    align-items: self-end;
-    gap: 15px;
-    margin-top: 20px;
+    margin-right: 25%;
 }
 
 #cambiar_ficha{
@@ -354,6 +347,7 @@ margin-top: 15px;
     display: flex;
     justify-content: center;
     gap: 10px;
+    margin-left: 25%;
 }
 
 /*FILTROS*/
@@ -377,53 +371,12 @@ input, select {
     font-size: 1rem;
 }
 
-.grid-container {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-    gap: 20px;
-    padding: 20px;
-}
-
-.card {
-    background: #39ff14;
-    border-radius: 10px;
-    overflow: hidden;
-    transition: transform 0.2s;
-    border: 1px solid transparent;
-}
-
-.card:hover {
-    transform: translateY(-5px);
-    border-color: var(--rm-green);
-}
-
-.card img {
-    width: 100%;
-    display: block;
-}
-
-.card-info {
-    padding: 15px;
-}
-
-.card-info h3 {
-    margin: 0 0 10px 0;
-    color: var(--rm-yellow);
-}
-
-.card-info p {
-    font-size: 0.9rem;
-    margin: 5px 0;
-}
-
-/*.contenedor_boton {
-    position: relative;
+.contenedor_boton {
     display: flex;
-    align-items: flex-end;
-    padding: 20px;
-    min-height: 80px;
-}*/
-
+    justify-content: center;
+    align-items: self-end;
+    gap: 15px;
+}
 
 .search-container {
     position: absolute;
