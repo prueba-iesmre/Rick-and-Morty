@@ -1,0 +1,16 @@
+h1{
+    text-align: center;
+}
+
+body{
+    text-align: justify;
+    margin:67px;
+}
+
+.rgpd{
+    color: black;
+}
+
+.rgpd:hover{
+    color: blue;
+}
