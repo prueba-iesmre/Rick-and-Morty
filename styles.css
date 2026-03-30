@@ -227,3 +227,18 @@ background: linear-gradient(
     line-height: 1.6;
 }
 
+/*Estilos de los Opciones Seleccionables*/
+.opciones{
+  border: 0;
+  padding: 7px;
+}
+
+.tituloOpciones{
+    font-family: 'Creepster', cursive;
+}
+
+.conjuntoOpciones{
+    background-color: #39ff14;
+    border-radius: 10px;
+}
+/*Fin de los Estilos de los Opciones Seleccionables*/

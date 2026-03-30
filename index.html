@@ -27,10 +27,10 @@
       </h1>
       <p>Explora personajes, episodios y localizaciones del universo de Rick and Morty</p>
     </div>
-    <form action="" method="post">
-      <fieldset class="opcionesPersonajes">
-        <legend>Opciones de Personajes</legend>
+    <form action="" method="post" class="conjuntoOpciones">
+      <fieldset class="opciones">
         <div>
+          <legend class="tituloOpciones">Opciones de Personajes</legend>
           <label for="estado">Estado:</label>
           <div id="estado" class="estado"></div>
         </div>
@@ -51,9 +51,9 @@
         </div>
         <script>generarGenero();</script>
       </fieldset>
-      <fieldset class="opcionesUbicaciones">
-        <legend>Opciones de Ubicacion</legend>
+      <fieldset class="opciones">
         <div>
+          <legend class="tituloOpciones">Opciones de Ubicacion</legend>
           <label for="tipoL">Tipo:</label>
           <div id="tipoL" class="tipoL"></div>
         </div>
@@ -65,9 +65,9 @@
         <script>generarDimension();</script>
         <button type="submit">Buscar</button>
       </fieldset>
-      <fieldset class="opcionesEpisodios">
-        <legend>Opciones de Episodios</legend>
+      <fieldset class="opciones">
         <div>
+          <legend class="tituloOpciones">Opciones de Episodios</legend>
           <label for="episodio">Episodio:</label>
           <div id="episodio" class="episodio"></div>
         </div>
