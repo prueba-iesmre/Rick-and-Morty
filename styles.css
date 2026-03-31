@@ -205,12 +205,17 @@ img{
     }
 
     .btn-icono{
-        background-color: black;
-        fill: #00bcd4;
-        -webkit-text-stroke: 1px ;
-        stroke: #39ff14;
-
+        background-color: transparent;
+        border: none;
+        outline: none;
+        cursor: pointer;
     }
+
+    .btn-icono svg {
+        fill: #00bcd4;
+        stroke: #39ff14;
+    }
+
 /* FIN BOTONES PAGINACION */
 
 
