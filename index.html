@@ -17,6 +17,7 @@
 </div>
     <header class="main-header space-bg">
         <div class="header-content">
+            <img src="img/Portal-Nave.png" class="header-img left">
             <h1>
               <a href="index.html" class="header-link">
                 <span class="t-green">Rick</span>
@@ -24,22 +25,36 @@
                 <span class="t-cyan">Morty</span>
                 </a>
             </h1>
+            <img src="img/Pepinillo.png" class="header-img right">
         </div>
     </header>
-    <header></header>
     <main>
   <div class="contenedor_boton">
+    <div class="contenedor-dropdown">
+    <select id="dropdown" onchange="abrirNuevaVentana(this.value);">
+    <option value="">-- Selecciona una opción --</option>
+    <option value="index.html">Inicio</option>
+    <option value="https://rickandmortyapi.com/">API</option>
+    <option value="Sobre_Nosotros.html">Sobre Nosotros</option>
+    <option value="Aviso_legal.html">Aviso Legal</option>
+    <option value="https://docs.google.com/document/d/1Ln-msqPSI5VURYl2V_Jo3vwCTMTNQOKzFCKvynF537g/edit?usp=sharing">Documentación</option>
+</select>
+  </div>
+  <!--<div class="contenedor-navbar">
+    <a href="index.html" target="_blank">Inicio</a>
+    <a href="https://rickandmortyapi.com/" target="_blank">API</a>
+    <a href="Sobre_Nosotros" target="_blank">Sobre Nosotros</a>
+    <a href="Aviso_legal" target="_blank">Aviso Legal</a>
+    <a href="https://docs.google.com/document/d/1Ln-msqPSI5VURYl2V_Jo3vwCTMTNQOKzFCKvynF537g/edit?usp=sharing" target="_blank">Documentacion</a>
+  </div>-->
     <div class="search-container">
         <input type="text" id="searchInput" placeholder="Escribe para buscar...">
         <select id="filterType">
-            <option value="character">Personajes ▾</option>
+            <option value="character">Personajes</option>
             <option value="location">Ubicaciones</option>
             <option value="episode">Episodios</option>
         </select>
     </div>
-
-    <script src="script.js"></script>
-
     <button id="cambiar_ficha" onclick="cambiarVista()">
       <svg class="icono" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16">
       <path d="M3 1H1V3H3V1Z"/>
@@ -56,11 +71,46 @@
       <div id="contenedor" class="contenedor">
     </div>
     <script>ficha();</script>
+
+    <div class="botonesPaginacion">
+      <button class="btn-icono" onclick="paginaAnterior()">
+  <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 16 16">
+    <path d="M8 10L8 14L6 14L0 8L6 2L8 2L8 6L16 6L16 10L8 10Z" fill=""/>
+  </svg>
+</button>
+<button class="btn-icono" onclick="paginaSiguiente()">
+  <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 16 16">
+    <path d="M8 6L8 2L10 2L16 8L10 14L8 14L8 10L0 10L0 6L8 6Z" fill=""/>
+  </svg>
+</button>
+    </div>
+
     </main>
-    <footer>
-    </footer>
+    <script src="script.js"></script>
     <footer class="piedepagina">
-      <h2>Rick & Morty Web</h2>
+      <ul class="redes">
+        <li>
+          <a href="https://github.com/prueba-iesmre/Rick-and-Morty" target="_blank">
+            <img src="img/github.png" alt="Github">
+          </a>
+        </li>
+          <li>
+          <a href="https://www.instagram.com/rickandmorty/" target="_blank">
+            <img src="img/instagram.png" alt="Instagram">
+          </a>
+                </li>
+                <li>
+          <a href="https://rickandmortyapi.com/" target="_blank">
+            <img src="img/api.png" alt="RICK Y MORTY API">
+          </a>
+                </li>
+
+                <li>
+                  <a href="">
+                    <img src="img/about.png" alt="about us">
+                  </a>
+                </li>
+      </ul>
       <p>© 2026 Multiverse Web Page | Inspired by Rick & Morty</p>
     </footer>
   </body>
