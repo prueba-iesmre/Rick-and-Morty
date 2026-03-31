@@ -17,16 +17,64 @@
 </div>
     <header class="main-header space-bg">
         <div class="header-content">
-            <img src="img/Portal-Nave.png" class="header-img left">
+          <img src="img/Portal-Nave.png" class="header-img left">
             <h1>
               <a href="index.html" class="header-link">
                 <span class="t-green">Rick</span>
                 <span class="t-and">&</span>
                 <span class="t-cyan">Morty</span>
-                </a>
+              </a>
             </h1>
             <img src="img/Pepinillo.png" class="header-img right">
         </div>
+            <form action="" method="post" class="conjuntoOpciones">
+      <fieldset class="opciones">
+        <div>
+          <legend class="tituloOpciones">Opciones de Personajes</legend>
+          <label for="estado">Estado:</label>
+          <div id="estado" class="estado"></div>
+        </div>
+        <script>generarEstado();</script>
+        <div>
+          <label for="especie">Especie:</label>
+          <div id="especie" class="especie"></div>
+        </div>
+        <script>generarEspecie();</script>
+        <div>
+          <label for="tipoC">Tipo:</label>
+          <div id="tipoC" class="tipoC"></div>
+        </div>
+        <script>generarTipoC();</script>
+        <div>
+          <label for="genero">Genero:</label>
+          <div id="genero" class="genero"></div>
+        </div>
+        <script>generarGenero();</script>
+      </fieldset>
+      <fieldset class="opciones">
+        <div>
+          <legend class="tituloOpciones">Opciones de Ubicacion</legend>
+          <label for="tipoL">Tipo:</label>
+          <div id="tipoL" class="tipoL"></div>
+        </div>
+        <script>generarTipoL();</script>
+        <div>
+          <label for="dimension">Dimension:</label>
+          <div id="dimension" class="dimension"></div>
+        </div>
+        <script>generarDimension();</script>
+        <button type="submit">Buscar</button>
+      </fieldset>
+      <fieldset class="opciones">
+        <div>
+          <legend class="tituloOpciones">Opciones de Episodios</legend>
+          <label for="episodio">Episodio:</label>
+          <div id="episodio" class="episodio"></div>
+        </div>
+        <script>generarEpisodio();</script>
+        <button type="submit">Buscar</button>
+      </fieldset>
+    </form>
     </header>
     <main>
       <div class="contenedor-navbar">
