@@ -30,16 +30,19 @@
     border: none;
     border-radius: 8px;
     background-color: #39ff14;
-    color: white;
+    color: black;
     font-weight: bold;
     font-size: 25px;
     font-family: 'Creepster', cursive;
     margin-top: 30px;
     border: 2px solid #e905fe;
+    color: black;
+    -webkit-text-stroke: 1px white;
 }
 
 .contenido_bienvenida button:hover {
     color: white;
+    -webkit-text-stroke: 1px #e905fe;
     background: linear-gradient(
     150deg,
     #000000 0%,
@@ -53,6 +56,10 @@
 
 /* FICHAS */
 
+#contenedor{
+    min-height: 484px;
+}
+
 .contenedor{
     display: grid;
     grid-template-columns: repeat(4, 1fr);
@@ -60,8 +67,11 @@
     width: 50%;
     justify-content: center;
     margin: auto;
-
+    margin-top: 50px;
+    margin-bottom: 50px;
 }
+
+
 
 .fichas{
     background-color: #39ff14;
@@ -73,6 +83,8 @@
     display: flex;
     flex-direction: column;
     margin-top: -15px;
+    font-family: 'Inter', sans-serif;
+
 }
 
 p{
@@ -121,21 +133,22 @@ img{
     font-size: 30px;
 }
 
+.nombre2{
+    text-align: center;
+    margin-left: 0px;
+    font-family: 'Creepster', cursive;
+    font-size: 30px;
+    -webkit-text-stroke: 1px  black;
+    color: white;
+}
 /* FIN FICHAS */
 
 /* BOTON PARA CAMBIAR VISTA FICHAS */
 
 #cambiar_ficha {
-    width: 70px;
-    height: 70px;
-}
-
-.contenedor_boton {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    gap: 15px;
-    margin-top: 20px;
+    width: 45px;
+    height: 45px;
+    margin-right: 25%;
 }
 
 #cambiar_ficha{
@@ -152,6 +165,8 @@ img{
 .contenedorLista{
     display: flex;
     flex-direction: column;
+    margin-top: 50px;
+    margin-bottom: 50px;
 }
 
 .contenedorLista .fichas{
@@ -159,6 +174,7 @@ img{
     align-items: center;
     flex-wrap: wrap;
     width: 600px;
+    margin: 0 auto;
 }
 
 .contenedorLista .fichas .imagen {
@@ -180,35 +196,50 @@ img{
 
 /* FIN CSS MODO VISTA TOGGLE */
 
+/* BOTONES PAGINACION */
+    .botonesPaginacion{
+        display: flex;
+        justify-content: center;
+        gap: 30px;
+        margin-bottom: 30px;
+    }
+
+    .btn-icono{
+        background-color: black;
+        fill: #00bcd4;
+        -webkit-text-stroke: 1px ;
+        stroke: #39ff14;
+
+    }
+/* FIN BOTONES PAGINACION */
+
+
 /* FOOTER */
 .piedepagina{
-background: linear-gradient(
-    135deg,
-    #000000 0%,
-    #031b03 25%,
-    #0f3d0f 50%,
-    #1b5e20 75%,
-    #39FF14 100%
-);
-  color: #ffffff;
-  padding: 20px;
-  position: relative;
-  font-weight: bold;
-  text-align: center;
+    border-top: 2px solid #333;
+
+    background:
+        linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.9)),
+        url('img/portal.jpg') center/cover no-repeat;
+        color: #ffffff;
+        padding: 20px;
+        position: relative;
+        font-weight: bold;
+        text-align: center;
 }
 
 .redes{
 list-style: none;
 padding: 0;
 display: flex;
-gap: 15px;
+gap: 50px;
 justify-content: center;
 margin-top: 10px;
 }
 
 .redes img {
-    width: 30px;
-    height: 30px;
+    width: 40px;
+    height: 40px;
 }
 
 .piedepagina p{
@@ -238,7 +269,7 @@ margin-top: 15px;
     overflow: hidden;
 }
 
-/* --- EFECTO ESTRELLAS --- */
+/* --- EFECTO ESTRELLAS -- */
 .main-header::before {
     content: "";
     position: absolute;
@@ -318,7 +349,50 @@ margin-top: 15px;
     line-height: 1.6;
 }
 
-/*FILTRS*/
+/* DROPDOWN */
+.contenedor-dropdown{
+    margin-top: 1rem;
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin-left: 25%;
+}
+
+/* NAVBAR */
+ .contenedor-navbar{
+    background: rgba(8, 254, 0, 0.6);
+    padding: 10px;
+    display: flex;
+    justify-content: center;
+    box-shadow: 0 0 10px rgba(57,255,20,0.4);
+    margin-bottom: 20px;
+}
+
+.contenedor-navbar a{
+    text-decoration: none;
+    color: black;
+    margin-right: 20px;
+    padding:10px 20px;
+    border: 2px solid #39FF14;
+    border-radius: 20px;
+    box-shadow: 0 0 3px rgba(0,0,0,0.3);
+    background-color: #39ff14;
+}
+
+.contenedor-navbar a:hover{
+    color: #00FFFF;
+    border: 1px solid #00FFFF;
+    background: linear-gradient(
+    180deg,
+    #000000 0%,
+    #031b03 25%,
+    #0f3d0f 50%,
+    #1b5e20 75%,
+    #39FF14 100%
+);
+}
+
+/*FILTROS*/
 .search-container {
     margin-top: 1rem;
     display: flex;
@@ -326,60 +400,24 @@ margin-top: 15px;
     gap: 10px;
 }
 
+.search-container input::placeholder{
+    color: black;
+}
+
 input, select {
     padding: 12px;
     border-radius: 8px;
     border: 2px solid var(--rm-green);
     background: #39ff14; /*Color fondo*/
-    color: white; /*Color letras filtro*/
+    color: black; /*Color letras filtro*/
     font-size: 1rem;
 }
 
-.grid-container {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-    gap: 20px;
-    padding: 20px;
-}
-
-.card {
-    background: #39ff14;
-    border-radius: 10px;
-    overflow: hidden;
-    transition: transform 0.2s;
-    border: 1px solid transparent;
-}
-
-.card:hover {
-    transform: translateY(-5px);
-    border-color: var(--rm-green);
-}
-
-.card img {
-    width: 100%;
-    display: block;
-}
-
-.card-info {
-    padding: 15px;
-}
-
-.card-info h3 {
-    margin: 0 0 10px 0;
-    color: var(--rm-yellow);
-}
-
-.card-info p {
-    font-size: 0.9rem;
-    margin: 5px 0;
-}
-
 .contenedor_boton {
-    position: relative; /* Para que el centro sea relativo a esta barra */
     display: flex;
-    align-items: center;
-    padding: 20px;
-    min-height: 80px;
+    justify-content: center;
+    align-items: self-end;
+    gap: 15px;
 }
 
 .search-container {
@@ -396,9 +434,36 @@ input, select {
 body{
     background-image: url(img/imagenfondo.jpg);
     background-size: cover;
-  background-position: center;
-  background-repeat: no-repeat;
-  background-attachment:fixed;
-  margin: 0;
-  height: 100vh;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-attachment:fixed;
+    margin: 0;
+    height: 100%;
+}
+
+/* IMÁGENES EN HEADER */
+.header-img {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 120px; /* ajusta tamaño */
+    height: auto;
+    z-index: 2;
+    pointer-events: none; /* evita problemas al hacer click */
+}
+
+/* IZQUIERDA */
+.header-img.left {
+    left: -50px;
+}
+
+/* DERECHA */
+.header-img.right {
+    right: -50px;
+}
+
+/*terminos y condiciones footer*/
+.termin{
+    color: rgb(232, 232, 232);
+    text-decoration: none;
 }
