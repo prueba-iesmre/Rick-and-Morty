@@ -108,8 +108,11 @@ function renderCards(items, type) {
     contenedor.innerHTML = ""; // <--- ESTO es lo que hace que desaparezcan las fichas viejas
 
     items.forEach(item => {
-        // Imagen por defecto si no es un personaje (Ubicaciones/Episodios)
-        const imagenUrl = item.image ? item.image : 'https://via.placeholder.com/210x240?text=No+Image';
+        // Imagen por defecto de Ubicaciones y Episodios
+        const imagenUrl =
+        type === 'character' ? item.image :
+        type === 'location' ? 'img/ubicacion.jpg' :
+        type === 'episode' ? 'img/episodio.jpg':'';
 
         // Preparamos la info según el tipo
         let infoExtra = "";
