@@ -1,7 +1,7 @@
 public class DbConnect {
     // JDBC URL, usuario y contraseña de la base de datos
-    private static final String JDBC_URL = "jdbc:mysql://localhost:3307/RickAndMorty";
-    private static final String USUARIO = "pr_michael";
+    private static final String JDBC_URL = "jdbc:mysql://localhost:3306/RickAndMorty";
+    private static final String USUARIO = "pr_cristhian";
     private static final String CONTRASEÑA = "1234";
 
     private static DbConnect dbInstance; //Variable para almacenar la unica instancia de la clase
