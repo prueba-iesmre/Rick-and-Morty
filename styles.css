@@ -360,11 +360,12 @@ margin-top: 15px;
 
 /* NAVBAR */
  .contenedor-navbar{
-    background: rgba(57, 255, 20, 0.6);
+    background: rgba(8, 254, 0, 0.6);
     padding: 10px;
     display: flex;
     justify-content: center;
     box-shadow: 0 0 10px rgba(57,255,20,0.4);
+    margin-bottom: 20px;
 }
 
 .contenedor-navbar a{
@@ -375,13 +376,20 @@ margin-top: 15px;
     border: 2px solid #39FF14;
     border-radius: 20px;
     box-shadow: 0 0 3px rgba(0,0,0,0.3);
+    background-color: #39ff14;
 }
 
 .contenedor-navbar a:hover{
-    background: rgba(57, 255, 20, 1);
     color: #00FFFF;
-    box-shadow: 0 0 5px black, 0 0 5px black;
-    text-shadow: 0 0 10px #00FFFF, 0 0 20px #00FFFF;
+    border: 1px solid #00FFFF;
+    background: linear-gradient(
+    180deg,
+    #000000 0%,
+    #031b03 25%,
+    #0f3d0f 50%,
+    #1b5e20 75%,
+    #39FF14 100%
+);
 }
 
 /*FILTROS*/
