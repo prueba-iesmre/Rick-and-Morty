@@ -1,13 +1,35 @@
-
+/* SCRIPT PARA SELECCIONAR TIPO DE BUSQUEDA  */
 function cambiarVista() {
     const contenedor = document.getElementById("contenedor");
     contenedor.classList.toggle("contenedorLista");
 }
 /* FIN SCRIPT PARA SELECCIONAR TIPO DE BUSQUEDA  */
 
+/* SCRIPT PARA CAMBIAR DE PAGINA  */
+var numeroPagina = 1;
+function paginaSiguiente() {
+    numeroPagina ++
+    ficha();
+    window.scrollTo({
+        top: 0,
+    });
+}
+
+function paginaAnterior(){
+    if (numeroPagina > 1) {
+        numeroPagina--;
+        ficha();
+        window.scrollTo({
+        top: 0,
+    });
+    }
+}
+/* FIN SCRIPT PARA CAMBIAR DE PAGINA  */
+
 /* SCRIPT PARA SELECCIONAR TIPO DE BUSQUEDA  */
 function usarAPI() {
     document.getElementById("bienvenida").style.display = "none";
+    ficha();
 }
 
 function usarBBDD() {
@@ -19,7 +41,7 @@ function usarBBDD() {
 async function ficha() {
 
 const contenedor = document.getElementById("contenedor");
-const response = await fetch("https://rickandmortyapi.com/api/character?page={0}");
+const response = await fetch(`https://rickandmortyapi.com/api/character?page=${numeroPagina}`);
 const data = await response.json();
 console.log(data);
 
@@ -74,7 +96,7 @@ async function fetchData() {
             renderCards(data.results, type);
         } else {
             // Si escribes algo que no existe, limpiamos la pantalla
-            contenedor.innerHTML = `<p class="nombre" style="grid-column: 1/-1;">No hay ningún "${query}" en este universo.</p>`;
+            contenedor.innerHTML = `<p class="nombre2" style="grid-column: 1/-1;">No hay ningún "${query}" en este universo.</p>`;
         }
     } catch (error) {
         console.error("Error buscando datos:", error);
@@ -112,8 +134,10 @@ function renderCards(items, type) {
             </div>`;
     });
 }
-
-// Eventos
-searchInput.addEventListener('input', fetchData);
-filterType.addEventListener('change', fetchData);
 /*FIN FILTROS*/
+
+function abrirNuevaVentana(url) {
+    if(url) {
+      window.open(url, '_blank'); // abre en nueva pestaña
+    }
+}
