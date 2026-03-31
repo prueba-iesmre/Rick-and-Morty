@@ -461,3 +461,9 @@ body{
 .header-img.right {
     right: -50px;
 }
+
+/*terminos y condiciones footer*/
+.termin{
+    color: rgb(232, 232, 232);
+    text-decoration: none;
+}
