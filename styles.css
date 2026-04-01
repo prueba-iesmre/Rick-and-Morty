@@ -83,7 +83,8 @@
     display: flex;
     flex-direction: column;
     margin-top: -15px;
-    font-family: 'Inter', sans-serif;
+    font-family: "Orbitron" ;
+    font-size: 14px;
 
 }
 
@@ -231,6 +232,7 @@ img{
         position: relative;
         font-weight: bold;
         text-align: center;
+        font-family: 'Creepster', cursive;
 }
 
 .redes{
@@ -363,6 +365,7 @@ margin-top: 15px;
     justify-content: center;
     box-shadow: 0 0 10px rgba(57,255,20,0.4);
     margin-bottom: 20px;
+    font-family: 'Creepster', cursive;
 }
 
 .contenedor-navbar a{
