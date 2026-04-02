@@ -10,7 +10,7 @@ public class testBBDD {
 
             pst.setString(1, nombre);
             pst.setString(2, genero);
-            pst.setString(3, estado);
+            pst.setString(3, especie);
             pst.setString(4, estado);
             pst.setString(5, origen);
             pst.setString(6, imagen);
