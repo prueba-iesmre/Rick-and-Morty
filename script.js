@@ -58,7 +58,7 @@ for (let i = 0; i < 12; i++) {
             '<img src="' + char.image + '">' +
         '</div>' +
         '<div class="info_fichas">' +
-            '<p>Genero: ' + char.gender + '</p>' +
+            '<p>Ultima ubicacion: ' + char.location.name + '</p>' +
             '<p>Especie: ' + char.species + '</p>' +
             '<p>Estado: ' + char.status + '</p>' +
             '<p>Origen: ' + char.origin.name + '</p>' +
