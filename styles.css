@@ -72,7 +72,6 @@
 }
 
 
-
 .fichas{
     background-color: #39ff14;
     border-radius: 15px;
@@ -174,25 +173,36 @@ img{
     display: flex;
     align-items: center;
     flex-wrap: wrap;
-    width: 600px;
+    width: 620px;
     margin: 0 auto;
 }
 
 .contenedorLista .fichas .imagen {
     display: flex;
     justify-content: flex-start;
+    margin-top: -50px;
+    padding: 25px;
 }
+
+.contenedorLista .fichas img{
+    width: 150px;
+    height: 150px;
+}
+
 
 .contenedorLista .info_fichas{
     justify-content: center;
+    display: block;
+    margin-left: 10px;
 }
 
 .contenedorLista .info_fichas p{
-    margin: 14px;
+    margin: 8px;
 }
 
 .contenedorLista .nombre{
     width: 100%;
+    font-size: 25px;
 }
 
 /* FIN CSS MODO VISTA TOGGLE */
