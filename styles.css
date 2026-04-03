@@ -76,6 +76,7 @@
     background-color: #39ff14;
     border-radius: 15px;
     box-shadow: 0 8px 3px rgba(0,0,0,0.2);
+    max-width: 250px;
 }
 
 .info_fichas{
@@ -84,7 +85,6 @@
     margin-top: -15px;
     font-family: "Montserrat" ;
     font-size: 14px;
-
 }
 
 p{
@@ -131,6 +131,14 @@ img{
     margin-left: 0px;
     font-family: 'Creepster', cursive;
     font-size: 30px;
+    max-height: 50px;
+    /* Fix nombre largo 1*/
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    /* Fix nombre largo 2*/
+    /* font-size: 24px; */
+
 }
 
 .nombre2{
@@ -175,6 +183,7 @@ img{
     flex-wrap: wrap;
     width: 620px;
     margin: 0 auto;
+    max-width: 100%;
 }
 
 .contenedorLista .fichas .imagen {
