@@ -165,9 +165,17 @@ img{
     border-radius: 8px;
     margin-left: auto;
 }
-
-
 /* FIN BOTON PARA CAMBIAR VISTA FICHAS */
+
+
+/* ESTILOS PAGINACION CON NUMEROS */
+.numeroBtn.activo {
+    background-color: #39ff14;
+    color: black;
+    font-weight: bold;
+}
+/*  FINESTILOS PAGINACION CON NUMEROS */
+
 
 /* CSS MODO VISTA TOGGLE */
 

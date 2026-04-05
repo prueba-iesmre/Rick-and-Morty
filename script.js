@@ -1,3 +1,53 @@
+let numeroPagina = 1;
+
+/* SCRIPT PARA MOSTRAR NUMERO DE PAGINAS  */
+function generarNumerosPaginas() {
+    const contenedor = document.getElementById("numerosPaginacion");
+    contenedor.innerHTML = "";
+
+    let inicio = Math.max(1, numeroPagina - 2);
+    let fin = Math.min(totalPaginas, numeroPagina + 2);
+
+    // Primera pagina
+    if (inicio > 1) {
+        contenedor.innerHTML += `<button class="numeroBtn" onclick="irAPagina(1)">1</button>`;
+        if (inicio > 2) {
+            contenedor.innerHTML += `<span class="dots">...</span>`;
+        }
+    }
+
+    // Pagina media
+    for (let i = inicio; i <= fin; i++) {
+        contenedor.innerHTML += `
+            <button class="numeroBtn ${i === numeroPagina ? 'activo' : ''}" onclick="irAPagina(${i})">
+                ${i}
+            </button>
+        `;
+    }
+
+    // Ultima pagina
+    if (fin < totalPaginas) {
+        if (fin < totalPaginas - 1) {
+            contenedor.innerHTML += `<span class="dots">...</span>`;
+        }
+        contenedor.innerHTML += `<button class="numeroBtn" onclick="irAPagina(${totalPaginas})">${totalPaginas}</button>`;
+    }
+}
+
+
+function irAPagina(num) {
+    numeroPagina = num;
+    ficha();
+    generarNumerosPaginas();
+
+    window.scrollTo({
+        top: 0,
+    });
+}
+
+/* FIN SCRIPT PARA MOSTRAR NUMERO DE PAGINAS  */
+
+
 /* SCRIPT PARA SELECCIONAR TIPO DE BUSQUEDA  */
 function cambiarVista() {
     const contenedor = document.getElementById("contenedor");
@@ -6,10 +56,11 @@ function cambiarVista() {
 /* FIN SCRIPT PARA SELECCIONAR TIPO DE BUSQUEDA  */
 
 /* SCRIPT PARA CAMBIAR DE PAGINA  */
-var numeroPagina = 1;
 function paginaSiguiente() {
-    numeroPagina ++
+    numeroPagina++;
     ficha();
+    generarNumerosPaginas();
+
     window.scrollTo({
         top: 0,
     });
@@ -19,9 +70,11 @@ function paginaAnterior(){
     if (numeroPagina > 1) {
         numeroPagina--;
         ficha();
+        generarNumerosPaginas();
+
         window.scrollTo({
-        top: 0,
-    });
+            top: 0,
+        });
     }
 }
 /* FIN SCRIPT PARA CAMBIAR DE PAGINA  */
@@ -45,6 +98,8 @@ const response = await fetch(`https://rickandmortyapi.com/api/character?page=${n
 const data = await response.json();
 console.log(data);
 
+totalPaginas = data.info.pages;
+
 contenedor.innerHTML = "";
 
 for (let i = 0; i < 12; i++) {
@@ -65,6 +120,7 @@ for (let i = 0; i < 12; i++) {
         '</div>' +
     '</div>';
 }
+    generarNumerosPaginas();
 }
 /* FIN SCRIPT FICHAS DINAMICAS CON DATOS DE LA API */
 
