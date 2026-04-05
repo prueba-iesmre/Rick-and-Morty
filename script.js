@@ -96,7 +96,7 @@ async function fetchData() {
             renderCards(data.results, type);
         } else {
             // Si escribes algo que no existe, limpiamos la pantalla
-            contenedor.innerHTML = `<p class="nombre2" style="grid-column: 1/-1;">No hay ningún "${query}" en este universo.</p>`;
+            contenedor.innerHTML = `<h2 class="nombre2" style="grid-column: 1/-1;">No hay ningún "${query}" en este universo.</h2>`;
         }
     } catch (error) {
         console.error("Error buscando datos:", error);
