@@ -49,19 +49,19 @@ contenedor.innerHTML = "";
 
 for (let i = 0; i < 12; i++) {
 
-    const char = data.results[i];
+    const personajes = data.results[i];
 
     contenedor.innerHTML +=
     '<div class="fichas">' +
-        '<p class="nombre">' + char.name + '</p>' +
+        '<p class="nombre">' + personajes.name + '</p>' +
         '<div class="imagen">' +
-            '<img src="' + char.image + '">' +
+            '<img src="' + personajes.image + '">' +
         '</div>' +
         '<div class="info_fichas">' +
-            '<p>Ultima ubicacion: ' + char.location.name + '</p>' +
-            '<p>Especie: ' + char.species + '</p>' +
-            '<p>Estado: ' + char.status + '</p>' +
-            '<p>Origen: ' + char.origin.name + '</p>' +
+            '<p>Especie: ' + personajes.species + '</p>' +
+            '<p>Estado: ' + personajes.status + '</p>' +
+            '<p>Origen: ' + personajes.origin.name + '</p>' +
+            '<p>Ultima ubicacion: ' + personajes.location.name + '</p>' +
         '</div>' +
     '</div>';
 }
