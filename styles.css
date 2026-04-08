@@ -169,10 +169,45 @@ img{
 
 
 /* ESTILOS PAGINACION CON NUMEROS */
+.numerosPaginacion{
+    display: flex;
+    justify-content: center;
+    margin-bottom: 30px;
+    gap: 5px;
+    color: #00bcd4;
+    align-items: center;
+    margin-top: 10px;
+}
+
+
+.numeroBtn{
+    width: 40px;
+    height: 40px;
+    font-size: 25px;
+    font-family: 'Creepster', cursive;
+    border-radius: 20px;
+    background-color: transparent;
+    color: #00bcd4;
+    border-color: transparent;
+    cursor: pointer;
+}
+
+.numeroBtn:hover{
+    color: black;
+    background-color: #00bcd4;
+    border: 2px solid #39ff14;
+}
+
 .numeroBtn.activo {
     background-color: #39ff14;
     color: black;
     font-weight: bold;
+    border: 2px solid #00bcd4;
+}
+
+.dots{
+    font-size: 20px;
+    font-family: 'Creepster', cursive;
 }
 /*  FINESTILOS PAGINACION CON NUMEROS */
 
@@ -230,7 +265,6 @@ img{
         display: flex;
         justify-content: center;
         gap: 30px;
-        margin-bottom: 30px;
     }
 
     .btn-icono{
