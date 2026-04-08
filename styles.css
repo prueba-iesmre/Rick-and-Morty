@@ -179,7 +179,6 @@ img{
     margin-top: 10px;
 }
 
-
 .numeroBtn{
     width: 40px;
     height: 40px;
@@ -190,12 +189,18 @@ img{
     color: #00bcd4;
     border-color: transparent;
     cursor: pointer;
+    -webkit-text-stroke: 1px white;
 }
 
 .numeroBtn:hover{
-    color: black;
+    color: white;
     background-color: #00bcd4;
     border: 2px solid #39ff14;
+    -webkit-text-stroke: 1px black;
+}
+
+.numeroBtn.activo:hover{
+    -webkit-text-stroke: 1px white;
 }
 
 .numeroBtn.activo {
@@ -206,8 +211,9 @@ img{
 }
 
 .dots{
-    font-size: 20px;
+    font-size: 30px;
     font-family: 'Creepster', cursive;
+    -webkit-text-stroke: 1px white;
 }
 /*  FINESTILOS PAGINACION CON NUMEROS */
 
