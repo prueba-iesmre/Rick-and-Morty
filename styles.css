@@ -145,9 +145,10 @@ img{
     text-align: center;
     margin-left: 0px;
     font-family: 'Creepster', cursive;
-    font-size: 30px;
+    font-size: 50px;
     -webkit-text-stroke: 1px  black;
     color: white;
+    margin-top: 20%;
 }
 /* FIN FICHAS */
 
@@ -164,9 +165,58 @@ img{
     border-radius: 8px;
     margin-left: auto;
 }
-
-
 /* FIN BOTON PARA CAMBIAR VISTA FICHAS */
+
+
+/* ESTILOS PAGINACION CON NUMEROS */
+.numerosPaginacion{
+    display: flex;
+    justify-content: center;
+    margin-bottom: 30px;
+    gap: 5px;
+    color: #00bcd4;
+    align-items: center;
+    margin-top: 10px;
+}
+
+.numeroBtn{
+    width: 40px;
+    height: 40px;
+    font-size: 25px;
+    font-family: 'Creepster', cursive;
+    border-radius: 20px;
+    background-color: transparent;
+    color: #00bcd4;
+    border-color: transparent;
+    cursor: pointer;
+    -webkit-text-stroke: 1px white;
+}
+
+.numeroBtn:hover{
+    color: white;
+    background-color: #00bcd4;
+    border: 2px solid #39ff14;
+    -webkit-text-stroke: 1px black;
+}
+
+.numeroBtn.activo:hover{
+    -webkit-text-stroke: 1px white;
+}
+
+.numeroBtn.activo {
+    background-color: #39ff14;
+    color: black;
+    font-weight: bold;
+    border: 2px solid #00bcd4;
+}
+
+.dots{
+    font-size: 30px;
+    font-family: 'Creepster', cursive;
+    -webkit-text-stroke: 1px white;
+}
+/*  FINESTILOS PAGINACION CON NUMEROS */
+
 
 /* CSS MODO VISTA TOGGLE */
 
@@ -221,7 +271,6 @@ img{
         display: flex;
         justify-content: center;
         gap: 30px;
-        margin-bottom: 30px;
     }
 
     .btn-icono{
