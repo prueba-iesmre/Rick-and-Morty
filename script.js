@@ -200,3 +200,11 @@ function abrirNuevaVentana(url) {
       window.open(url, '_blank'); // abre en nueva pestaña
     }
 }
+
+function btnvolver(){
+    if(document.referrer !== "") {
+        window.location.href = document.referrer;
+    } else {
+        window.location.href = "index.html";
+    }
+}

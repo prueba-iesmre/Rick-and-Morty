@@ -158,14 +158,25 @@ img{
     width: 45px;
     height: 45px;
     margin-right: 25%;
-}
-
-#cambiar_ficha{
     background-color: #39ff14;
     border-radius: 8px;
     margin-left: auto;
 }
+
 /* FIN BOTON PARA CAMBIAR VISTA FICHAS */
+
+.btn-volver{
+    width: 45px;
+    height: 45px;
+    background-color: #39ff14;
+    margin-left: 25%;
+    border-radius: 8px;
+    margin-right: auto;
+}
+
+.btn-volver:hover{
+    background-color: #39FF14;
+}
 
 
 /* ESTILOS PAGINACION CON NUMEROS */
