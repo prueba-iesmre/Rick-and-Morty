@@ -202,9 +202,5 @@ function abrirNuevaVentana(url) {
 }
 
 function btnvolver(){
-    if(document.referrer !== "") {
-        window.location.href = document.referrer;
-    } else {
-        window.location.href = "index.html";
-    }
+    window.history.back();
 }
