@@ -163,6 +163,24 @@ img{
     justify-content: center;
     margin-left: auto;
     margin-right: 25%;
+    border: none;
+}
+
+#cambiar_ficha:hover {
+    border: 1px solid #00FFFF;
+    background: linear-gradient(
+    180deg,
+    #000000 0%,
+    #031b03 25%,
+    #0f3d0f 50%,
+    #1b5e20 75%,
+    #39FF14 100%
+);
+    cursor: pointer;
+}
+
+#cambiar_ficha:hover svg path{
+    fill: #00FFFF;
 }
 
 .oculto{
