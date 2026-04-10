@@ -517,6 +517,23 @@ input, select {
     display: flex;
     gap: 10px;
 }
+
+input:hover, select:hover {
+    color: #00FFFF;
+    border: 1px solid #00FFFF;
+    background: linear-gradient(
+    180deg,
+    #000000 0%,
+    #031b03 25%,
+    #0f3d0f 50%,
+    #1b5e20 75%,
+    #39FF14 100%
+);
+}
+
+input:hover::placeholder{
+    color: #00FFFF;
+}
 /*FIN FILTROS*/
 
 
