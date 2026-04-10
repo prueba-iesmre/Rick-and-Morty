@@ -51,13 +51,14 @@
     #1b5e20 75%,
     #39FF14 100%
 );
+    cursor: pointer;
 }
 /* FIN PAGINA BIENVENIDA */
 
 /* FICHAS */
 
 #contenedor{
-    min-height: 484px;
+    min-height: 379px;
 }
 
 .contenedor{
@@ -77,6 +78,7 @@
     border-radius: 15px;
     box-shadow: 0 8px 3px rgba(0,0,0,0.2);
     max-width: 250px;
+    border: 1px solid transparent;
 }
 
 .info_fichas{
@@ -124,6 +126,7 @@ img{
     #1b5e20 75%,
     #39FF14 100%
 );
+    border: 1px solid #00FFFF;
 }
 
 .nombre{
@@ -153,14 +156,39 @@ img{
 /* FIN FICHAS */
 
 /* BOTON PARA CAMBIAR VISTA FICHAS */
-
 #cambiar_ficha {
     width: 45px;
     height: 45px;
-    margin-right: 25%;
     background-color: #39ff14;
     border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     margin-left: auto;
+    margin-right: 25%;
+    border: none;
+    border: 1px solid transparent;
+}
+
+#cambiar_ficha:hover {
+    border: 1px solid #00FFFF;
+    background: linear-gradient(
+    180deg,
+    #000000 0%,
+    #031b03 25%,
+    #0f3d0f 50%,
+    #1b5e20 75%,
+    #39FF14 100%
+);
+    cursor: pointer;
+}
+
+#cambiar_ficha:hover svg path{
+    fill: #00FFFF;
+}
+
+.oculto{
+    display: none;
 }
 
 /* FIN BOTON PARA CAMBIAR VISTA FICHAS */
@@ -456,6 +484,7 @@ margin-top: 15px;
     border-radius: 20px;
     box-shadow: 0 0 3px rgba(0,0,0,0.3);
     background-color: #39ff14;
+    border: 1px solid transparent;
 }
 
 .contenedor-navbar a:hover{
@@ -490,6 +519,7 @@ input, select {
     background: #39ff14; /*Color fondo*/
     color: black; /*Color letras filtro*/
     font-size: 1rem;
+    border: 1px solid transparent;
 }
 
 .contenedor_boton {
@@ -505,6 +535,24 @@ input, select {
     transform: translateX(-50%); /* El truco para el centrado perfecto */
     display: flex;
     gap: 10px;
+}
+
+input:hover, select:hover {
+    color: #00FFFF;
+    border: 1px solid #00FFFF;
+    background: linear-gradient(
+    180deg,
+    #000000 0%,
+    #031b03 25%,
+    #0f3d0f 50%,
+    #1b5e20 75%,
+    #39FF14 100%
+);
+    cursor: pointer;
+}
+
+input:hover::placeholder{
+    color: #00FFFF;
 }
 /*FIN FILTROS*/
 
