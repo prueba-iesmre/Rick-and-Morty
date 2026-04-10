@@ -70,6 +70,7 @@ function svgDinamico(){
 
 
 /* SCRIPT PARA CAMBIAR DE PAGINA  */
+
 function paginaSiguiente() {
     numeroPagina++;
     ficha();
@@ -91,6 +92,7 @@ function paginaAnterior(){
         });
     }
 }
+
 /* FIN SCRIPT PARA CAMBIAR DE PAGINA  */
 
 /* SCRIPT PARA SELECCIONAR TIPO DE BUSQUEDA  */
@@ -107,35 +109,89 @@ function usarBBDD() {
 /* SCRIPT PARA HACER FICHAS DINAMICAS CON DATOS DE LA API */
 async function ficha() {
 
-const contenedor = document.getElementById("contenedor");
-const response = await fetch(`https://rickandmortyapi.com/api/character?page=${numeroPagina}`);
-const data = await response.json();
-console.log(data);
+    const contenedor = document.getElementById("contenedor");
+    let url = "";
 
-totalPaginas = data.info.pages;
+    if (seccionActual === "character") {
+        url = `https://rickandmortyapi.com/api/character?page=${numeroPagina}`;
+    } else if (seccionActual === "location") {
+        url = `https://rickandmortyapi.com/api/location?page=${numeroPagina}`;
+    } else if (seccionActual === "episode") {
+        url = `https://rickandmortyapi.com/api/episode?page=${numeroPagina}`;
+    }
 
-contenedor.innerHTML = "";
+    const response = await fetch(url);
+    const data = await response.json();
 
-for (let i = 0; i < 12; i++) {
+    totalPaginas = data.info.pages;
 
-    const personajes = data.results[i];
+    contenedor.innerHTML = "";
 
-    contenedor.innerHTML +=
-    '<div class="fichas">' +
-        '<p class="nombre">' + personajes.name + '</p>' +
-        '<div class="imagen">' +
-            '<img src="' + personajes.image + '">' +
-        '</div>' +
-        '<div class="info_fichas">' +
-            '<p>Especie: ' + personajes.species + '</p>' +
-            '<p>Estado: ' + personajes.status + '</p>' +
-            '<p>Origen: ' + personajes.origin.name + '</p>' +
-            '<p>Ultima ubicacion: ' + personajes.location.name + '</p>' +
-        '</div>' +
-    '</div>';
-}
+    data.results.forEach(item => {
+
+        // Imagenes para cada seccion
+        const imagenUrl =
+            seccionActual === "character" ? item.image :
+            seccionActual === "location" ? "img/ubicacion.jpg" :
+            seccionActual === "episode" ? "img/episodio.jpg" : "";
+
+        let html = `<div class="fichas">`;
+
+        html += `
+            <p class="nombre">${item.name}</p>
+
+            <div class="imagen">
+                <img src="${imagenUrl}">
+            </div>
+        `;
+
+        if (seccionActual === "character") {
+            html += `
+                <div class="info_fichas">
+                    <p>Especie: ${item.species}</p>
+                    <p>Estado: ${item.status}</p>
+                    <p>Origen: ${item.origin.name}</p>
+                    <p>Ultima ubicacion: ${item.location.name}</p>
+                </div>
+            `;
+        }
+
+        else if (seccionActual === "location") {
+            html += `
+                <div class="info_fichas">
+                    <p>Tipo: ${item.type}</p>
+                    <p>Dimensión: ${item.dimension}</p>
+                </div>
+            `;
+        }
+
+        else if (seccionActual === "episode") {
+            html += `
+                <div class="info_fichas">
+                    <p>Episodio: ${item.episode}</p>
+                    <p>Fecha: ${item.air_date}</p>
+                </div>
+            `;
+        }
+
+        html += `</div>`;
+        contenedor.innerHTML += html;
+    });
+
     generarNumerosPaginas();
 }
+
+/*Cambiar seccion */
+
+let seccionActual = "character";
+
+function cambiarSeccion(nuevaSeccion) {
+    seccionActual = nuevaSeccion;
+    numeroPagina = 1;
+    ficha();
+
+}
+
 /* FIN SCRIPT FICHAS DINAMICAS CON DATOS DE LA API */
 
 /*FILTROS*/
@@ -174,39 +230,7 @@ async function fetchData() {
 }
 
 // Función para pintar las tarjetas con TU diseño
-function renderCards(items, type) {
-    contenedor.innerHTML = ""; // <--- ESTO es lo que hace que desaparezcan las fichas viejas
 
-    items.forEach(item => {
-        // Imagen por defecto de Ubicaciones y Episodios
-        const imagenUrl =
-        type === 'character' ? item.image :
-        type === 'location' ? 'img/ubicacion.jpg' :
-        type === 'episode' ? 'img/episodio.jpg':'';
-
-        // Preparamos la info según el tipo
-        let infoExtra = "";
-        if (type === 'character') {
-            infoExtra = `<p>Genero: ${item.gender}</p><p>Especie: ${item.species}</p><p>Estado: ${item.status}</p><p>Origen: ${item.origin.name}</p>`;
-        } else if (type === 'location') {
-            infoExtra = `<p>Tipo: ${item.type}</p><p>Dimensión: ${item.dimension}</p>`;
-        } else {
-            infoExtra = `<p>Fecha: ${item.air_date}</p><p>Código: ${item.episode}</p>`;
-        }
-
-        // Insertamos la ficha con TU diseño CSS
-        contenedor.innerHTML += `
-            <div class="fichas">
-                <p class="nombre">${item.name}</p>
-                <div class="imagen">
-                    <img src="${imagenUrl}">
-                </div>
-                <div class="info_fichas">
-                    ${infoExtra}
-                </div>
-            </div>`;
-    });
-}
 /*FIN FILTROS*/
 
 function abrirNuevaVentana(url) {
