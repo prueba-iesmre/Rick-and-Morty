@@ -44,7 +44,6 @@ function irAPagina(num) {
         top: 0,
     });
 }
-
 /* FIN SCRIPT PARA MOSTRAR NUMERO DE PAGINAS  */
 
 
@@ -52,8 +51,23 @@ function irAPagina(num) {
 function cambiarVista() {
     const contenedor = document.getElementById("contenedor");
     contenedor.classList.toggle("contenedorLista");
+
+    svgDinamico();
 }
 /* FIN SCRIPT PARA SELECCIONAR TIPO DE BUSQUEDA  */
+
+
+/* SCRIPT PARA CAMBIAR SVG DINAMICO  */
+function svgDinamico(){
+    const grid = document.getElementById("svgGrid");
+    const list = document.getElementById("svgList");
+
+    grid.classList.toggle("oculto");
+    list.classList.toggle("oculto");
+}
+/* FIN SCRIPT PARA CAMBIAR SVG DINAMICO  */
+
+
 
 /* SCRIPT PARA CAMBIAR DE PAGINA  */
 function paginaSiguiente() {

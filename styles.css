@@ -165,6 +165,13 @@ img{
     border-radius: 8px;
     margin-left: auto;
 }
+
+.oculto{
+    display: none;
+}
+
+
+
 /* FIN BOTON PARA CAMBIAR VISTA FICHAS */
 
 
