@@ -2,15 +2,27 @@ h1{
     text-align: center;
 }
 
-body{
-    text-align: justify;
-    margin:67px;
-}
-
 .rgpd{
-    color: black;
+    color: white;
 }
 
 .rgpd:hover{
     color: blue;
+}
+
+.contenido{
+    text-align: justify;
+    color: white;
+    max-width: 1200px;
+    margin: 40px auto;
+    padding: 20px;
+    line-height: 1.6;
+}
+
+.contenido p{
+    margin-bottom: 20px;
+}
+
+.fond{
+    background-color: rgba(0, 0, 0, 0.8);
 }

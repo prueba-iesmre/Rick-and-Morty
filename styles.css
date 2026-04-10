@@ -477,7 +477,7 @@ body{
 .rm-team-grid {
     display: grid;
     /* Esto crea columnas automáticas que se ajustan al tamaño de la pantalla */
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); 
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
     gap: 30px;
     max-width: 1300px;
     margin: 40px auto;
