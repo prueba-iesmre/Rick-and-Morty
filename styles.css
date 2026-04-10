@@ -51,6 +51,7 @@
     #1b5e20 75%,
     #39FF14 100%
 );
+    cursor: pointer;
 }
 /* FIN PAGINA BIENVENIDA */
 
@@ -534,6 +535,7 @@ input:hover, select:hover {
     #1b5e20 75%,
     #39FF14 100%
 );
+    cursor: pointer;
 }
 
 input:hover::placeholder{
