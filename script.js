@@ -229,9 +229,61 @@ async function fetchData() {
     }
 }
 
-// Función para pintar las tarjetas con TU diseño
+// Función para pintar las tarjetas en el buscador usando el diseño que tienen las fichas y para el modo lista
 
-/*FIN FILTROS*/
+
+function renderCards(items, type) {
+    contenedor.innerHTML = "";
+
+    items.forEach(item => {
+
+        // Imagen según tipo
+        const imagenUrl =
+            type === 'character' ? item.image :
+            type === 'location' ? 'img/ubicacion.jpg' :
+            type === 'episode' ? 'img/episodio.jpg' : '';
+
+        let infoExtra = "";
+
+
+        //Seccion personajes
+        if (type === 'character') {
+            infoExtra = `
+                <p>Especie: ${item.species}</p>
+                <p>Estado: ${item.status}</p>
+                <p>Origen: ${item.origin.name}</p>
+                <p>Ultima ubicacion: ${item.location.name}</p>
+
+            `;
+        } else if (type === 'location') {
+            infoExtra = `
+                <p>Tipo: ${item.type}</p>
+                <p>Dimensión: ${item.dimension}</p>
+            `;
+        } else {
+            infoExtra = `
+                <p>Fecha: ${item.air_date}</p>
+                <p>Código: ${item.episode}</p>
+            `;
+        }
+
+        contenedor.innerHTML += `
+            <div class="fichas">
+                <p class="nombre">${item.name}</p>
+
+                <div class="imagen">
+                    <img src="${imagenUrl}">
+                </div>
+
+                <div class="info_fichas">
+                    ${infoExtra}
+                </div>
+            </div>
+        `;
+    });
+}
+
+// FIN Buscador y modo lista estilo
 
 function abrirNuevaVentana(url) {
     if(url) {
