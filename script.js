@@ -218,3 +218,53 @@ function abrirNuevaVentana(url) {
 function btnvolver(){
     window.history.back();
 }
+
+
+/*SCRIPT PARA GUARDAR INFO EN BBDD*/
+function guardarEnBD(item, type) {
+    // CREAMOS ARCHIVO JSON
+    let datos = {
+        tipo_dato: type,
+        nombre: item.name,
+        // TERNARIO PARA COMPROBAR QUE QUEREMOS GUARDAR
+        imagen: type === 'character' ? item.image : (type === 'location' ? 'img/ubicacion.jpg' : 'img/episodio.jpg')
+    };
+
+    // AÑADIMOS DATOS SEGÚN EL TIPO
+    if (type === 'character') {
+        datos.especie = item.species;
+        datos.estado = item.status;
+        datos.origen = item.origin.name;
+        datos.genero = item.location.name; // Usamos esto para la "ultima_ubicacion" en Java
+    } else if (type === 'location') {
+        datos.tipo = item.type;
+        datos.dimension = item.dimension;
+    } else if (type === 'episode') {
+        datos.air_date = item.air_date;
+        datos.episode = item.episode;
+    }
+
+    // 3. ENVIAMOS LOS DATOS AL SERVIDOR (FETCH)
+    fetch('http://localhost:8080/guardar', {
+        method: 'POST', // Usamos post para enviar informacion al servidor
+        headers: { 'Content-Type': 'application/json' }, // Decimos que enviamos un JSON
+        body: JSON.stringify(datos) // Convertimos el objeto JS a texto plano
+    })
+    .then(async respuesta => {
+        // Leemos el texto que nos devuelve Java
+        const mensaje = await respuesta.text();
+
+        if (respuesta.ok) {
+            alert("✅ " + mensaje); // "Personaje guardado!"
+        } else if (respuesta.status === 409) {
+            alert("ℹ️ " + mensaje); // "Ya estaba guardado anteriormente"
+        } else {
+            alert("❌ Error: " + mensaje);
+        }
+    })
+    .catch(error => {
+        // Si el servidor Java está apagado, entrará aquí
+        alert("🔌 No se pudo conectar con el servidor Java. ¿Está encendido?");
+    });
+}
+/* FIN SCRIPT PARA GUARDAR INFO EN BBDD*/
