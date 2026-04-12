@@ -71,7 +71,6 @@ public class ServidorRick {
                         codigoEstado = 500;
                     }
                 }
-
                 //  ENVIAR RESPUESTA AL NAVEGADOR
                 byte[] respuestaBytes = mensajeRespuesta.getBytes(StandardCharsets.UTF_8);
                 exchange.sendResponseHeaders(codigoEstado, respuestaBytes.length);

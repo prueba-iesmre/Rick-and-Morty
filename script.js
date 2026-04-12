@@ -272,7 +272,7 @@ function guardarEnBD(item, type) {
         if (respuesta.ok) {
             alert("✅ " + mensaje); // "Personaje guardado!"
         } else if (respuesta.status === 409) {
-            alert("ℹ️ " + mensaje); // "Ya estaba guardado anteriormente"
+            alert("❌" + mensaje); // "Ya estaba guardado anteriormente"
         } else {
             alert("❌ Error: " + mensaje);
         }
