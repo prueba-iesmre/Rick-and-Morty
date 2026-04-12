@@ -125,58 +125,40 @@ async function ficha() {
 
     totalPaginas = data.info.pages;
 
-    contenedor.innerHTML = "";
+contenedor.innerHTML = "";
 
-    data.results.forEach(item => {
 
-        // Imagenes para cada seccion
-        const imagenUrl =
-            seccionActual === "character" ? item.image :
-            seccionActual === "location" ? "img/ubicacion.jpg" :
-            seccionActual === "episode" ? "img/episodio.jpg" : "";
+for (let i = 0; i < 12; i++) {
 
-        let html = `<div class="fichas">`;
 
-        html += `
-            <p class="nombre">${item.name}</p>
+const personajes = data.results[i];
+contenedor.innerHTML += `
+<div class="fichas">
+    <div class="header-ficha">
+        <div class="contenedor-guardado">
+            <button class="btn-guardar" onclick='guardarEnBD(${JSON.stringify(personajes)}, "character")'>
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"></path>
+                    <polyline points="17 21 17 13 7 13 7 21"></polyline>
+                    <polyline points="7 3 7 8 15 8"></polyline>
+                </svg>
+            </button>
+        </div>
+        <p class="nombre">${personajes.name}</p>
 
-            <div class="imagen">
-                <img src="${imagenUrl}">
-            </div>
-        `;
-
-        if (seccionActual === "character") {
-            html += `
-                <div class="info_fichas">
-                    <p>Especie: ${item.species}</p>
-                    <p>Estado: ${item.status}</p>
-                    <p>Origen: ${item.origin.name}</p>
-                    <p>Ultima ubicacion: ${item.location.name}</p>
-                </div>
-            `;
-        }
-
-        else if (seccionActual === "location") {
-            html += `
-                <div class="info_fichas">
-                    <p>Tipo: ${item.type}</p>
-                    <p>Dimensión: ${item.dimension}</p>
-                </div>
-            `;
-        }
-
-        else if (seccionActual === "episode") {
-            html += `
-                <div class="info_fichas">
-                    <p>Episodio: ${item.episode}</p>
-                    <p>Fecha: ${item.air_date}</p>
-                </div>
-            `;
-        }
-
-        html += `</div>`;
-        contenedor.innerHTML += html;
-    });
+        <div class="spacer"></div>
+    </div>
+    <div class="imagen">
+        <img src="${personajes.image}">
+    </div>
+    <div class="info_fichas">
+        <p>Especie: ${personajes.species}</p>
+        <p>Estado: ${personajes.status}</p>
+        <p>Origen: ${personajes.origin.name}</p>
+        <p>Ultima ubicación: ${personajes.location.name}</p>
+    </div>
+</div>`;
+}
 
     generarNumerosPaginas();
 }
@@ -269,17 +251,26 @@ function renderCards(items, type) {
 
         contenedor.innerHTML += `
             <div class="fichas">
+            <div class="header-ficha">
+            <div class="contenedor-guardado">
+            <button class="btn-guardar" onclick='guardarEnBD(${JSON.stringify(item)}, "${type}")'>
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"></path>
+                    <polyline points="17 21 17 13 7 13 7 21"></polyline>
+                    <polyline points="7 3 7 8 15 8"></polyline>
+                </svg>
+            </button>
+            </div>
                 <p class="nombre">${item.name}</p>
-
+                <div class="spacer"></div>
+            </div>
                 <div class="imagen">
                     <img src="${imagenUrl}">
                 </div>
 
                 <div class="info_fichas">
                     ${infoExtra}
-                </div>
-            </div>
-        `;
+            </div>`;
     });
 }
 
@@ -294,3 +285,53 @@ function abrirNuevaVentana(url) {
 function btnvolver(){
     window.history.back();
 }
+
+
+/*SCRIPT PARA GUARDAR INFO EN BBDD*/
+function guardarEnBD(item, type) {
+    // CREAMOS ARCHIVO JSON
+    let datos = {
+        tipo_dato: type,
+        nombre: item.name,
+        // TERNARIO PARA COMPROBAR QUE QUEREMOS GUARDAR
+        imagen: type === 'character' ? item.image : (type === 'location' ? 'img/ubicacion.jpg' : 'img/episodio.jpg')
+    };
+
+    // AÑADIMOS DATOS SEGÚN EL TIPO
+    if (type === 'character') {
+        datos.especie = item.species;
+        datos.estado = item.status;
+        datos.origen = item.origin.name;
+        datos.genero = item.location.name; // Usamos esto para la "ultima_ubicacion" en Java
+    } else if (type === 'location') {
+        datos.tipo = item.type;
+        datos.dimension = item.dimension;
+    } else if (type === 'episode') {
+        datos.air_date = item.air_date;
+        datos.episode = item.episode;
+    }
+
+    // 3. ENVIAMOS LOS DATOS AL SERVIDOR (FETCH)
+    fetch('http://localhost:8080/guardar', {
+        method: 'POST', // Usamos post para enviar informacion al servidor
+        headers: { 'Content-Type': 'application/json' }, // Decimos que enviamos un JSON
+        body: JSON.stringify(datos) // Convertimos el objeto JS a texto plano
+    })
+    .then(async respuesta => {
+        // Leemos el texto que nos devuelve Java
+        const mensaje = await respuesta.text();
+
+        if (respuesta.ok) {
+            alert("✅ " + mensaje); // "Personaje guardado!"
+        } else if (respuesta.status === 409) {
+            alert("❌" + mensaje); // "Ya estaba guardado anteriormente"
+        } else {
+            alert("❌ Error: " + mensaje);
+        }
+    })
+    .catch(error => {
+        // Si el servidor Java está apagado, entrará aquí
+        alert("🔌 No se pudo conectar con el servidor Java. ¿Está encendido?");
+    });
+}
+/* FIN SCRIPT PARA GUARDAR INFO EN BBDD*/
