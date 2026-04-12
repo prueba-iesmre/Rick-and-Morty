@@ -116,24 +116,35 @@ totalPaginas = data.info.pages;
 
 contenedor.innerHTML = "";
 
+
 for (let i = 0; i < 12; i++) {
 
-    const personajes = data.results[i];
 
-    contenedor.innerHTML +=
-    '<div class="fichas">' +
-        '<p class="nombre">' + personajes.name + '</p>' +
-        '<div class="imagen">' +
-            '<img src="' + personajes.image + '">' +
-        '</div>' +
-        '<div class="info_fichas">' +
-            '<p>Especie: ' + personajes.species + '</p>' +
-            '<p>Estado: ' + personajes.status + '</p>' +
-            '<p>Origen: ' + personajes.origin.name + '</p>' +
-            '<p>Ultima ubicacion: ' + personajes.location.name + '</p>' +
-        '</div>' +
-    '</div>';
+const personajes = data.results[i];
+contenedor.innerHTML += `
+<div class="fichas">
+    <p class="nombre">${personajes.name}</p>
+
+
+    <div class="imagen">
+        <img src="${personajes.image}">
+    </div>
+
+
+    <div class="info_fichas">
+        <p>Especie: ${personajes.species}</p>
+        <p>Estado: ${personajes.status}</p>
+        <p>Origen: ${personajes.origin.name}</p>
+        <p>Ultima ubicacion: ${personajes.location.name}</p>
+    </div>
+
+
+    <button class="btn-guardar" onclick='guardarEnBD(${JSON.stringify(personajes)}, "character")'>
+💾 Guardar Personaje
+</button>
+</div>`;
 }
+
     generarNumerosPaginas();
 }
 /* FIN SCRIPT FICHAS DINAMICAS CON DATOS DE LA API */
@@ -204,6 +215,10 @@ function renderCards(items, type) {
                 <div class="info_fichas">
                     ${infoExtra}
                 </div>
+                <button class="btn-guardar" onclick='guardarEnBD(${JSON.stringify(item)}, "${type}")'>
+💾 Guardar ${type}
+</button>
+
             </div>`;
     });
 }
