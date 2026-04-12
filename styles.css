@@ -79,6 +79,7 @@
     box-shadow: 0 8px 3px rgba(0,0,0,0.2);
     max-width: 250px;
     border: 1px solid transparent;
+    position: relative;
 }
 
 .info_fichas{
@@ -87,6 +88,7 @@
     margin-top: -15px;
     font-family: "Montserrat" ;
     font-size: 14px;
+    min-height: 162px;
 }
 
 p{
@@ -107,6 +109,7 @@ p:last-child{
     display: flex;
     justify-content: center;
     padding: 20px;
+    padding-top: 5px;
 }
 
 img{
@@ -130,18 +133,13 @@ img{
 }
 
 .nombre{
+    flex: 1;
     text-align: center;
-    margin-left: 0px;
     font-family: 'Creepster', cursive;
-    font-size: 30px;
-    max-height: 50px;
-    /* Fix nombre largo 1*/
+    font-size: 24px;
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
-    /* Fix nombre largo 2*/
-    /* font-size: 24px; */
-
 }
 
 .nombre2{
@@ -153,6 +151,81 @@ img{
     color: white;
     margin-top: 20%;
 }
+
+.contenedor-guardado{
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    z-index: 10;
+}
+
+.btn-guardar {
+    background: black;
+    border: none;
+    border-radius: 50%;
+    width: 35px;
+    height: 35px;
+    cursor: pointer;
+    color: #39ff14;
+}
+
+.header-ficha {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px;
+    width: 100%;
+}
+
+.contenedor-guardado, .spacer {
+    width: 40px;
+    display: flex;
+    justify-content: center;
+}
+
+
+.btn-guardar:hover {
+    border: 1px solid #00FFFF;
+    background: linear-gradient(
+    180deg,
+    #000000 0%,
+    #031b03 25%,
+    #0f3d0f 50%,
+    #1b5e20 75%,
+    #39FF14 100%
+);
+    cursor: pointer;
+    fill: #00FFFF;
+}
+
+#contenedor .fichas:hover .btn-guardar {
+    border: 1px solid white;
+    background: transparent;
+}
+
+#contenedor .fichas:hover .btn-guardar svg * {
+    stroke: white;
+    fill: #000000;
+    stroke-width: 2px;
+}
+
+#contenedor .fichas:hover .btn-guardar:hover {
+    border: 1px solid #00FFFF; /* Borderbox azul */
+    background: linear-gradient(
+        180deg,
+        #000000 0%,
+        #031b03 25%,
+        #0f3d0f 50%,
+        #1b5e20 75%,
+        #39FF14 100%
+    );
+}
+
+#contenedor .fichas:hover .btn-guardar:hover svg * {
+    stroke: #00FFFF !important;
+    fill: #000000;
+}
+
 /* FIN FICHAS */
 
 /* BOTON PARA CAMBIAR VISTA FICHAS */
