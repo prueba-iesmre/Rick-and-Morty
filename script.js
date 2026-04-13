@@ -75,8 +75,43 @@ function usarBBDD() {
 function cambiarSeccion(nuevaSeccion) {
     seccionActual = nuevaSeccion;
     numeroPagina = 1;
-    ficha();
+    if (modoFuente === "BBDD") {
+        cargarDesdeBBDD();
+    } else {
+        ficha();
+    }
 }
+
+/* LOGICA PARA FETCH DESDE BBDD */
+
+let modoFuente = "API";
+
+async function usarBBDD() {
+    modoFuente = "BBDD";
+    document.getElementById("bienvenida").style.display = "none";
+    document.getElementById("numerosPaginacion").style.display = "none";
+    cargarDesdeBBDD();
+}
+
+async function cargarDesdeBBDD() {
+    const contenedor = document.getElementById("contenedor");
+
+    try {
+        const response = await fetch(`http://localhost:8080/obtener?tipo=${seccionActual}`);
+        const data = await response.json();
+
+        if (data.length === 0) {
+            contenedor.innerHTML = `<h2 class="nombre2" style="grid-column: 1/-1;">No hay datos guardados en este universo.</h2>`;
+        } else {
+            renderCards(data, seccionActual);
+        }
+    } catch (error) {
+        console.error("Error cargando desde BBDD:", error);
+        alert("🔌 Error al conectar con la base de datos.");
+    }
+}
+
+/* LOGICA PARA FETCH DESDE BBDD */
 
 /* LÓGICA DE CARGA DE DATOS (FICHAS) */
 async function ficha() {

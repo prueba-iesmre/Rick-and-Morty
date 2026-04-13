@@ -10,6 +10,30 @@ public class ServidorRick {
         // CREAMOS SERVIDOR PUERTO 8080
         HttpServer server = HttpServer.create(new InetSocketAddress(8080), 0);
 
+        server.createContext("/obtener", exchange -> {
+            // PERMISOS PARA EL NAVEGADOR
+            exchange.getResponseHeaders().add("Access-Control-Allow-Origin", "*");
+
+        // Leemos el tipo de la URL: /obtener?tipo=character
+        String query = exchange.getRequestURI().getQuery();
+        String tipo = query.split("=")[1];
+
+        testBBDD db = new testBBDD();
+        try {
+            String respuestaJson = db.obtenerDatos(tipo);
+            byte[] response = respuestaJson.getBytes(StandardCharsets.UTF_8);
+            exchange.getResponseHeaders().set("Content-Type", "application/json");
+            exchange.sendResponseHeaders(200, response.length);
+        try (OutputStream os = exchange.getResponseBody()) {
+            os.write(response);
+        }
+        } catch (Exception e) {
+            e.printStackTrace();
+            exchange.sendResponseHeaders(500, 0);
+        }
+        exchange.close();
+    });
+
         server.createContext("/guardar", exchange -> {
             // CONFIGURACI0N DE CORS (Para que el navegador no bloquee la conexión)
             exchange.getResponseHeaders().add("Access-Control-Allow-Origin", "*");
@@ -117,4 +141,5 @@ public class ServidorRick {
             return "No encontrado";
         }
     }
+
 }
