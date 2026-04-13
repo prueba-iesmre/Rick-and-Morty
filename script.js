@@ -206,7 +206,7 @@ function guardarEnBD(item, type) {
     .then(async respuesta => {
         const mensaje = await respuesta.text();
         if (respuesta.ok) {
-            alert("✅ " + mensaje);
+            alert("💾 " + mensaje);
         } else if (respuesta.status === 409) {
             alert("❌ " + mensaje);
         } else {

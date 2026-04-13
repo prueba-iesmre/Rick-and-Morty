@@ -1,5 +1,4 @@
 import com.sun.net.httpserver.HttpServer;
-import com.sun.net.httpserver.HttpExchange;
 import java.net.InetSocketAddress;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -38,33 +37,41 @@ public class ServidorRick {
                 try {
                     // DEPENDIENDO DEL TIPO INSERTAMOS X
                     if (tipoDato.equals("character")) {
+                        String nombre = extraer(json, "nombre");
                         db.insertarPersonajes(
                             extraer(json, "nombre"), extraer(json, "especie"),
                             extraer(json, "estado"), extraer(json, "origen"),
                             extraer(json, "imagen"), extraer(json, "genero") // En JS mandamos 'genero' para la ubicación
                         );
-                        mensajeRespuesta = "Personaje guardado correctamente";
+                        mensajeRespuesta =  nombre + " guardado en la base de datos";
                     }
                     else if (tipoDato.equals("location")) {
+                        String nombre = extraer(json, "nombre");
                         db.insertarUbicacion(
                             extraer(json, "nombre"), extraer(json, "tipo"),
                             extraer(json, "dimension"), extraer(json, "imagen")
                         );
-                        mensajeRespuesta = "Ubicación guardada correctamente";
+                        mensajeRespuesta =  nombre + " guardado en la base de datos";
                     }
                     else if (tipoDato.equals("episode")) {
+                        String nombre = extraer(json, "nombre");
                         db.insertarEpisodio(
                             extraer(json, "nombre"), extraer(json, "air_date"),
                             extraer(json, "episode"), extraer(json, "imagen")
                         );
-                        mensajeRespuesta = "Episodio guardado correctamente";
+                        mensajeRespuesta =  nombre + " guardado en la base de datos";
                     }
 
                 } catch (Exception e) {
                     //  CONTROL DE DUPLICADOS
                     if (e.getMessage().contains("Duplicate entry")) {
-                        mensajeRespuesta = "Esta información ya está en la base de datos";
+                        String mensajeError = e.getMessage();
+                        // [0] DUPLICATE ENTRY [1] NOMBRE
+                        String valorDuplicado = mensajeError.split("'")[1];
+                        System.out.println("❌ " + valorDuplicado + " ya está en la base de datos" + "\n");
+                        mensajeRespuesta = valorDuplicado + " ya está en la base de datos";
                         codigoEstado = 409;
+
                     } else {
                         e.printStackTrace();
                         mensajeRespuesta = "Error en el servidor o BD";

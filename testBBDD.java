@@ -18,7 +18,7 @@ public class testBBDD {
             int filasmodificadas = pst.executeUpdate();
 
             if (filasmodificadas > 0){
-                System.out.println("Se insertaron personajes");
+                System.out.println("💾 Personaje guardado: " + nombre + "\n");
             }else{
                 System.out.println("No se insertaron personajes");
             }
@@ -39,10 +39,8 @@ public class testBBDD {
 
             int filasmodificadas = pst.executeUpdate();
 
-            System.out.println("💾 Episodio guardado: " + nombre);
-
             if (filasmodificadas > 0){
-                System.out.println("Se inserto un episodio");
+                System.out.println("💾 Episodio guardado: " + nombre + "\n");
             }else{
                 System.out.println("No se inserto ningun episodio");
             }
@@ -61,10 +59,8 @@ public class testBBDD {
 
             int filasmodificadas = pst.executeUpdate();
 
-            System.out.println("💾 Episodio guardado: " + nombre);
-
             if (filasmodificadas > 0){
-                System.out.println("Se inserto una ubicacion");
+                System.out.println("💾 Ubicacion guardada: " + nombre + "\n");
             }else{
                 System.out.println("No se inserto ninguna ubicacion");
             }
