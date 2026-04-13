@@ -86,6 +86,8 @@ function usarBBDD() {
 function cambiarSeccion(nuevaSeccion) {
     seccionActual = nuevaSeccion;
     numeroPagina = 1;
+    //BORRA EL INPUT AL CAMBIAR EL SEARCH
+    if (searchInput) searchInput.value = "";
     if (modoFuente === "BBDD") {
         cargarDesdeBBDD();
     } else {
@@ -206,8 +208,13 @@ if (filterType) filterType.addEventListener('change', fetchData);
 async function fetchData() {
     const query = searchInput.value.toLowerCase().trim();
     const type = filterType.value;
-    const url = `https://rickandmortyapi.com/api/${type}/?name=${query}`;
 
+    if (modoFuente === "BBDD") {
+        buscarEnBBDDLocal(query, type);
+        return;
+    }
+
+    const url = `https://rickandmortyapi.com/api/${type}/?name=${query}`;
     try {
         const response = await fetch(url);
         const data = await response.json();
@@ -218,7 +225,30 @@ async function fetchData() {
             document.getElementById('contenedor').innerHTML = `<h2 class="nombre2" style="grid-column: 1/-1;">No hay ningún "${query}" en este universo.</h2>`;
         }
     } catch (error) {
-        console.error("Error buscando datos:", error);
+        console.error("Error buscando datos en API:", error);
+    }
+}
+
+//FUNCION PARA BUSCAR SOLO EN BBDD
+async function buscarEnBBDDLocal(query, type) {
+    const contenedor = document.getElementById("contenedor");
+    try {
+
+        const response = await fetch(`http://localhost:8080/obtener?tipo=${type}`);
+        const data = await response.json();
+
+
+        const resultadosFiltrados = data.filter(item =>
+            item.name.toLowerCase().includes(query)
+        );
+
+        if (resultadosFiltrados.length === 0) {
+            contenedor.innerHTML = `<h2 class="nombre2" style="grid-column: 1/-1;">"${query}" no está en tu base de datos.</h2>`;
+        } else {
+            renderCards(resultadosFiltrados, type);
+        }
+    } catch (error) {
+        console.error("Error buscando en BBDD:", error);
     }
 }
 
