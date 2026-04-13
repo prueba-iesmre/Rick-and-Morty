@@ -70,14 +70,4 @@ public class testBBDD {
             }
         }
     }
-
-    public static void main(String[] args) {
-        testBBDD testDAO = new testBBDD();
-        try {
-            testDAO.insertarPersonajes("Rick Sanchez", "Humano", "Vivo", "Tierra", "http://imagen.png", "Ciudadela");
-
-        } catch (SQLException e) {
-            System.out.println(e);
-        }
-    }
 }
