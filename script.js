@@ -1,6 +1,7 @@
 let numeroPagina = 1;
 let totalPaginas = 0;
 let seccionActual = "character";
+let modoFuente = "API";
 
 /* SCRIPT PARA MOSTRAR NUMERO DE PAGINAS */
 function generarNumerosPaginas() {
@@ -31,7 +32,7 @@ function generarNumerosPaginas() {
 
 function irAPagina(num) {
     numeroPagina = num;
-    ficha();
+    cargarDatos();
     window.scrollTo({ top: 0, behavior: 'smooth' });
 }
 
@@ -49,26 +50,36 @@ function svgDinamico() {
     list.classList.toggle("oculto");
 }
 
+function cargarDatos(){
+    if (modoFuente === "BBDD") {
+        cargarDesdeBBDD();
+    }else{
+        ficha();
+    }
+}
+
 function paginaSiguiente() {
     numeroPagina++;
-    ficha();
+    cargarDatos();
     window.scrollTo({ top: 0 });
 }
 
 function paginaAnterior() {
     if (numeroPagina > 1) {
         numeroPagina--;
-        ficha();
+        cargarDatos();
         window.scrollTo({ top: 0 });
     }
 }
 
 function usarAPI() {
+    modoFuente = "API"
     document.getElementById("bienvenida").style.display = "none";
     ficha();
 }
 
 function usarBBDD() {
+    modoFuente= "BBDD"
     document.getElementById("bienvenida").style.display = "none";
 }
 
@@ -82,9 +93,8 @@ function cambiarSeccion(nuevaSeccion) {
     }
 }
 
-/* LOGICA PARA FETCH DESDE BBDD */
 
-let modoFuente = "API";
+/* LOGICA PARA FETCH DESDE BBDD */
 
 async function usarBBDD() {
     modoFuente = "BBDD";
