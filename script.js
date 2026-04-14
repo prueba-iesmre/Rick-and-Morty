@@ -7,23 +7,31 @@ let modoFuente = "API";
 function generarNumerosPaginas() {
     const contenedor = document.getElementById("numerosPaginacion");
     if (!contenedor) return;
+
     contenedor.innerHTML = "";
+
+    // 🧠 si estamos en búsqueda, no mostramos paginación
+    if (searchInput && searchInput.value.trim() !== "") return;
 
     let inicio = Math.max(1, numeroPagina - 2);
     let fin = Math.min(totalPaginas, numeroPagina + 2);
 
+    // ⬅️ botón primera página
     if (inicio > 1) {
         contenedor.innerHTML += `<button class="numeroBtn" onclick="irAPagina(1)">1</button>`;
         if (inicio > 2) contenedor.innerHTML += `<span class="dots">...</span>`;
     }
 
+    // 🔢 páginas centrales
     for (let i = inicio; i <= fin; i++) {
         contenedor.innerHTML += `
-            <button class="numeroBtn ${i === numeroPagina ? 'activo' : ''}" onclick="irAPagina(${i})">
+            <button class="numeroBtn ${i === numeroPagina ? 'activo' : ''}"
+            onclick="irAPagina(${i})">
                 ${i}
             </button>`;
     }
 
+    // ➡️ última página
     if (fin < totalPaginas) {
         if (fin < totalPaginas - 1) contenedor.innerHTML += `<span class="dots">...</span>`;
         contenedor.innerHTML += `<button class="numeroBtn" onclick="irAPagina(${totalPaginas})">${totalPaginas}</button>`;
@@ -126,17 +134,34 @@ async function cargarDesdeBBDD() {
 /* LOGICA PARA FETCH DESDE BBDD */
 
 /* LÓGICA DE CARGA DE DATOS (FICHAS) */
+let cache = {};
+
 async function ficha() {
     const contenedor = document.getElementById("contenedor");
-    let url = `https://rickandmortyapi.com/api/${seccionActual}?page=${numeroPagina}`;
 
     try {
-        const response = await fetch(url);
-        const data = await response.json();
-        totalPaginas = data.info.pages;
 
-        renderCards(data.results, seccionActual);
+        // 1. Si no tengo la página, la pido a la API
+        if (!cache[numeroPagina]) {
+            let url = `https://rickandmortyapi.com/api/${seccionActual}?page=${numeroPagina}`;
+            const response = await fetch(url);
+            const data = await response.json();
+
+            totalPaginas = data.info.pages;
+
+            cache[numeroPagina] = data.results;
+        }
+
+        // 2. Cojo los datos de esa página
+        let datos = cache[numeroPagina];
+
+        // 3. Muestro solo 12
+        let mostrar = datos.slice(0, 12);
+
+        // 4. Pinto en pantalla
+        renderCards(mostrar, seccionActual);
         generarNumerosPaginas();
+
     } catch (error) {
         console.error("Error cargando fichas:", error);
     }
@@ -148,13 +173,13 @@ function renderCards(items, type) {
     contenedor.innerHTML = "";
 
     items.forEach(item => {
-        // Lógica de imágenes de tu compañero
+        // Imagenes para cada seccion
         const imagenUrl =
             type === 'character' ? item.image :
             type === 'location' ? 'img/ubicacion.jpg' :
             type === 'episode' ? 'img/episodio.jpg' : '';
 
-        // Lógica de info extra de tu compañero
+        // Informacion extra
         let infoExtra = "";
         if (type === 'character') {
             infoExtra = `
@@ -172,7 +197,7 @@ function renderCards(items, type) {
                 <p>Código: ${item.episode}</p>`;
         }
 
-        // Estructura final con TU botón de guardar
+        // Estructura final con el botón de guardar
         contenedor.innerHTML += `
             <div class="fichas">
                 <div class="header-ficha">
@@ -199,32 +224,43 @@ function renderCards(items, type) {
 }
 
 /* FILTROS Y BUSCADOR */
-const searchInput = document.getElementById('searchInput');
-const filterType = document.getElementById('filterType');
+const searchInput = document.getElementById('searchInput'); // input de búsqueda
+const filterType = document.getElementById('filterType');   // tipo (personaje, etc.)
 
+// ejecuta búsqueda al escribir o cambiar tipo
 if (searchInput) searchInput.addEventListener('input', fetchData);
 if (filterType) filterType.addEventListener('change', fetchData);
 
+// 🔍 BUSCADOR PRINCIPAL
 async function fetchData() {
-    const query = searchInput.value.toLowerCase().trim();
-    const type = filterType.value;
 
+    const query = searchInput.value.toLowerCase().trim(); // texto escrito
+    const type = filterType.value; // tipo seleccionado
+
+    // 🗄️ si usas base de datos local
     if (modoFuente === "BBDD") {
         buscarEnBBDDLocal(query, type);
         return;
     }
 
+    // 🌐 llamada a la API
     const url = `https://rickandmortyapi.com/api/${type}/?name=${query}`;
+
     try {
-        const response = await fetch(url);
-        const data = await response.json();
+        const response = await fetch(url); // pedir datos
+        const data = await response.json(); // convertir a JSON
 
         if (data.results) {
-            renderCards(data.results, type);
+            // ✅ mostrar SOLO 12 resultados
+            renderCards(data.results.slice(0, 12), type);
         } else {
-            document.getElementById('contenedor').innerHTML = `<h2 class="nombre2" style="grid-column: 1/-1;">No hay ningún "${query}" en este universo.</h2>`;
+            // ❌ sin resultados
+            document.getElementById('contenedor').innerHTML =
+                `<h2 class="nombre2" style="grid-column: 1/-1;">No hay resultados</h2>`;
         }
+
     } catch (error) {
+        // 🚨 error de API
         console.error("Error buscando datos en API:", error);
     }
 }
