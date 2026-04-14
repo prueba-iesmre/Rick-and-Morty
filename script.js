@@ -73,15 +73,9 @@ function paginaAnterior() {
 }
 
 function usarAPI() {
-    modoFuente = "API"
-    document.getElementById("bienvenida").style.display = "none";
-    ficha();
+    window.location.href = "app.html?fuente=API";
 }
 
-function usarBBDD() {
-    modoFuente= "BBDD"
-    document.getElementById("bienvenida").style.display = "none";
-}
 
 function cambiarSeccion(nuevaSeccion) {
     seccionActual = nuevaSeccion;
@@ -99,10 +93,14 @@ function cambiarSeccion(nuevaSeccion) {
 /* LOGICA PARA FETCH DESDE BBDD */
 
 async function usarBBDD() {
-    modoFuente = "BBDD";
-    document.getElementById("bienvenida").style.display = "none";
-    document.getElementById("numerosPaginacion").style.display = "none";
-    cargarDesdeBBDD();
+    try {
+        const res = await fetch(`http://localhost:8080/obtener?tipo=character`);
+        if (res.ok) return window.location.href = "app.html?fuente=BBDD";
+
+        alert("⚠️ Error en el servidor");
+    } catch (e) {
+        alert("🔌 Servidor apagado. ¿Está encendido?");
+    }
 }
 
 async function cargarDesdeBBDD() {
@@ -119,9 +117,11 @@ async function cargarDesdeBBDD() {
         }
     } catch (error) {
         console.error("Error cargando desde BBDD:", error);
-        alert("🔌 Error al conectar con la base de datos.");
+            alert("🔌 No se pudo conectar con el servidor Java. ¿Está encendido?");
+        window.location.replace("index.html");
     }
 }
+
 
 /* LOGICA PARA FETCH DESDE BBDD */
 
@@ -300,3 +300,29 @@ function abrirNuevaVentana(url) {
 function btnvolver(){
     window.history.back();
 }
+
+
+//Funcion para cargar paginas al cambiar de index a app.html
+window.addEventListener('DOMContentLoaded', () => {
+    const contenedor = document.getElementById("contenedor");
+
+    if (contenedor) {
+        const urlParams = new URLSearchParams(window.location.search);
+        const fuente = urlParams.get('fuente');
+
+        if (fuente === "BBDD") {
+            modoFuente = "BBDD";
+
+            const botonesPag = document.querySelector(".botonesPaginacion");
+            const numerosPag = document.getElementById("numerosPaginacion");
+            if (botonesPag) botonesPag.style.display = "none";
+            if (numerosPag) numerosPag.style.display = "none";
+
+
+            cargarDesdeBBDD();
+        } else {
+            modoFuente = "API";
+            ficha();
+        }
+    }
+});
