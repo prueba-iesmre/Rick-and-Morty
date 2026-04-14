@@ -126,17 +126,34 @@ async function cargarDesdeBBDD() {
 /* LOGICA PARA FETCH DESDE BBDD */
 
 /* LÓGICA DE CARGA DE DATOS (FICHAS) */
+let cache = {};
+
 async function ficha() {
     const contenedor = document.getElementById("contenedor");
-    let url = `https://rickandmortyapi.com/api/${seccionActual}?page=${numeroPagina}`;
 
     try {
-        const response = await fetch(url);
-        const data = await response.json();
-        totalPaginas = data.info.pages;
 
-        renderCards(data.results, seccionActual);
+        // 1. Si no tengo la página, la pido a la API
+        if (!cache[numeroPagina]) {
+            let url = `https://rickandmortyapi.com/api/${seccionActual}?page=${numeroPagina}`;
+            const response = await fetch(url);
+            const data = await response.json();
+
+            totalPaginas = data.info.pages;
+
+            cache[numeroPagina] = data.results;
+        }
+
+        // 2. Cojo los datos de esa página
+        let datos = cache[numeroPagina];
+
+        // 3. Muestro solo 12
+        let mostrar = datos.slice(0, 12);
+
+        // 4. Pinto en pantalla
+        renderCards(mostrar, seccionActual);
         generarNumerosPaginas();
+
     } catch (error) {
         console.error("Error cargando fichas:", error);
     }
@@ -148,7 +165,7 @@ function renderCards(items, type) {
     contenedor.innerHTML = "";
 
     items.forEach(item => {
-        // Imagenes
+        // Imagenes para cada seccion
         const imagenUrl =
             type === 'character' ? item.image :
             type === 'location' ? 'img/ubicacion.jpg' :
