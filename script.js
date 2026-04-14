@@ -1,6 +1,6 @@
-let numeroPagina = 1;
-let totalPaginas = 0;
-let seccionActual = "character";
+global.numeroPagina = 1;
+global.totalPaginas = 0;
+global.seccionActual = "character";
 
 /* SCRIPT PARA MOSTRAR NUMERO DE PAGINAS */
 function generarNumerosPaginas() {
@@ -225,3 +225,9 @@ function abrirNuevaVentana(url) {
 function btnvolver(){
     window.history.back();
 }
+
+module.exports = {
+  paginaAnterior,
+  cambiarSeccion,
+  irAPagina
+};

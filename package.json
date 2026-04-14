@@ -1,0 +1,27 @@
+{
+  "name": "rick-and-morty",
+  "version": "1.0.0",
+  "description": "",
+  "main": "script.js",
+  "scripts": {
+    "test": "jest"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/prueba-iesmre/Rick-and-Morty.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/prueba-iesmre/Rick-and-Morty/issues"
+  },
+  "homepage": "https://github.com/prueba-iesmre/Rick-and-Morty#readme",
+  "devDependencies": {
+    "jest": "^30.3.0",
+    "jest-environment-jsdom": "^30.3.0"
+  },
+  "jest": {
+  "testEnvironment": "jsdom"
+}
+}
