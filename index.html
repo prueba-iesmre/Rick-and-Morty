@@ -27,54 +27,7 @@
             </h1>
             <img src="img/Pepinillo.png" class="header-img right">
         </div>
-            <form action="" method="post" class="conjuntoOpciones">
-      <fieldset class="opciones">
-        <div>
-          <legend class="tituloOpciones">Opciones de Personajes</legend>
-          <label for="estado">Estado:</label>
-          <div id="estado" class="estado"></div>
-        </div>
-        <script>generarEstado();</script>
-        <div>
-          <label for="especie">Especie:</label>
-          <div id="especie" class="especie"></div>
-        </div>
-        <script>generarEspecie();</script>
-        <div>
-          <label for="tipoC">Tipo:</label>
-          <div id="tipoC" class="tipoC"></div>
-        </div>
-        <script>generarTipoC();</script>
-        <div>
-          <label for="genero">Genero:</label>
-          <div id="genero" class="genero"></div>
-        </div>
-        <script>generarGenero();</script>
-      </fieldset>
-      <fieldset class="opciones">
-        <div>
-          <legend class="tituloOpciones">Opciones de Ubicacion</legend>
-          <label for="tipoL">Tipo:</label>
-          <div id="tipoL" class="tipoL"></div>
-        </div>
-        <script>generarTipoL();</script>
-        <div>
-          <label for="dimension">Dimension:</label>
-          <div id="dimension" class="dimension"></div>
-        </div>
-        <script>generarDimension();</script>
-        <button type="submit">Buscar</button>
-      </fieldset>
-      <fieldset class="opciones">
-        <div>
-          <legend class="tituloOpciones">Opciones de Episodios</legend>
-          <label for="episodio">Episodio:</label>
-          <div id="episodio" class="episodio"></div>
-        </div>
-        <script>generarEpisodio();</script>
-        <button type="submit">Buscar</button>
-      </fieldset>
-    </form>
+            
     </header>
     <main>
       <div class="contenedor-navbar">
@@ -117,9 +70,54 @@
       </svg>
     </button>
   </div>
-      <div id="contenedor" class="contenedor">
+    <form action="" method="post" id="formPersonajes" class="conjuntoOpciones">
+      <fieldset class="opciones">
+        <legend class="tituloOpciones">Opciones de Personajes</legend>
+        <div>
+          <label for="estado">Estado:</label>
+          <div id="estado" class="estado"></div>
+        </div>
+        <div>
+          <label for="especie">Especie:</label>
+          <div id="especie" class="especie"></div>
+        </div>
+        <div>
+          <label for="tipoC">Tipo:</label>
+          <div id="tipoC" class="tipoC"></div>
+        </div>
+        <div>
+          <label for="genero">Genero:</label>
+          <div id="genero" class="genero"></div>
+        </div>
+        <button type="submit" id="formBusqueda">Buscar</button>
+      </fieldset>
+    </form>
+    <form action="" method="post" id="formUbicaciones" class="conjuntoOpciones">
+      <fieldset class="opciones">
+        <legend class="tituloOpciones">Opciones de Ubicacion</legend>
+        <div>
+          <label for="tipoL">Tipo:</label>
+          <div id="tipoL" class="tipoL"></div>
+        </div>
+        <div>
+          <label for="dimension">Dimension:</label>
+          <div id="dimension" class="dimension"></div>
+        </div>
+        <button type="submit" id="formBusqueda">Buscar</button>
+      </fieldset>
+    </form>
+    <form action="" method="post" id="formEpisodios" class="conjuntoOpciones">
+      <fieldset class="opciones">
+        <legend class="tituloOpciones">Opciones de Episodios</legend>
+        <div>
+          <label for="episodio">Episodio:</label>
+          <div id="episodio" class="episodio"></div>
+        </div>
+        <button type="submit" id="formBusqueda">Buscar</button>
+      </fieldset>
+    </form>
+    <div id="contenedor" class="contenedor">
     </div>
-    <script>ficha();</script>
 
     <div class="botonesPaginacion">
       <button class="btn-icono" onclick="paginaAnterior()">

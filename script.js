@@ -148,7 +148,7 @@ function generarEstado() {
     let html = '<select name="estado" id="estado">';
 
     for (let i = 0; i < arrayStatus.length; i++) {
-        html += '<option value="' + i+1 + '">' + arrayStatus[i] + '</option>';
+        html += '<option value="' + arrayStatus[i] + '">' + arrayStatus[i] + '</option>';
     }
 
     html += '</select>';
@@ -163,7 +163,7 @@ function generarEspecie() {
     let html = '<select name="especie" id="especie">';
 
     for (let i = 0; i < arraySpecie.length; i++) {
-        html += '<option value="' + i+1 + '">' + arraySpecie[i] + '</option>';
+        html += '<option value="' + arraySpecie[i] + '">' + arraySpecie[i] + '</option>';
     }
 
     html += '</select>';
@@ -173,11 +173,11 @@ function generarEspecie() {
 
 function generarTipoC() {
     const tipoC = document.getElementById("tipoC");
-    const arrayType = ["Genetic experiment", "Superhuman (Ghost trains summoner)", "Parasite", "Human with antennae", "Human with ants in his eyes", "Fish-Person", "Cromulon", "Self-aware arm", "Cat-Person", "Human with baby legs","Bepisian", "Hivemind","Mytholog","Human with giant head","Dog","Bird-Person","Korblock","Boobloosian","Elephant-Person","Superhuman","Gromflomite","Centaur","Organic gun","Microverse inhabitant","Vampire","Light bulb-Alien","Animal","Robot-Crocodile hybrid","Zigerion","Giant","Cone-nippled alien","Demon","Shapeshifter","Game","Amoeba-Person","Cronenberg","Clone","Robot","Interdimensional gaseous being","Flansian","Zombodian","Garblovian","Gazorpian","Eat shiter-Person","Goddess","Gazorpian reproduction robot","Hammerhead-Person","Hole","Tuskfish","Alphabetrian","Cat","Time God","Unknown-nippled alien","Krootabulan","Plutonian","Jellybean","Tentacle alien","Miniverse inhabitant","Cyborg","Larva alien","Snail alien","Tinymouth","Lizard-Person","Alligator-Person","Monster","Conjoined twin","Sentient ant colony","Human Gazorpian","Boobie buyer reptilian","Meeseeks","The Devil","Cat controlled dead lady","Numbericon","Octopus-Person","Hairy alien","Pickle","Bread","Mega Gargantuan","Rat","Gear-Person","Blue ape alien","Ring-nippled alien","Lobster-Alien","Scrotian","Shimshamian","Omniscient being","Slug","Stair goblin","Leprechaun","Morty's toxic side","Rick's toxic side","Traflorkian","Teenyverse inhabitant","Trunk-Person","Tumblorkian","Chair","Drumbloxian","Floop Floopian","Greebybobe", "Corn-person","Phone-Person","Teddy Bear","Little Human","Mexican","Giant Cat Monster","Old Amazons","Mannie","Necrophiliac","Eel","Pizza","Grandma","Phone","Doopidoo","Pripudlian","Nano Alien","Human with a flower in his head","Hologram","Shrimp","Caterpillar","Wasp","Toy","Monogatron","Lizard","Fly","God","Dummy","Human with tusks","Gramuflackian","Dragon","Snake","Human-Snake hybrid","Soulless Puppet","Half Soulless Puppet","Glorzo","Planet","Zeus","Clay-Person","Sexy Aquaman","Narnian","Starfish","Squid","Decoy","Whenwolf","Summon","Morglutzian","Weasel","Super Sperm Monster","CHUD","Giant Incest Baby","CHUD Human Mix","Changeformer","Artificial Intelligence","Guinea Pig for the Polio Vaccine","Turkey","Turkey Human Mix","Anime","Memory","Bird-Person Human Mix","Crow","Cookie","Normal Size Bug","Slartivartian","Ferkusian","Mascot","Scarecrow","Tiger","Crow Horse","Ferret Robot","Passing Butter Robot"];
+    const arrayType = ["None","Genetic experiment", "Superhuman (Ghost trains summoner)", "Parasite", "Human with antennae", "Human with ants in his eyes", "Fish-Person", "Cromulon", "Self-aware arm", "Cat-Person", "Human with baby legs","Bepisian", "Hivemind","Mytholog","Human with giant head","Dog","Bird-Person","Korblock","Boobloosian","Elephant-Person","Superhuman","Gromflomite","Centaur","Organic gun","Microverse inhabitant","Vampire","Light bulb-Alien","Animal","Robot-Crocodile hybrid","Zigerion","Giant","Cone-nippled alien","Demon","Shapeshifter","Game","Amoeba-Person","Cronenberg","Clone","Robot","Interdimensional gaseous being","Flansian","Zombodian","Garblovian","Gazorpian","Eat shiter-Person","Goddess","Gazorpian reproduction robot","Hammerhead-Person","Hole","Tuskfish","Alphabetrian","Cat","Time God","Unknown-nippled alien","Krootabulan","Plutonian","Jellybean","Tentacle alien","Miniverse inhabitant","Cyborg","Larva alien","Snail alien","Tinymouth","Lizard-Person","Alligator-Person","Monster","Conjoined twin","Sentient ant colony","Human Gazorpian","Boobie buyer reptilian","Meeseeks","The Devil","Cat controlled dead lady","Numbericon","Octopus-Person","Hairy alien","Pickle","Bread","Mega Gargantuan","Rat","Gear-Person","Blue ape alien","Ring-nippled alien","Lobster-Alien","Scrotian","Shimshamian","Omniscient being","Slug","Stair goblin","Leprechaun","Morty's toxic side","Rick's toxic side","Traflorkian","Teenyverse inhabitant","Trunk-Person","Tumblorkian","Chair","Drumbloxian","Floop Floopian","Greebybobe", "Corn-person","Phone-Person","Teddy Bear","Little Human","Mexican","Giant Cat Monster","Old Amazons","Mannie","Necrophiliac","Eel","Pizza","Grandma","Phone","Doopidoo","Pripudlian","Nano Alien","Human with a flower in his head","Hologram","Shrimp","Caterpillar","Wasp","Toy","Monogatron","Lizard","Fly","God","Dummy","Human with tusks","Gramuflackian","Dragon","Snake","Human-Snake hybrid","Soulless Puppet","Half Soulless Puppet","Glorzo","Planet","Zeus","Clay-Person","Sexy Aquaman","Narnian","Starfish","Squid","Decoy","Whenwolf","Summon","Morglutzian","Weasel","Super Sperm Monster","CHUD","Giant Incest Baby","CHUD Human Mix","Changeformer","Artificial Intelligence","Guinea Pig for the Polio Vaccine","Turkey","Turkey Human Mix","Anime","Memory","Bird-Person Human Mix","Crow","Cookie","Normal Size Bug","Slartivartian","Ferkusian","Mascot","Scarecrow","Tiger","Crow Horse","Ferret Robot","Passing Butter Robot"];
     let html = '<select name="tipoC" id="tipoC">';
 
     for (let i = 0; i < arrayType.length; i++) {
-        html += '<option value="' + i+1 + '">' + arrayType[i] + '</option>';
+        html += '<option value="' + arrayType[i] + '">' + arrayType[i] + '</option>';
     }
 
     html += '</select>';
@@ -191,7 +191,7 @@ function generarGenero() {
     let html = '<select name="genero" id="genero">';
 
     for (let i = 0; i < arrayGender.length; i++) {
-        html += '<option value="' + i+1 + '">' + arrayGender[i] + '</option>';
+        html += '<option value="' + arrayGender[i] + '">' + arrayGender[i] + '</option>';
     }
 
     html += '</select>';
@@ -205,7 +205,7 @@ function generarTipoL() {
     let html = '<select name="tipoL" id="tipoL">';
 
     for (let i = 0; i < arrayType.length; i++) {
-        html += '<option value="' + i+1 + '">' + arrayType[i] + '</option>';
+        html += '<option value="' + arrayType[i] + '">' + arrayType[i] + '</option>';
     }
 
     html += '</select>';
@@ -219,7 +219,7 @@ function generarDimension() {
     let html = '<select name="dimension" id="dimension">';
 
     for (let i = 0; i < arrayDimension.length; i++) {
-        html += '<option value="' + i+1 + '">' + arrayDimension[i] + '</option>';
+        html += '<option value="' + arrayDimension[i] + '">' + arrayDimension[i] + '</option>';
     }
 
     html += '</select>';
@@ -233,11 +233,120 @@ function generarEpisodio() {
     let html = '<select name="episodio" id="episodio">';
 
     for (let i = 0; i < arrayEpisode.length; i++) {
-        html += '<option value="' + i+1 + '">' + arrayEpisode[i] + '</option>';
+        html += '<option value="' + arrayEpisode[i] + '">' + arrayEpisode[i] + '</option>';
     }
 
     html += '</select>';
 
     episodio.innerHTML += html;
 }
+
+function mostrarOpciones(){
+    const filterType = document.getElementById("filterType");
+    const formPersonajes = document.getElementById("formPersonajes");
+    const formUbicaciones = document.getElementById("formUbicaciones");
+    const formEpisodios = document.getElementById("formEpisodios");
+
+    function mostrarSeleccionables(filtro){
+        formPersonajes.style.display = "none";
+        formUbicaciones.style.display = "none";
+        formEpisodios.style.display = "none";
+
+        if (filtro === "character"){
+            formPersonajes.style.display = "block";
+        } else if (filtro === "location"){
+            formUbicaciones.style.display = "block";
+        } else if (filtro === "episode"){
+            formEpisodios.style.display = "block";
+        }
+    }
+
+    filterType.addEventListener("change", function(){
+    mostrarSeleccionables(this.value);
+    });
+
+    mostrarSeleccionables(filterType.value);
+}
+
+/*Activacion y Busqueda*/
+
+document.addEventListener("DOMContentLoaded", function () {
+    generarEstado();
+    generarEspecie();
+    generarTipoC();
+    generarGenero();
+    generarTipoL();
+    generarDimension();
+    generarEpisodio();
+    
+    mostrarOpciones();
+    ficha();
+
+    document.getElementById("filterType").addEventListener("change",()=>{
+        paginaActual = 1;
+        mostrarOpcionesBusqueda();
+        ficha();
+    });
+
+    document.getElementById("formBusqueda").addEventListener("submit", async(e)=> {
+        e.preventDefault();
+
+        const tipo = document.getElementById("filterType").value;
+        const texto = document.getElementById("searchInput").value.trim();
+ 
+        let url = "";
+ 
+        if (tipo === "character") {
+            const estado = document.getElementById("estadoSelect")?.value || "";
+            const especie = document.getElementById("especieSelect")?.value || "";
+            const tipoC = document.getElementById("tipoCSelect")?.value || "";
+            const genero = document.getElementById("generoSelect")?.value || "";
+ 
+            url = `https://rickandmortyapi.com/api/character/?page=1`;
+            if (texto) url += `&name=${encodeURIComponent(texto)}`;
+            if (estado) url += `&status=${encodeURIComponent(estado)}`;
+            if (especie) url += `&species=${encodeURIComponent(especie)}`;
+            if (tipoC) url += `&type=${encodeURIComponent(tipoC)}`;
+            if (genero) url += `&gender=${encodeURIComponent(genero)}`;
+        }
+ 
+        if (tipo === "location") {
+            const tipoL = document.getElementById("tipoLSelect")?.value || "";
+            const dimension = document.getElementById("dimensionSelect")?.value || "";
+ 
+            url = `https://rickandmortyapi.com/api/location/?page=1`;
+            if (texto) url += `&name=${encodeURIComponent(texto)}`;
+            if (tipoL) url += `&type=${encodeURIComponent(tipoL)}`;
+            if (dimension && dimension !== "Unknown") {
+                url += `&dimension=${encodeURIComponent(dimension)}`;
+            }
+        }
+ 
+        if (tipo === "episode") {
+            const episodio = document.getElementById("episodioSelect")?.value || "";
+ 
+            url = `https://rickandmortyapi.com/api/episode/?page=1`;
+            if (texto) url += `&name=${encodeURIComponent(texto)}`;
+            if (episodio) url += `&episode=${encodeURIComponent(episodio)}`;
+        }
+ 
+        try {
+            const respuesta = await fetch(url);
+            const datos = await respuesta.json();
+ 
+            if (datos.error) {
+                renderFichas([], tipo);
+                return;
+            }
+ 
+            datosActuales = datos.results || [];
+            paginaActual = 1;
+            renderFichas(datosActuales, tipo);
+        } catch (error) {
+            console.error("Error en la búsqueda:", error);
+            renderFichas([], tipo);
+        }
+    })
+});
+
 /* FIN SCRIPT DE LAS OPCIONES DE LAS FICHAS*/
