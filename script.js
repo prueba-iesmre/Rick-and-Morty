@@ -3,6 +3,12 @@ let totalPaginas = 0;
 let seccionActual = "character";
 let modoFuente = "API";
 
+let paginacionSecciones = {
+    character: 0,
+    location: 0,
+    episode: 0
+};
+
 /* SCRIPT PARA MOSTRAR NUMERO DE PAGINAS */
 function generarNumerosPaginas() {
     const contenedor = document.getElementById("numerosPaginacion");
@@ -10,19 +16,18 @@ function generarNumerosPaginas() {
 
     contenedor.innerHTML = "";
 
-    // 🧠 si estamos en búsqueda, no mostramos paginación
-    if (searchInput && searchInput.value.trim() !== "") return;
+    const totalPaginasActual = paginacionSecciones[seccionActual];
+
+    if (!totalPaginasActual || totalPaginasActual <= 1) return;
 
     let inicio = Math.max(1, numeroPagina - 2);
-    let fin = Math.min(totalPaginas, numeroPagina + 2);
+    let fin = Math.min(totalPaginasActual, numeroPagina + 2);
 
-    // ⬅️ botón primera página
     if (inicio > 1) {
         contenedor.innerHTML += `<button class="numeroBtn" onclick="irAPagina(1)">1</button>`;
         if (inicio > 2) contenedor.innerHTML += `<span class="dots">...</span>`;
     }
 
-    // 🔢 páginas centrales
     for (let i = inicio; i <= fin; i++) {
         contenedor.innerHTML += `
             <button class="numeroBtn ${i === numeroPagina ? 'activo' : ''}"
@@ -31,10 +36,9 @@ function generarNumerosPaginas() {
             </button>`;
     }
 
-    // ➡️ última página
-    if (fin < totalPaginas) {
-        if (fin < totalPaginas - 1) contenedor.innerHTML += `<span class="dots">...</span>`;
-        contenedor.innerHTML += `<button class="numeroBtn" onclick="irAPagina(${totalPaginas})">${totalPaginas}</button>`;
+    if (fin < totalPaginasActual) {
+        if (fin < totalPaginasActual - 1) contenedor.innerHTML += `<span class="dots">...</span>`;
+        contenedor.innerHTML += `<button class="numeroBtn" onclick="irAPagina(${totalPaginasActual})">${totalPaginasActual}</button>`;
     }
 }
 
@@ -147,8 +151,7 @@ async function ficha() {
             const response = await fetch(url);
             const data = await response.json();
 
-            totalPaginas = data.info.pages;
-
+            paginacionSecciones[seccionActual] = data.info.pages;
             cache[numeroPagina] = data.results;
         }
 
