@@ -149,13 +149,13 @@ function renderCards(items, type) {
     contenedor.innerHTML = "";
 
     items.forEach(item => {
-        // Lógica de imágenes de tu compañero
+        // Imagenes
         const imagenUrl =
             type === 'character' ? item.image :
             type === 'location' ? 'img/ubicacion.jpg' :
             type === 'episode' ? 'img/episodio.jpg' : '';
 
-        // Lógica de info extra de tu compañero
+        // Informacion extra
         let infoExtra = "";
         if (type === 'character') {
             infoExtra = `
@@ -173,7 +173,7 @@ function renderCards(items, type) {
                 <p>Código: ${item.episode}</p>`;
         }
 
-        // Estructura final con TU botón de guardar
+        // Estructura final con el botón de guardar
         contenedor.innerHTML += `
             <div class="fichas">
                 <div class="header-ficha">
