@@ -200,12 +200,15 @@ function renderCards(items, type) {
                 <p>Código: ${item.episode}</p>`;
         }
 
+        //Convertimos el objeto a texto y reemplazamos la comilla con codigo html para no romper la query
+        const itemString = JSON.stringify(item).replace(/'/g, "&#39;");
+
         // Estructura final con el botón de guardar
         contenedor.innerHTML += `
             <div class="fichas">
                 <div class="header-ficha">
                     <div class="contenedor-guardado">
-                        <button class="btn-guardar" onclick='guardarEnBD(${JSON.stringify(item)}, "${type}")'>
+                        <button class="btn-guardar" onclick='guardarEnBD(${itemString}, "${type}")'>
                             <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                                 <path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"></path>
                                 <polyline points="17 21 17 13 7 13 7 21"></polyline>
