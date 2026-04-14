@@ -1,6 +1,8 @@
+
 global.numeroPagina = 1;
 global.totalPaginas = 0;
 global.seccionActual = "character";
+let modoFuente = "API";
 
 /* SCRIPT PARA MOSTRAR NUMERO DE PAGINAS */
 function generarNumerosPaginas() {
@@ -31,7 +33,7 @@ function generarNumerosPaginas() {
 
 function irAPagina(num) {
     numeroPagina = num;
-    ficha();
+    cargarDatos();
     window.scrollTo({ top: 0, behavior: 'smooth' });
 }
 
@@ -49,34 +51,80 @@ function svgDinamico() {
     list.classList.toggle("oculto");
 }
 
+function cargarDatos(){
+    if (modoFuente === "BBDD") {
+        cargarDesdeBBDD();
+    }else{
+        ficha();
+    }
+}
+
 function paginaSiguiente() {
     numeroPagina++;
-    ficha();
+    cargarDatos();
     window.scrollTo({ top: 0 });
 }
 
 function paginaAnterior() {
     if (numeroPagina > 1) {
         numeroPagina--;
-        ficha();
+        cargarDatos();
         window.scrollTo({ top: 0 });
     }
 }
 
 function usarAPI() {
+    modoFuente = "API"
     document.getElementById("bienvenida").style.display = "none";
     ficha();
 }
 
 function usarBBDD() {
+    modoFuente= "BBDD"
     document.getElementById("bienvenida").style.display = "none";
 }
 
 function cambiarSeccion(nuevaSeccion) {
     seccionActual = nuevaSeccion;
     numeroPagina = 1;
-    ficha();
+    //BORRA EL INPUT AL CAMBIAR EL SEARCH
+    if (searchInput) searchInput.value = "";
+    if (modoFuente === "BBDD") {
+        cargarDesdeBBDD();
+    } else {
+        ficha();
+    }
 }
+
+
+/* LOGICA PARA FETCH DESDE BBDD */
+
+async function usarBBDD() {
+    modoFuente = "BBDD";
+    document.getElementById("bienvenida").style.display = "none";
+    document.getElementById("numerosPaginacion").style.display = "none";
+    cargarDesdeBBDD();
+}
+
+async function cargarDesdeBBDD() {
+    const contenedor = document.getElementById("contenedor");
+
+    try {
+        const response = await fetch(`http://localhost:8080/obtener?tipo=${seccionActual}`);
+        const data = await response.json();
+
+        if (data.length === 0) {
+            contenedor.innerHTML = `<h2 class="nombre2" style="grid-column: 1/-1;">No hay datos guardados en este universo.</h2>`;
+        } else {
+            renderCards(data, seccionActual);
+        }
+    } catch (error) {
+        console.error("Error cargando desde BBDD:", error);
+        alert("🔌 Error al conectar con la base de datos.");
+    }
+}
+
+/* LOGICA PARA FETCH DESDE BBDD */
 
 /* LÓGICA DE CARGA DE DATOS (FICHAS) */
 async function ficha() {
@@ -161,8 +209,13 @@ if (filterType) filterType.addEventListener('change', fetchData);
 async function fetchData() {
     const query = searchInput.value.toLowerCase().trim();
     const type = filterType.value;
-    const url = `https://rickandmortyapi.com/api/${type}/?name=${query}`;
 
+    if (modoFuente === "BBDD") {
+        buscarEnBBDDLocal(query, type);
+        return;
+    }
+
+    const url = `https://rickandmortyapi.com/api/${type}/?name=${query}`;
     try {
         const response = await fetch(url);
         const data = await response.json();
@@ -173,7 +226,30 @@ async function fetchData() {
             document.getElementById('contenedor').innerHTML = `<h2 class="nombre2" style="grid-column: 1/-1;">No hay ningún "${query}" en este universo.</h2>`;
         }
     } catch (error) {
-        console.error("Error buscando datos:", error);
+        console.error("Error buscando datos en API:", error);
+    }
+}
+
+//FUNCION PARA BUSCAR SOLO EN BBDD
+async function buscarEnBBDDLocal(query, type) {
+    const contenedor = document.getElementById("contenedor");
+    try {
+
+        const response = await fetch(`http://localhost:8080/obtener?tipo=${type}`);
+        const data = await response.json();
+
+
+        const resultadosFiltrados = data.filter(item =>
+            item.name.toLowerCase().includes(query)
+        );
+
+        if (resultadosFiltrados.length === 0) {
+            contenedor.innerHTML = `<h2 class="nombre2" style="grid-column: 1/-1;">"${query}" no está en tu base de datos.</h2>`;
+        } else {
+            renderCards(resultadosFiltrados, type);
+        }
+    } catch (error) {
+        console.error("Error buscando en BBDD:", error);
     }
 }
 
@@ -206,7 +282,7 @@ function guardarEnBD(item, type) {
     .then(async respuesta => {
         const mensaje = await respuesta.text();
         if (respuesta.ok) {
-            alert("✅ " + mensaje);
+            alert("💾 " + mensaje);
         } else if (respuesta.status === 409) {
             alert("❌ " + mensaje);
         } else {

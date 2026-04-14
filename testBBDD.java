@@ -18,7 +18,7 @@ public class testBBDD {
             int filasmodificadas = pst.executeUpdate();
 
             if (filasmodificadas > 0){
-                System.out.println("Se insertaron personajes");
+                System.out.println("💾 Personaje guardado: " + nombre + "\n");
             }else{
                 System.out.println("No se insertaron personajes");
             }
@@ -39,10 +39,8 @@ public class testBBDD {
 
             int filasmodificadas = pst.executeUpdate();
 
-            System.out.println("💾 Episodio guardado: " + nombre);
-
             if (filasmodificadas > 0){
-                System.out.println("Se inserto un episodio");
+                System.out.println("💾 Episodio guardado: " + nombre + "\n");
             }else{
                 System.out.println("No se inserto ningun episodio");
             }
@@ -61,23 +59,48 @@ public class testBBDD {
 
             int filasmodificadas = pst.executeUpdate();
 
-            System.out.println("💾 Episodio guardado: " + nombre);
-
             if (filasmodificadas > 0){
-                System.out.println("Se inserto una ubicacion");
+                System.out.println("💾 Ubicacion guardada: " + nombre + "\n");
             }else{
                 System.out.println("No se inserto ninguna ubicacion");
             }
         }
     }
 
-    public static void main(String[] args) {
-        testBBDD testDAO = new testBBDD();
-        try {
-            testDAO.insertarPersonajes("Rick Sanchez", "Humano", "Vivo", "Tierra", "http://imagen.png", "Ciudadela");
+    public String obtenerDatos(String tipo) throws SQLException {
+    Connection con = DbConnect.getInstance().getConnection();
+    String sql = "SELECT * FROM " + (tipo.equals("character") ? "personajes" : tipo.equals("location") ? "ubicaciones" : "episodios");
 
-        } catch (SQLException e) {
-            System.out.println(e);
+    StringBuilder json = new StringBuilder("[");
+    try (PreparedStatement pst = con.prepareStatement(sql);
+        ResultSet rs = pst.executeQuery()) {
+
+        while (rs.next()) {
+            json.append("{");
+            if (tipo.equals("character")) {
+                json.append("\"name\":\"").append(rs.getString("nombre")).append("\",");
+                json.append("\"species\":\"").append(rs.getString("especie")).append("\",");
+                json.append("\"status\":\"").append(rs.getString("estado")).append("\",");
+                json.append("\"origin\":{\"name\":\"").append(rs.getString("origen")).append("\"},");
+                json.append("\"location\":{\"name\":\"").append(rs.getString("ultima_ubicacion")).append("\"},");
+                json.append("\"image\":\"").append(rs.getString("imagen")).append("\"");
+            } else if (tipo.equals("location")) {
+                json.append("\"name\":\"").append(rs.getString("nombre")).append("\",");
+                json.append("\"type\":\"").append(rs.getString("tipo")).append("\",");
+                json.append("\"dimension\":\"").append(rs.getString("dimension")).append("\",");
+                json.append("\"image\":\"").append(rs.getString("imagen")).append("\"");
+            } else if (tipo.equals("episode")) {
+                json.append("\"name\":\"").append(rs.getString("nombre")).append("\",");
+                json.append("\"air_date\":\"").append(rs.getString("fecha")).append("\",");
+                json.append("\"episode\":\"").append(rs.getString("codigo")).append("\",");
+                json.append("\"image\":\"").append(rs.getString("imagen")).append("\"");
+            }
+            json.append("},");
         }
     }
+    // Quitar la ultima coma
+    if (json.length() > 1) json.setLength(json.length() - 1);
+    json.append("]");
+    return json.toString();
+}
 }
