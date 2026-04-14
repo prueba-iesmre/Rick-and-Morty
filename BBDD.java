@@ -1,6 +1,6 @@
 import java.sql.*;
 
-public class testBBDD {
+public class BBDD {
 
     public void insertarPersonajes(String nombre, String especie, String estado, String origen, String imagen, String ultima_ubicacion) throws SQLException{
         Connection con = DbConnect.getInstance().getConnection();

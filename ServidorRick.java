@@ -18,7 +18,7 @@ public class ServidorRick {
         String query = exchange.getRequestURI().getQuery();
         String tipo = query.split("=")[1];
 
-        testBBDD db = new testBBDD();
+        BBDD db = new BBDD();
         try {
             String respuestaJson = db.obtenerDatos(tipo);
             byte[] response = respuestaJson.getBytes(StandardCharsets.UTF_8);
@@ -54,7 +54,7 @@ public class ServidorRick {
                 System.out.println("📥 Solicitud recibida: " + json);
 
                 String tipoDato = extraer(json, "tipo_dato");
-                testBBDD db = new testBBDD();
+                BBDD db = new BBDD();
                 String mensajeRespuesta = "";
                 int codigoEstado = 200;
 
