@@ -389,6 +389,17 @@ img{
     font-size: 25px;
 }
 
+.contenedorLista .fichas .imagen {
+    display: flex;
+    justify-content: flex-start;
+    margin-top: -30px;
+    padding: 25px;
+}
+
+.contenedorLista .header-ficha{
+    padding: 0px;
+}
+
 /* FIN CSS MODO VISTA TOGGLE */
 
 /* BOTONES PAGINACION */
