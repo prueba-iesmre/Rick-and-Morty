@@ -290,6 +290,8 @@ img{
 
 .btn-volver:hover svg path{
     fill: #00FFFF;
+    stroke: #00FFFF;
+    stroke-width: 3px;
 }
 
 
