@@ -72,9 +72,19 @@ function cargarDatos() {
 
 
 function paginaSiguiente() {
-    numeroPagina++;
-    cargarDatos();
-    window.scrollTo({ top: 0 });
+    if (numeroPagina < totalPaginas) {
+        numeroPagina++;
+        cargarDatos();
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+}
+
+function paginaAnterior() {
+    if (numeroPagina > 1) {
+        numeroPagina--;
+        cargarDatos();
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
 }
 
 function paginaAnterior() {
@@ -279,49 +289,47 @@ async function fetchData() {
 
 async function gestionarBBDD() {
     const contenedor = document.getElementById("contenedor");
-    const query = searchInput?.value.toLowerCase().trim() || ""; // Captura el buscador
+    const query = searchInput?.value.toLowerCase().trim() || "";
 
     try {
         const response = await fetch(`http://localhost:8080/obtener?tipo=${seccionActual}`);
         let data = await response.json();
 
-        // 1. Si hay algo escrito, filtramos. Si no, usamos 'data' tal cual.
+        // 1. Filtrado local
         if (query) {
             data = data.filter(item => item.name.toLowerCase().includes(query));
         }
 
-
+        // 2. Cálculo de páginas
         totalPaginas = Math.ceil(data.length / 12);
 
+        // Si al filtrar la página actual queda fuera de rango, volvemos a la 1
+        if (numeroPagina > totalPaginas && totalPaginas > 0) {
+            numeroPagina = 1;
+        }
+
         if (data.length === 0) {
-        let mensaje;
+            totalPaginas = 0;
+            let mensaje = query
+                ? `No hay ningún "${query}" en tu base de datos.`
+                : `No hay ${seccionActual} guardados en tu base de datos.`;
 
-        if (query) {
-        // Mensaje cuando el usuario busca algo y no aparece
-        mensaje = `No hay ningún "${query}" en tu base de datos.`;
-        }  else {
-        // Traductor de secciones para el mensaje
-        const nombresSecciones = {
-            'character': 'personajes',
-            'location': 'ubicaciones',
-            'episode': 'episodios'
-        };
+            contenedor.innerHTML = `<h2 class="nombre2" style="grid-column: 1/-1;">${mensaje}</h2>`;
+        } else {
+            // 3. Paginación del array local
+            const inicio = (numeroPagina - 1) * 12;
+            const fin = inicio + 12;
+            const itemsParaMostrar = data.slice(inicio, fin);
 
-        const seccionNombre = nombresSecciones[seccionActual];
-        mensaje = `No hay ${seccionNombre} guardados tu base de datos.`;
-    }
+            renderCards(itemsParaMostrar, seccionActual);
+        }
 
-    contenedor.innerHTML = `<h2 class="nombre2" style="grid-column: 1/-1;">${mensaje}</h2>`;
-} else {
-    const inicio = (numeroPagina - 1) * 12;
-    renderCards(data.slice(inicio, inicio + 12), seccionActual);
-}
-
+        // 4. Refrescar la botonera de números
         generarNumerosPaginas();
 
     } catch (error) {
         console.error("Error:", error);
-        alert("🔌 No se pudo conectar con el servidor Java. ¿Está encendido?");
+        alert("🔌 No se pudo conectar con el servidor Java.");
     }
 }
 
