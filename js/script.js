@@ -287,13 +287,15 @@ async function fetchData() {
         } else {
             totalPaginas = 0;
             document.getElementById('contenedor').innerHTML =
-                `<h2 class="nombre2" style="grid-column: 1/-1;">No hay resultados</h2>`;
+                `<h2 class="nombre2" style="grid-column: 1/-1;">No hay ningún "${query}" en este universo.</h2>`;
             generarNumerosPaginas();
         }
     } catch (error) {
         console.error("Error buscando datos en API:", error);
     }
 }
+
+
 
 //FUNCION PARA BUSCAR SOLO EN BBDD
 async function buscarEnBBDDLocal(query, type) {
