@@ -1,3 +1,4 @@
+package backend;
 public class DbConnect {
     // JDBC URL, usuario y contraseña de la base de datos
     private static final String JDBC_URL = "jdbc:mysql://localhost:3307/RickAndMorty";
