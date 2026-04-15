@@ -11,7 +11,6 @@ function generarNumerosPaginas() {
     contenedor.innerHTML = "";
 
     // 🧠 si estamos en búsqueda, no mostramos paginación
-    if (searchInput && searchInput.value.trim() !== "") return;
 
     let inicio = Math.max(1, numeroPagina - 2);
     let fin = Math.min(totalPaginas, numeroPagina + 2);
@@ -58,18 +57,34 @@ function svgDinamico() {
     list.classList.toggle("oculto");
 }
 
-function cargarDatos(){
+function cargarDatos() {
     if (modoFuente === "BBDD") {
-        cargarDesdeBBDD();
-    }else{
-        ficha();
+        gestionarBBDD();
+    } else {
+        const query = searchInput ? searchInput.value.trim() : "";
+        if (query !== "") {
+            fetchData();
+        } else {
+            ficha();
+        }
     }
 }
 
+
 function paginaSiguiente() {
-    numeroPagina++;
-    cargarDatos();
-    window.scrollTo({ top: 0 });
+    if (numeroPagina < totalPaginas) {
+        numeroPagina++;
+        cargarDatos();
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+}
+
+function paginaAnterior() {
+    if (numeroPagina > 1) {
+        numeroPagina--;
+        cargarDatos();
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
 }
 
 function paginaAnterior() {
@@ -90,8 +105,9 @@ function cambiarSeccion(nuevaSeccion) {
     numeroPagina = 1;
     //BORRA EL INPUT AL CAMBIAR EL SEARCH
     if (searchInput) searchInput.value = "";
+    cache = {};
     if (modoFuente === "BBDD") {
-        cargarDesdeBBDD();
+        gestionarBBDD();
     } else {
         ficha();
     }
@@ -111,28 +127,7 @@ async function usarBBDD() {
     }
 }
 
-async function cargarDesdeBBDD() {
-    const contenedor = document.getElementById("contenedor");
-
-    try {
-        const response = await fetch(`http://localhost:8080/obtener?tipo=${seccionActual}`);
-        const data = await response.json();
-
-        if (data.length === 0) {
-            contenedor.innerHTML = `<h2 class="nombre2" style="grid-column: 1/-1;">No hay datos guardados en este universo.</h2>`;
-        } else {
-            renderCards(data, seccionActual);
-        }
-    } catch (error) {
-        console.error("Error cargando desde BBDD:", error);
-            alert("🔌 No se pudo conectar con el servidor Java. ¿Está encendido?");
-        window.location.replace("index.html");
-    }
-}
-
-
 /* LOGICA PARA FETCH DESDE BBDD */
-
 /* LÓGICA DE CARGA DE DATOS (FICHAS) */
 let cache = {};
 
@@ -172,12 +167,15 @@ function renderCards(items, type) {
     const contenedor = document.getElementById("contenedor");
     contenedor.innerHTML = "";
 
-    items.forEach(item => {
+    //Maximo 12 items
+    const itemsLimitados = items.slice(0, 12);
+
+    itemsLimitados.forEach(item => {
         // Imagenes para cada seccion
         const imagenUrl =
             type === 'character' ? item.image :
-            type === 'location' ? 'img/ubicacion.jpg' :
-            type === 'episode' ? 'img/episodio.jpg' : '';
+            type === 'location' ? '../img/ubicacion.jpg' :
+            type === 'episode' ? '../img/episodio.jpg' : '';
 
         // Informacion extra
         let infoExtra = "";
@@ -197,12 +195,15 @@ function renderCards(items, type) {
                 <p>Código: ${item.episode}</p>`;
         }
 
+        //Convertimos el objeto a texto y reemplazamos la comilla con codigo html para no romper la query
+        const itemString = JSON.stringify(item).replace(/'/g, "&#39;");
+
         // Estructura final con el botón de guardar
         contenedor.innerHTML += `
             <div class="fichas">
                 <div class="header-ficha">
                     <div class="contenedor-guardado">
-                        <button class="btn-guardar" onclick='guardarEnBD(${JSON.stringify(item)}, "${type}")'>
+                        <button class="btn-guardar" onclick='guardarEnBD(${itemString}, "${type}")'>
                             <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                                 <path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"></path>
                                 <polyline points="17 21 17 13 7 13 7 21"></polyline>
@@ -228,65 +229,110 @@ const searchInput = document.getElementById('searchInput'); // input de búsqued
 const filterType = document.getElementById('filterType');   // tipo (personaje, etc.)
 
 // ejecuta búsqueda al escribir o cambiar tipo
-if (searchInput) searchInput.addEventListener('input', fetchData);
-if (filterType) filterType.addEventListener('change', fetchData);
+if (searchInput) {
+    searchInput.addEventListener('input', () => {
+        numeroPagina = 1;
+        fetchData();
+    });
+}
 
-// 🔍 BUSCADOR PRINCIPAL
+if (filterType) {
+    filterType.addEventListener('change', () => {
+        numeroPagina = 1; // También reseteamos si cambiamos de Personaje a Episodio
+        fetchData();
+    });
+}
+
+
+//  BUSCADOR PRINCIPAL
 async function fetchData() {
+    const query = searchInput.value.toLowerCase().trim();
+    const type = filterType.value;
 
-    const query = searchInput.value.toLowerCase().trim(); // texto escrito
-    const type = filterType.value; // tipo seleccionado
-
-    // 🗄️ si usas base de datos local
     if (modoFuente === "BBDD") {
-        buscarEnBBDDLocal(query, type);
+        gestionarBBDD();
         return;
     }
 
-    // 🌐 llamada a la API
-    const url = `https://rickandmortyapi.com/api/${type}/?name=${query}`;
+    // Si el buscador está vacío, volvemos a la carga normal (página 1)
+    if (query === "") {
+        numeroPagina = 1;
+        ficha();
+        return;
+    }
+
+    // URL con filtro y pagina actual
+    const url = `https://rickandmortyapi.com/api/${type}/?name=${query}&page=${numeroPagina}`;
 
     try {
-        const response = await fetch(url); // pedir datos
-        const data = await response.json(); // convertir a JSON
+        const response = await fetch(url);
+        const data = await response.json();
 
         if (data.results) {
-            // ✅ mostrar SOLO 12 resultados
-            renderCards(data.results.slice(0, 12), type);
-        } else {
-            // ❌ sin resultados
-            document.getElementById('contenedor').innerHTML =
-                `<h2 class="nombre2" style="grid-column: 1/-1;">No hay resultados</h2>`;
-        }
+            // Actualiza paginas totales
+            totalPaginas = data.info.pages;
 
+            renderCards(data.results.slice(0, 12), type);
+
+            // Genera pagiacion
+            generarNumerosPaginas();
+        } else {
+            totalPaginas = 0;
+            document.getElementById('contenedor').innerHTML =
+                `<h2 class="nombre2" style="grid-column: 1/-1;">No hay ningún "${query}" en este universo.</h2>`;
+            generarNumerosPaginas();
+        }
     } catch (error) {
-        // 🚨 error de API
         console.error("Error buscando datos en API:", error);
     }
 }
 
-//FUNCION PARA BUSCAR SOLO EN BBDD
-async function buscarEnBBDDLocal(query, type) {
+async function gestionarBBDD() {
     const contenedor = document.getElementById("contenedor");
+    const query = searchInput?.value.toLowerCase().trim() || "";
+
     try {
+        const response = await fetch(`http://localhost:8080/obtener?tipo=${seccionActual}`);
+        let data = await response.json();
 
-        const response = await fetch(`http://localhost:8080/obtener?tipo=${type}`);
-        const data = await response.json();
-
-
-        const resultadosFiltrados = data.filter(item =>
-            item.name.toLowerCase().includes(query)
-        );
-
-        if (resultadosFiltrados.length === 0) {
-            contenedor.innerHTML = `<h2 class="nombre2" style="grid-column: 1/-1;">"${query}" no está en tu base de datos.</h2>`;
-        } else {
-            renderCards(resultadosFiltrados, type);
+        // 1. Filtrado local
+        if (query) {
+            data = data.filter(item => item.name.toLowerCase().includes(query));
         }
+
+        // 2. Cálculo de páginas
+        totalPaginas = Math.ceil(data.length / 12);
+
+        // Si al filtrar la página actual queda fuera de rango, volvemos a la 1
+        if (numeroPagina > totalPaginas && totalPaginas > 0) {
+            numeroPagina = 1;
+        }
+
+        if (data.length === 0) {
+            totalPaginas = 0;
+            let mensaje = query
+                ? `No hay ningún "${query}" en tu base de datos.`
+                : `No hay ${seccionActual} guardados en tu base de datos.`;
+
+            contenedor.innerHTML = `<h2 class="nombre2" style="grid-column: 1/-1;">${mensaje}</h2>`;
+        } else {
+            // 3. Paginación del array local
+            const inicio = (numeroPagina - 1) * 12;
+            const fin = inicio + 12;
+            const itemsParaMostrar = data.slice(inicio, fin);
+
+            renderCards(itemsParaMostrar, seccionActual);
+        }
+
+        // 4. Refrescar la botonera de números
+        generarNumerosPaginas();
+
     } catch (error) {
-        console.error("Error buscando en BBDD:", error);
+        console.error("Error:", error);
+        alert("🔌 No se pudo conectar con el servidor Java.");
     }
 }
+
 
 /* SCRIPT PARA GUARDAR INFO EN BBDD (Tu funcionalidad intacta) */
 function guardarEnBD(item, type) {
@@ -348,14 +394,7 @@ window.addEventListener('DOMContentLoaded', () => {
 
         if (fuente === "BBDD") {
             modoFuente = "BBDD";
-
-            const botonesPag = document.querySelector(".botonesPaginacion");
-            const numerosPag = document.getElementById("numerosPaginacion");
-            if (botonesPag) botonesPag.style.display = "none";
-            if (numerosPag) numerosPag.style.display = "none";
-
-
-            cargarDesdeBBDD();
+            gestionarBBDD();
         } else {
             modoFuente = "API";
             ficha();
