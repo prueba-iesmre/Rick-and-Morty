@@ -1,4 +1,32 @@
-let numeroPagina = 1;
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: script.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: script.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>let numeroPagina = 1;
 let totalPaginas = 0;
 let seccionActual = "character";
 let modoFuente = "API";
@@ -34,23 +62,23 @@ function generarNumerosPaginas() {
 
     // ⬅️ botón primera página
     if (inicio > 1) {
-        contenedor.innerHTML += `<button class="numeroBtn" onclick="irAPagina(1)">1</button>`;
-        if (inicio > 2) contenedor.innerHTML += `<span class="dots">...</span>`;
+        contenedor.innerHTML += `&lt;button class="numeroBtn" onclick="irAPagina(1)">1&lt;/button>`;
+        if (inicio > 2) contenedor.innerHTML += `&lt;span class="dots">...&lt;/span>`;
     }
 
     // 🔢 páginas centrales
-    for (let i = inicio; i <= fin; i++) {
+    for (let i = inicio; i &lt;= fin; i++) {
         contenedor.innerHTML += `
-            <button class="numeroBtn ${i === numeroPagina ? 'activo' : ''}"
+            &lt;button class="numeroBtn ${i === numeroPagina ? 'activo' : ''}"
             onclick="irAPagina(${i})">
                 ${i}
-            </button>`;
+            &lt;/button>`;
     }
 
     // ➡️ última página
-    if (fin < totalPaginas) {
-        if (fin < totalPaginas - 1) contenedor.innerHTML += `<span class="dots">...</span>`;
-        contenedor.innerHTML += `<button class="numeroBtn" onclick="irAPagina(${totalPaginas})">${totalPaginas}</button>`;
+    if (fin &lt; totalPaginas) {
+        if (fin &lt; totalPaginas - 1) contenedor.innerHTML += `&lt;span class="dots">...&lt;/span>`;
+        contenedor.innerHTML += `&lt;button class="numeroBtn" onclick="irAPagina(${totalPaginas})">${totalPaginas}&lt;/button>`;
     }
 }
 
@@ -148,7 +176,7 @@ function cargarDatos() {
  * @returns {void} No retorna ningún valor.
  */
 function paginaSiguiente() {
-    if (numeroPagina < totalPaginas) {
+    if (numeroPagina &lt; totalPaginas) {
         numeroPagina++;
         cargarDatos();
         window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -228,7 +256,7 @@ function cambiarSeccion(nuevaSeccion) {
  *
  * @async
  * @function usarBBDD
- * @returns {Promise<void>} No retorna valor; puede redirigir o mostrar alertas.
+ * @returns {Promise&lt;void>} No retorna valor; puede redirigir o mostrar alertas.
  */
 async function usarBBDD() {
     try {
@@ -259,7 +287,7 @@ let cache = {};
  *
  * @async
  * @function ficha
- * @returns {Promise<void>} No retorna valor; actualiza la interfaz.
+ * @returns {Promise&lt;void>} No retorna valor; actualiza la interfaz.
  */
 async function ficha() {
     const contenedor = document.getElementById("contenedor");
@@ -308,7 +336,7 @@ async function ficha() {
  * - episode: muestra fecha de emisión y código del episodio
  *
  * @function renderCards
- * @param {Array<Object>} items - Lista de objetos a renderizar.
+ * @param {Array&lt;Object>} items - Lista de objetos a renderizar.
  * @param {string} type - Tipo de datos (character, location o episode).
  * @returns {void} No retorna ningún valor.
  */
@@ -330,46 +358,46 @@ function renderCards(items, type) {
         let infoExtra = "";
         if (type === 'character') {
             infoExtra = `
-                <p>Especie: ${item.species}</p>
-                <p>Estado: ${item.status}</p>
-                <p>Origen: ${item.origin.name}</p>
-                <p>Última ubicación: ${item.location.name}</p>`;
+                &lt;p>Especie: ${item.species}&lt;/p>
+                &lt;p>Estado: ${item.status}&lt;/p>
+                &lt;p>Origen: ${item.origin.name}&lt;/p>
+                &lt;p>Última ubicación: ${item.location.name}&lt;/p>`;
         } else if (type === 'location') {
             infoExtra = `
-                <p>Tipo: ${item.type}</p>
-                <p>Dimensión: ${item.dimension}</p>`;
+                &lt;p>Tipo: ${item.type}&lt;/p>
+                &lt;p>Dimensión: ${item.dimension}&lt;/p>`;
         } else if (type === 'episode') {
             infoExtra = `
-                <p>Fecha: ${item.air_date}</p>
-                <p>Código: ${item.episode}</p>`;
+                &lt;p>Fecha: ${item.air_date}&lt;/p>
+                &lt;p>Código: ${item.episode}&lt;/p>`;
         }
 
         //Convertimos el objeto a texto y reemplazamos la comilla con codigo html para no romper la query
-        const itemString = JSON.stringify(item).replace(/'/g, "&#39;");
+        const itemString = JSON.stringify(item).replace(/'/g, "&amp;#39;");
 
         // Estructura final con el botón de guardar
         contenedor.innerHTML += `
-            <div class="fichas">
-                <div class="header-ficha">
-                    <div class="contenedor-guardado">
-                        <button class="btn-guardar" onclick='guardarEnBD(${itemString}, "${type}")'>
-                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                <path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"></path>
-                                <polyline points="17 21 17 13 7 13 7 21"></polyline>
-                                <polyline points="7 3 7 8 15 8"></polyline>
-                            </svg>
-                        </button>
-                    </div>
-                    <p class="nombre">${item.name}</p>
-                    <div class="spacer"></div>
-                </div>
-                <div class="imagen">
-                    <img src="${imagenUrl}">
-                </div>
-                <div class="info_fichas">
+            &lt;div class="fichas">
+                &lt;div class="header-ficha">
+                    &lt;div class="contenedor-guardado">
+                        &lt;button class="btn-guardar" onclick='guardarEnBD(${itemString}, "${type}")'>
+                            &lt;svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                &lt;path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z">&lt;/path>
+                                &lt;polyline points="17 21 17 13 7 13 7 21">&lt;/polyline>
+                                &lt;polyline points="7 3 7 8 15 8">&lt;/polyline>
+                            &lt;/svg>
+                        &lt;/button>
+                    &lt;/div>
+                    &lt;p class="nombre">${item.name}&lt;/p>
+                    &lt;div class="spacer">&lt;/div>
+                &lt;/div>
+                &lt;div class="imagen">
+                    &lt;img src="${imagenUrl}">
+                &lt;/div>
+                &lt;div class="info_fichas">
                     ${infoExtra}
-                </div>
-            </div>`;
+                &lt;/div>
+            &lt;/div>`;
     });
 }
 
@@ -414,7 +442,7 @@ if (filterType) {
  *
  * @async
  * @function fetchData
- * @returns {Promise<void>} No retorna valor; actualiza la interfaz.
+ * @returns {Promise&lt;void>} No retorna valor; actualiza la interfaz.
  */
 async function fetchData() {
     const query = searchInput.value.toLowerCase().trim();
@@ -433,7 +461,7 @@ async function fetchData() {
     }
 
     // URL con filtro y pagina actual
-    const url = `https://rickandmortyapi.com/api/${type}/?name=${query}&page=${numeroPagina}`;
+    const url = `https://rickandmortyapi.com/api/${type}/?name=${query}&amp;page=${numeroPagina}`;
 
     try {
         const response = await fetch(url);
@@ -450,7 +478,7 @@ async function fetchData() {
         } else {
             totalPaginas = 0;
             document.getElementById('contenedor').innerHTML =
-                `<h2 class="nombre2" style="grid-column: 1/-1;">No hay ningún "${query}" en este universo.</h2>`;
+                `&lt;h2 class="nombre2" style="grid-column: 1/-1;">No hay ningún "${query}" en este universo.&lt;/h2>`;
             generarNumerosPaginas();
         }
     } catch (error) {
@@ -473,7 +501,7 @@ async function fetchData() {
  *
  * @async
  * @function gestionarBBDD
- * @returns {Promise<void>} No retorna valor; actualiza la interfaz.
+ * @returns {Promise&lt;void>} No retorna valor; actualiza la interfaz.
  */
 async function gestionarBBDD() {
     const contenedor = document.getElementById("contenedor");
@@ -492,7 +520,7 @@ async function gestionarBBDD() {
         totalPaginas = Math.ceil(data.length / 12);
 
         // Si al filtrar la página actual queda fuera de rango, volvemos a la 1
-        if (numeroPagina > totalPaginas && totalPaginas > 0) {
+        if (numeroPagina > totalPaginas &amp;&amp; totalPaginas > 0) {
             numeroPagina = 1;
         }
 
@@ -502,7 +530,7 @@ async function gestionarBBDD() {
                 ? `No hay ningún "${query}" en tu base de datos.`
                 : `No hay ${seccionActual} guardados en tu base de datos.`;
 
-            contenedor.innerHTML = `<h2 class="nombre2" style="grid-column: 1/-1;">${mensaje}</h2>`;
+            contenedor.innerHTML = `&lt;h2 class="nombre2" style="grid-column: 1/-1;">${mensaje}&lt;/h2>`;
         } else {
             // 3. Paginación del array local
             const inicio = (numeroPagina - 1) * 12;
@@ -630,4 +658,26 @@ window.addEventListener('DOMContentLoaded', () => {
             ficha();
         }
     }
-});
+});</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Global</h3><ul><li><a href="global.html#abrirNuevaVentana">abrirNuevaVentana</a></li><li><a href="global.html#btnvolver">btnvolver</a></li><li><a href="global.html#cambiarSeccion">cambiarSeccion</a></li><li><a href="global.html#cambiarVista">cambiarVista</a></li><li><a href="global.html#cargarDatos">cargarDatos</a></li><li><a href="global.html#fetchData">fetchData</a></li><li><a href="global.html#ficha">ficha</a></li><li><a href="global.html#generarNumerosPaginas">generarNumerosPaginas</a></li><li><a href="global.html#gestionarBBDD">gestionarBBDD</a></li><li><a href="global.html#guardarEnBD">guardarEnBD</a></li><li><a href="global.html#irAPagina">irAPagina</a></li><li><a href="global.html#paginaAnterior">paginaAnterior</a></li><li><a href="global.html#paginaSiguiente">paginaSiguiente</a></li><li><a href="global.html#renderCards">renderCards</a></li><li><a href="global.html#svgDinamico">svgDinamico</a></li><li><a href="global.html#usarAPI">usarAPI</a></li><li><a href="global.html#usarBBDD">usarBBDD</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.5</a> on Wed Apr 15 2026 16:26:51 GMT+0200 (hora de verano de Europa central)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>
