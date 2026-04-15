@@ -265,7 +265,6 @@ async function ficha() {
     const contenedor = document.getElementById("contenedor");
 
     try {
-
         // 1. Si no tengo la página, la pido a la API
         if (!cache[numeroPagina]) {
             let url = `https://rickandmortyapi.com/api/${seccionActual}?page=${numeroPagina}`;
@@ -273,8 +272,13 @@ async function ficha() {
             const data = await response.json();
 
             totalPaginas = data.info.pages;
-
             cache[numeroPagina] = data.results;
+
+            // Guardamos el total de páginas para esta sección en la caché
+            cache[`total_${seccionActual}`] = data.info.pages;
+        } else {
+            // SI YA EXISTE EN CACHÉ: Recuperamos el total de páginas guardado
+            totalPaginas = cache[`total_${seccionActual}`];
         }
 
         // 2. Cojo los datos de esa página
@@ -479,6 +483,12 @@ async function gestionarBBDD() {
     const contenedor = document.getElementById("contenedor");
     const query = searchInput?.value.toLowerCase().trim() || "";
 
+    const traducciones = {
+        "character": "personajes",
+        "location": "ubicaciones",
+        "episode": "episodios"
+    };
+
     try {
         const response = await fetch(`http://localhost:8080/obtener?tipo=${seccionActual}`);
         let data = await response.json();
@@ -498,9 +508,11 @@ async function gestionarBBDD() {
 
         if (data.length === 0) {
             totalPaginas = 0;
+
+            const nombreSeccion = traducciones[seccionActual] || seccionActual;
             let mensaje = query
                 ? `No hay ningún "${query}" en tu base de datos.`
-                : `No hay ${seccionActual} guardados en tu base de datos.`;
+                : `No hay ${nombreSeccion} en tu base de datos.`;
 
             contenedor.innerHTML = `<h2 class="nombre2" style="grid-column: 1/-1;">${mensaje}</h2>`;
         } else {
