@@ -237,7 +237,7 @@ async function usarBBDD() {
 
         alert("⚠️ Error en el servidor");
     } catch (e) {
-        alert("🔌 Servidor apagado. ¿Está encendido?");
+        alert("🔌 No se pudo conectar con el servidor Java. ¿Está encendido?");
     }
 }
 
