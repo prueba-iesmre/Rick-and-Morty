@@ -117,6 +117,7 @@ async function usarBBDD() {
     }
 }
 
+
 async function cargarDesdeBBDD() {
     const contenedor = document.getElementById("contenedor");
 
@@ -126,16 +127,28 @@ async function cargarDesdeBBDD() {
 
         if (data.length === 0) {
             contenedor.innerHTML = `<h2 class="nombre2" style="grid-column: 1/-1;">No hay datos guardados en este universo.</h2>`;
+            totalPaginas = 0;
         } else {
-            renderCards(data, seccionActual);
+            //Calculo de paginas totales
+            totalPaginas = Math.ceil(data.length / 12);
+
+            // Partimos las paginas
+            const inicio = (numeroPagina - 1) * 12;
+            const fin = inicio + 12;
+            const datosPaginados = data.slice(inicio, fin);
+
+            renderCards(datosPaginados, seccionActual);
         }
+
+        generarNumerosPaginas();
+
     } catch (error) {
         console.error("Error cargando desde BBDD:", error);
-            alert("🔌 No se pudo conectar con el servidor Java. ¿Está encendido?");
+        // Mantenemos tus alertas originales
+        alert("🔌 No se pudo conectar con el servidor Java. ¿Está encendido?");
         window.location.replace("index.html");
     }
 }
-
 
 /* LOGICA PARA FETCH DESDE BBDD */
 
@@ -178,7 +191,10 @@ function renderCards(items, type) {
     const contenedor = document.getElementById("contenedor");
     contenedor.innerHTML = "";
 
-    items.forEach(item => {
+    //Maximo 12 items
+    const itemsLimitados = items.slice(0, 12);
+
+    itemsLimitados.forEach(item => {
         // Imagenes para cada seccion
         const imagenUrl =
             type === 'character' ? item.image :
@@ -380,13 +396,6 @@ window.addEventListener('DOMContentLoaded', () => {
 
         if (fuente === "BBDD") {
             modoFuente = "BBDD";
-
-            const botonesPag = document.querySelector(".botonesPaginacion");
-            const numerosPag = document.getElementById("numerosPaginacion");
-            if (botonesPag) botonesPag.style.display = "none";
-            if (numerosPag) numerosPag.style.display = "none";
-
-
             cargarDesdeBBDD();
         } else {
             modoFuente = "API";
