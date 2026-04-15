@@ -176,8 +176,8 @@ function renderCards(items, type) {
         // Imagenes para cada seccion
         const imagenUrl =
             type === 'character' ? item.image :
-            type === 'location' ? 'img/ubicacion.jpg' :
-            type === 'episode' ? 'img/episodio.jpg' : '';
+            type === 'location' ? '../img/ubicacion.jpg' :
+            type === 'episode' ? '../img/episodio.jpg' : '';
 
         // Informacion extra
         let infoExtra = "";
