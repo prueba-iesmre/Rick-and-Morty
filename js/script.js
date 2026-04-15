@@ -11,7 +11,6 @@ function generarNumerosPaginas() {
     contenedor.innerHTML = "";
 
     // 🧠 si estamos en búsqueda, no mostramos paginación
-    if (searchInput && searchInput.value.trim() !== "") return;
 
     let inicio = Math.max(1, numeroPagina - 2);
     let fin = Math.min(totalPaginas, numeroPagina + 2);
@@ -58,13 +57,19 @@ function svgDinamico() {
     list.classList.toggle("oculto");
 }
 
-function cargarDatos(){
+function cargarDatos() {
     if (modoFuente === "BBDD") {
         cargarDesdeBBDD();
-    }else{
-        ficha();
+    } else {
+        const query = searchInput ? searchInput.value.trim() : "";
+        if (query !== "") {
+            fetchData();
+        } else {
+            ficha();
+        }
     }
 }
+
 
 function paginaSiguiente() {
     numeroPagina++;
@@ -90,6 +95,7 @@ function cambiarSeccion(nuevaSeccion) {
     numeroPagina = 1;
     //BORRA EL INPUT AL CAMBIAR EL SEARCH
     if (searchInput) searchInput.value = "";
+    cache = {};
     if (modoFuente === "BBDD") {
         cargarDesdeBBDD();
     } else {
@@ -231,39 +237,60 @@ const searchInput = document.getElementById('searchInput'); // input de búsqued
 const filterType = document.getElementById('filterType');   // tipo (personaje, etc.)
 
 // ejecuta búsqueda al escribir o cambiar tipo
-if (searchInput) searchInput.addEventListener('input', fetchData);
-if (filterType) filterType.addEventListener('change', fetchData);
+if (searchInput) {
+    searchInput.addEventListener('input', () => {
+        numeroPagina = 1;
+        fetchData();
+    });
+}
 
-// 🔍 BUSCADOR PRINCIPAL
+if (filterType) {
+    filterType.addEventListener('change', () => {
+        numeroPagina = 1; // También reseteamos si cambiamos de Personaje a Episodio
+        fetchData();
+    });
+}
+
+
+//  BUSCADOR PRINCIPAL
 async function fetchData() {
+    const query = searchInput.value.toLowerCase().trim();
+    const type = filterType.value;
 
-    const query = searchInput.value.toLowerCase().trim(); // texto escrito
-    const type = filterType.value; // tipo seleccionado
-
-    // 🗄️ si usas base de datos local
     if (modoFuente === "BBDD") {
         buscarEnBBDDLocal(query, type);
         return;
     }
 
-    // 🌐 llamada a la API
-    const url = `https://rickandmortyapi.com/api/${type}/?name=${query}`;
+    // Si el buscador está vacío, volvemos a la carga normal (página 1)
+    if (query === "") {
+        numeroPagina = 1;
+        ficha();
+        return;
+    }
+
+    // URL con filtro y pagina actual
+    const url = `https://rickandmortyapi.com/api/${type}/?name=${query}&page=${numeroPagina}`;
 
     try {
-        const response = await fetch(url); // pedir datos
-        const data = await response.json(); // convertir a JSON
+        const response = await fetch(url);
+        const data = await response.json();
 
         if (data.results) {
-            // ✅ mostrar SOLO 12 resultados
+            // Actualiza paginas totales
+            totalPaginas = data.info.pages;
+
             renderCards(data.results.slice(0, 12), type);
+
+            // Genera pagiacion
+            generarNumerosPaginas();
         } else {
-            // ❌ sin resultados
+            totalPaginas = 0;
             document.getElementById('contenedor').innerHTML =
                 `<h2 class="nombre2" style="grid-column: 1/-1;">No hay resultados</h2>`;
+            generarNumerosPaginas();
         }
-
     } catch (error) {
-        // 🚨 error de API
         console.error("Error buscando datos en API:", error);
     }
 }
