@@ -112,7 +112,7 @@
 
 
 <div class="description">
-    Abre una nueva ventana o pestaña del navegador con la URL indicada.Si se proporciona una URL válida, se abre en una nueva pestaña usando`window.open` con el objetivo `_blank`.
+    Abre una nueva ventana o pestaña del navegador con la URL indicada.- Solo ejecuta la acción si la URL es válida- Abre la página en una nueva pestaña (_blank)
 </div>
 
 
@@ -205,7 +205,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="script.js.html">script.js</a>, <a href="script.js.html#line589">line 589</a>
+        <a href="script.js.html">script.js</a>, <a href="script.js.html#line807">line 807</a>
     </li></ul></dd>
     
 
@@ -233,10 +233,6 @@
 <h5>Returns:</h5>
 
         
-<div class="param-desc">
-    No retorna ningún valor.
-</div>
-
 
 
 <dl>
@@ -263,7 +259,7 @@
     
 
     
-    <h4 class="name" id="btnvolver"><span class="type-signature"></span>btnvolver<span class="signature">()</span><span class="type-signature"> &rarr; {void}</span></h4>
+    <h4 class="name" id="actualizarVisibilidadPaginacion"><span class="type-signature"></span>actualizarVisibilidadPaginacion<span class="signature">()</span><span class="type-signature"> &rarr; {void}</span></h4>
     
 
     
@@ -271,7 +267,7 @@
 
 
 <div class="description">
-    Vuelve a la página anterior en el historial del navegador.Utiliza `window.history.back()` para navegar hacia atrás en la sesióndel navegador, simulando el botón de “volver”.
+    Actualiza la visibilidad de los controles de paginación en la interfaz.Muestra u oculta los botones y números de paginación dependiendode si el modo de fuente actual es "API".
 </div>
 
 
@@ -315,7 +311,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="script.js.html">script.js</a>, <a href="script.js.html#line603">line 603</a>
+        <a href="script.js.html">script.js</a>, <a href="script.js.html#line101">line 101</a>
     </li></ul></dd>
     
 
@@ -343,10 +339,6 @@
 <h5>Returns:</h5>
 
         
-<div class="param-desc">
-    No retorna ningún valor.
-</div>
-
 
 
 <dl>
@@ -373,6 +365,218 @@
     
 
     
+    <h4 class="name" id="btnvolver"><span class="type-signature"></span>btnvolver<span class="signature">()</span><span class="type-signature"> &rarr; {void}</span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    Navega hacia la página anterior en el historial del navegador.- Equivale a pulsar el botón "Atrás" del navegador
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="script.js.html">script.js</a>, <a href="script.js.html#line821">line 821</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">void</span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="buscarEnBBDDLocal"><span class="type-signature">(async) </span>buscarEnBBDDLocal<span class="signature">()</span><span class="type-signature"> &rarr; {Promise.&lt;void>}</span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    Busca y filtra datos dentro de la base de datos local (backend Java)aplicando texto de búsqueda y filtros activos.- Obtiene todos los datos desde el backend- Filtra en frontend por nombre y criterios seleccionados- Renderiza resultados o muestra mensaje si no hay coincidencias
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="script.js.html">script.js</a>, <a href="script.js.html#line555">line 555</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">Promise.&lt;void></span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+
+
+        
+            
+
+    
+
+    
     <h4 class="name" id="cambiarSeccion"><span class="type-signature"></span>cambiarSeccion<span class="signature">(nuevaSeccion)</span><span class="type-signature"> &rarr; {void}</span></h4>
     
 
@@ -381,7 +585,7 @@
 
 
 <div class="description">
-    Cambia la sección actual de la aplicación y reinicia el estado de paginación y búsqueda.Actualiza la variable global `seccionActual` con la nueva sección recibida,reinicia la página a 1, limpia el input de búsqueda si existe y vacía la caché.Después, vuelve a cargar los datos según el modo de fuente:- Si `modoFuente` es "BBDD", llama a `gestionarBBDD()`.- En caso contrario, llama a `ficha()`.
+    Cambia la sección actual de la aplicación (character, location, episode).Reinicia la paginación, limpia la caché y los filtros, actualiza la UIy carga los nuevos datos correspondientes a la sección seleccionada.
 </div>
 
 
@@ -433,7 +637,7 @@
 
             
 
-            <td class="description last">Nombre de la nueva sección a la que se quiere cambiar.</td>
+            <td class="description last">Nueva sección a mostrar.</td>
         </tr>
 
     
@@ -474,7 +678,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="script.js.html">script.js</a>, <a href="script.js.html#line191">line 191</a>
+        <a href="script.js.html">script.js</a>, <a href="script.js.html#line203">line 203</a>
     </li></ul></dd>
     
 
@@ -502,10 +706,6 @@
 <h5>Returns:</h5>
 
         
-<div class="param-desc">
-    No retorna ningún valor.
-</div>
-
 
 
 <dl>
@@ -540,7 +740,7 @@
 
 
 <div class="description">
-    Alterna la vista del contenedor entre diferentes estilos (por ejemplo, grid y lista).Añade o elimina la clase "contenedorLista" al elemento con id "contenedor",permitiendo cambiar su apariencia visual. Después, actualiza el SVG dinámicollamando a la función correspondiente.Requiere que existan:- Un elemento en el DOM con id "contenedor"- La función svgDinamico definida
+    Alterna la vista del contenedor entre modo lista y modo normal.También actualiza los elementos SVG dinámicos tras el cambio de vista.
 </div>
 
 
@@ -584,7 +784,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="script.js.html">script.js</a>, <a href="script.js.html#line79">line 79</a>
+        <a href="script.js.html">script.js</a>, <a href="script.js.html#line122">line 122</a>
     </li></ul></dd>
     
 
@@ -612,10 +812,6 @@
 <h5>Returns:</h5>
 
         
-<div class="param-desc">
-    No devuelve ningún valor
-</div>
-
 
 
 <dl>
@@ -650,7 +846,7 @@
 
 
 <div class="description">
-    Gestiona la carga de datos según el modo de fuente y el estado de la búsqueda.Si el modo de fuente es "BBDD", se llama a la función `gestionarBBDD()`.En caso contrario, se comprueba si existe un valor en el input de búsqueda:- Si hay texto, se ejecuta `fetchData()`.- Si no hay texto, se ejecuta `ficha()`.
+    Controla el flujo principal de carga de datos según el estado de la aplicación.- Actualiza la visibilidad de la paginación- Si hay búsqueda activa, ejecuta búsqueda con filtros (fetchData)- Si no hay búsqueda activa:  - Carga desde BBDD si el modo es "BBDD"  - Si no, carga desde la API normal (ficha)
 </div>
 
 
@@ -694,7 +890,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="script.js.html">script.js</a>, <a href="script.js.html#line115">line 115</a>
+        <a href="script.js.html">script.js</a>, <a href="script.js.html#line495">line 495</a>
     </li></ul></dd>
     
 
@@ -722,10 +918,6 @@
 <h5>Returns:</h5>
 
         
-<div class="param-desc">
-    No retorna ningún valor.
-</div>
-
 
 
 <dl>
@@ -752,7 +944,7 @@
     
 
     
-    <h4 class="name" id="fetchData"><span class="type-signature">(async) </span>fetchData<span class="signature">()</span><span class="type-signature"> &rarr; {Promise.&lt;void>}</span></h4>
+    <h4 class="name" id="cargarDesdeBBDD"><span class="type-signature">(async) </span>cargarDesdeBBDD<span class="signature">()</span><span class="type-signature"> &rarr; {Promise.&lt;void>}</span></h4>
     
 
     
@@ -760,7 +952,7 @@
 
 
 <div class="description">
-    Realiza una búsqueda en la API de Rick and Morty o redirige a la lógica de BBDDsegún el modo de fuente activo.- Obtiene el texto del buscador y el tipo de filtro seleccionado.- Si el modo es "BBDD", delega la búsqueda a `gestionarBBDD()`.- Si el buscador está vacío, reinicia la paginación y carga la vista normal.- Si hay texto, consulta la API con filtros por nombre y página actual.En caso de respuesta válida:- Actualiza el número total de páginas.- Renderiza los resultados (máximo 12).- Genera la paginación.En caso de no encontrar resultados:- Muestra un mensaje indicando que no existen coincidencias.- Reinicia la paginación.
+    Carga todos los datos desde la base de datos local (backend Java).- Obtiene datos desde el endpoint según la sección actual- Renderiza las tarjetas si hay datos- Muestra un mensaje si no hay datos- Redirige al index si ocurre un error de conexión
 </div>
 
 
@@ -804,7 +996,113 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="script.js.html">script.js</a>, <a href="script.js.html#line397">line 397</a>
+        <a href="script.js.html">script.js</a>, <a href="script.js.html#line523">line 523</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">Promise.&lt;void></span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="construirUrlBusquedaAPI"><span class="type-signature"></span>construirUrlBusquedaAPI<span class="signature">()</span><span class="type-signature"> &rarr; {string}</span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    Construye la URL para realizar una petición a la API de Rick and Mortyen base al texto de búsqueda, filtros activos y la página actual.- Incluye siempre el parámetro de paginación (?page)- Añade el filtro por nombre si hay texto en el input- Añade dinámicamente los filtros activos
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="script.js.html">script.js</a>, <a href="script.js.html#line288">line 288</a>
     </li></ul></dd>
     
 
@@ -833,9 +1131,364 @@
 
         
 <div class="param-desc">
-    No retorna valor; actualiza la interfaz.
+    URL completa lista para hacer la petición a la API.
 </div>
 
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">string</span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="crearSelect"><span class="type-signature"></span>crearSelect<span class="signature">(idSelect, opciones, textoInicial<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {HTMLSelectElement}</span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    Crea un elemento <select> dinámico con una lista de opciones.La primera opción es siempre una opción inicial (por ejemplo "Todos"),seguida de las opciones proporcionadas en el array.
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+        <th>Attributes</th>
+        
+
+        
+        <th>Default</th>
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>idSelect</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                </td>
+            
+
+            <td class="description last">ID que se asignará al elemento select creado.</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>opciones</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Array.&lt;string></span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                </td>
+            
+
+            <td class="description last">Array de valores que se convertirán en opciones del select.</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>textoInicial</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                    "Todos"
+                
+                </td>
+            
+
+            <td class="description last">Texto de la opción inicial por defecto.</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="script.js.html">script.js</a>, <a href="script.js.html#line316">line 316</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    Elemento select completamente construido.
+</div>
+
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">HTMLSelectElement</span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="fetchData"><span class="type-signature">(async) </span>fetchData<span class="signature">()</span><span class="type-signature"> &rarr; {Promise.&lt;void>}</span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    Realiza una petición a la API o a la base de datos según el modo activoy renderiza los resultados filtrados o buscados.- Si el modo es "BBDD", delega la búsqueda local- Si no, construye la URL de búsqueda dinámica- Maneja respuestas vacías o errores- Actualiza la paginación y los resultados mostrados
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="script.js.html">script.js</a>, <a href="script.js.html#line648">line 648</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
 
 
 <dl>
@@ -870,7 +1523,7 @@
 
 
 <div class="description">
-    Obtiene y muestra fichas de datos desde la API de Rick and Morty,gestionando caché por páginas y renderizado de resultados.Flujo de la función:1. Comprueba si la página actual ya está en caché.   - Si no lo está, realiza una petición a la API.   - Guarda los resultados en `cache` y actualiza `totalPaginas`.2. Obtiene los datos de la página actual desde la caché.3. Limita los resultados a 12 elementos.4. Renderiza las tarjetas en pantalla y genera la paginación.
+    Carga y renderiza datos de la API de Rick and Morty con sistema de caché.- Comprueba si existe el contenedor principal- Usa caché para evitar peticiones repetidas por página/sección- Si no hay datos en caché, los obtiene desde la API- Maneja el caso de no resultados- Actualiza la paginación- Renderiza un máximo de 12 elementos por página
 </div>
 
 
@@ -914,7 +1567,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="script.js.html">script.js</a>, <a href="script.js.html#line248">line 248</a>
+        <a href="script.js.html">script.js</a>, <a href="script.js.html#line604">line 604</a>
     </li></ul></dd>
     
 
@@ -942,10 +1595,6 @@
 <h5>Returns:</h5>
 
         
-<div class="param-desc">
-    No retorna valor; actualiza la interfaz.
-</div>
-
 
 
 <dl>
@@ -972,7 +1621,7 @@
     
 
     
-    <h4 class="name" id="generarNumerosPaginas"><span class="type-signature"></span>generarNumerosPaginas<span class="signature">()</span><span class="type-signature"> &rarr; {void}</span></h4>
+    <h4 class="name" id="generarDimension"><span class="type-signature"></span>generarDimension<span class="signature">()</span><span class="type-signature"> &rarr; {void}</span></h4>
     
 
     
@@ -980,7 +1629,7 @@
 
 
 <div class="description">
-    Genera dinámicamente los botones de paginación en el contenedor HTML.Esta función calcula el rango de páginas visibles alrededor de la página actualy crea botones para navegar entre ellas. También añade accesos rápidos a laprimera y última página cuando están fuera del rango visible, incluyendopuntos suspensivos para indicar páginas omitidas.Requiere que existan las variables globales:- numeroPagina: número de la página actual- totalPaginas: número total de páginas disponiblesAdemás, utiliza un elemento del DOM con id "numerosPaginacion" como contenedor.
+    Genera y renderiza el selector de dimensión dentro del contenedor HTML con id "dimension".Si el contenedor existe:- Se limpia su contenido- Se inserta un <select> con dimensiones disponibles
 </div>
 
 
@@ -1024,7 +1673,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="script.js.html">script.js</a>, <a href="script.js.html#line7">line 7</a>
+        <a href="script.js.html">script.js</a>, <a href="script.js.html#line451">line 451</a>
     </li></ul></dd>
     
 
@@ -1052,10 +1701,6 @@
 <h5>Returns:</h5>
 
         
-<div class="param-desc">
-    No devuelve ningún valor
-</div>
-
 
 
 <dl>
@@ -1082,7 +1727,7 @@
     
 
     
-    <h4 class="name" id="gestionarBBDD"><span class="type-signature">(async) </span>gestionarBBDD<span class="signature">()</span><span class="type-signature"> &rarr; {Promise.&lt;void>}</span></h4>
+    <h4 class="name" id="generarEpisodio"><span class="type-signature"></span>generarEpisodio<span class="signature">()</span><span class="type-signature"> &rarr; {void}</span></h4>
     
 
     
@@ -1090,7 +1735,7 @@
 
 
 <div class="description">
-    Gestiona la obtención, filtrado y paginación de datos desde la base de datos local (BBDD).- Obtiene los datos desde el servidor local según la sección actual.- Aplica un filtrado local si existe texto en el buscador.- Calcula el número total de páginas en base a 12 elementos por página.- Ajusta la página actual si se sale del rango válido.Comportamiento:- Si no hay resultados, muestra un mensaje informativo en pantalla.- Si hay datos, aplica paginación manual y renderiza las tarjetas.- Finalmente, actualiza la paginación visible.
+    Genera y renderiza el selector de episodios dentro del contenedor HTML con id "episodio".Si el contenedor existe:- Se limpia su contenido- Se inserta un <select> con episodios disponibles
 </div>
 
 
@@ -1134,7 +1779,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="script.js.html">script.js</a>, <a href="script.js.html#line461">line 461</a>
+        <a href="script.js.html">script.js</a>, <a href="script.js.html#line473">line 473</a>
     </li></ul></dd>
     
 
@@ -1162,10 +1807,6 @@
 <h5>Returns:</h5>
 
         
-<div class="param-desc">
-    No retorna valor; actualiza la interfaz.
-</div>
-
 
 
 <dl>
@@ -1174,7 +1815,643 @@
     </dt>
     <dd>
         
-<span class="param-type">Promise.&lt;void></span>
+<span class="param-type">void</span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="generarEspecie"><span class="type-signature"></span>generarEspecie<span class="signature">()</span><span class="type-signature"> &rarr; {void}</span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    Genera y renderiza el selector de especie dentro del contenedor HTML con id "especie".Si el contenedor existe:- Se limpia su contenido- Se inserta un <select> con las especies disponibles de personajes
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="script.js.html">script.js</a>, <a href="script.js.html#line363">line 363</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">void</span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="generarEstado"><span class="type-signature"></span>generarEstado<span class="signature">()</span><span class="type-signature"> &rarr; {void}</span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    Genera y renderiza el selector de estado dentro del contenedor HTML con id "estado".Si el contenedor existe:- Se limpia su contenido- Se inserta un <select> con los estados disponibles de personajes
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="script.js.html">script.js</a>, <a href="script.js.html#line345">line 345</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">void</span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="generarGenero"><span class="type-signature"></span>generarGenero<span class="signature">()</span><span class="type-signature"> &rarr; {void}</span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    Genera y renderiza el selector de género dentro del contenedor HTML con id "genero".Si el contenedor existe:- Se limpia su contenido- Se inserta un <select> con géneros disponibles
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="script.js.html">script.js</a>, <a href="script.js.html#line407">line 407</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">void</span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="generarNumerosPaginas"><span class="type-signature"></span>generarNumerosPaginas<span class="signature">()</span><span class="type-signature"> &rarr; {void}</span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    Genera dinámicamente los botones de paginación en el contenedor HTML.Muestra un rango de páginas alrededor de la página actual, incluyendola primera y última página con puntos suspensivos si es necesario.
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="script.js.html">script.js</a>, <a href="script.js.html#line12">line 12</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">void</span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="generarTipoC"><span class="type-signature"></span>generarTipoC<span class="signature">()</span><span class="type-signature"> &rarr; {void}</span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    Genera y renderiza el selector de tipo de criatura dentro del contenedor HTML con id "tipoC".Si el contenedor existe:- Se limpia su contenido- Se inserta un <select> con tipos de criaturas disponibles
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="script.js.html">script.js</a>, <a href="script.js.html#line385">line 385</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">void</span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="generarTipoL"><span class="type-signature"></span>generarTipoL<span class="signature">()</span><span class="type-signature"> &rarr; {void}</span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    Genera y renderiza el selector de tipo de localización dentro del contenedor HTML con id "tipoL".Si el contenedor existe:- Se limpia su contenido- Se inserta un <select> con tipos de localización disponibles
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="script.js.html">script.js</a>, <a href="script.js.html#line429">line 429</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">void</span>
 
 
     </dd>
@@ -1200,7 +2477,7 @@
 
 
 <div class="description">
-    Guarda un elemento en la base de datos mediante una petición POST al servidor local.Construye un objeto con la información del elemento según su tipo (character, location o episode)y lo envía al endpoint `/guardar`.Campos enviados:- tipo_dato, nombre, imagen- Campos adicionales según el tipo:  - character: especie, estado, origen, genero (ubicación actual)  - location: tipo, dimensión  - episode: fecha de emisión y código de episodioRespuesta del servidor:- 200 OK: muestra mensaje de éxito.- 409 Conflict: indica que el elemento ya existe.- Otros errores: muestra mensaje genérico.
+    Guarda un elemento en la base de datos mediante una petición POST al backend Java.- Construye un objeto según el tipo de dato- Envía los datos al endpoint /guardar- Muestra mensaje de éxito o error en alert
 </div>
 
 
@@ -1265,7 +2542,13 @@
             <td class="type">
             
                 
-<span class="param-type">string</span>
+<span class="param-type">"character"</span>
+|
+
+<span class="param-type">"location"</span>
+|
+
+<span class="param-type">"episode"</span>
 
 
             
@@ -1275,7 +2558,7 @@
 
             
 
-            <td class="description last">Tipo de elemento (character, location o episode).</td>
+            <td class="description last">Tipo de elemento a guardar.</td>
         </tr>
 
     
@@ -1316,7 +2599,113 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="script.js.html">script.js</a>, <a href="script.js.html#line526">line 526</a>
+        <a href="script.js.html">script.js</a>, <a href="script.js.html#line762">line 762</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">void</span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="hayBusquedaActiva"><span class="type-signature"></span>hayBusquedaActiva<span class="signature">()</span><span class="type-signature"> &rarr; {boolean}</span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    Comprueba si hay una búsqueda activa en el input de texto o en los filtros.Una búsqueda se considera activa si:- El input de búsqueda no está vacío- O al menos uno de los filtros tiene un valor distinto de vacío
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="script.js.html">script.js</a>, <a href="script.js.html#line272">line 272</a>
     </li></ul></dd>
     
 
@@ -1345,7 +2734,7 @@
 
         
 <div class="param-desc">
-    No retorna valor; realiza una petición HTTP y muestra alertas.
+    Devuelve true si hay texto en la búsqueda o algún filtro activo, false en caso contrario.
 </div>
 
 
@@ -1356,7 +2745,7 @@
     </dt>
     <dd>
         
-<span class="param-type">void</span>
+<span class="param-type">boolean</span>
 
 
     </dd>
@@ -1382,7 +2771,7 @@
 
 
 <div class="description">
-    Cambia la página actual y recarga los datos correspondientes.Actualiza la variable global de página, ejecuta la función encargadade cargar los datos de esa página y desplaza la vista al iniciode la página con un desplazamiento suave.Requiere que existan:- numeroPagina: variable global que almacena la página actual- cargarDatos: función que carga los datos según la página actual
+    Cambia a una página específica y recarga los datos correspondientes.También desplaza la vista al inicio de la página de forma suave.
 </div>
 
 
@@ -1434,7 +2823,7 @@
 
             
 
-            <td class="description last">Número de la página a la que se quiere navegar</td>
+            <td class="description last">Número de la página a la que se desea navegar.</td>
         </tr>
 
     
@@ -1475,7 +2864,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="script.js.html">script.js</a>, <a href="script.js.html#line57">line 57</a>
+        <a href="script.js.html">script.js</a>, <a href="script.js.html#line55">line 55</a>
     </li></ul></dd>
     
 
@@ -1503,10 +2892,6 @@
 <h5>Returns:</h5>
 
         
-<div class="param-desc">
-    No devuelve ningún valor
-</div>
-
 
 
 <dl>
@@ -1533,7 +2918,7 @@
     
 
     
-    <h4 class="name" id="paginaAnterior"><span class="type-signature"></span>paginaAnterior<span class="signature">()</span><span class="type-signature"> &rarr; {void}</span></h4>
+    <h4 class="name" id="limpiarFiltros"><span class="type-signature"></span>limpiarFiltros<span class="signature">()</span><span class="type-signature"> &rarr; {void}</span></h4>
     
 
     
@@ -1541,7 +2926,7 @@
 
 
 <div class="description">
-    Retrocede a la página anterior de resultados si no se encuentra en la primera página.Decrementa el contador de página actual (`numeroPagina`) si es mayor que 1,recarga los datos llamando a `cargarDatos()` y desplaza la vista al inicio de la páginacon un scroll suave.
+    Limpia todos los filtros seleccionados en la interfaz,reseteando sus valores a vacío.
 </div>
 
 
@@ -1585,7 +2970,219 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="script.js.html">script.js</a>, <a href="script.js.html#line158">line 158</a>
+        <a href="script.js.html">script.js</a>, <a href="script.js.html#line225">line 225</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">void</span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="mostrarOpcionesBusqueda"><span class="type-signature"></span>mostrarOpcionesBusqueda<span class="signature">()</span><span class="type-signature"> &rarr; {void}</span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    Muestra las opciones de búsqueda correspondientes a la sección actualy oculta el resto de bloques de opciones.
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="script.js.html">script.js</a>, <a href="script.js.html#line150">line 150</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">void</span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="obtenerFiltrosActuales"><span class="type-signature"></span>obtenerFiltrosActuales<span class="signature">()</span><span class="type-signature"> &rarr; {Object}</span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    Obtiene los filtros actualmente seleccionados según la sección activa.Devuelve un objeto con las propiedades correspondientes a cada tipo de filtro.
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="script.js.html">script.js</a>, <a href="script.js.html#line242">line 242</a>
     </li></ul></dd>
     
 
@@ -1614,9 +3211,115 @@
 
         
 <div class="param-desc">
-    No retorna ningún valor.
+    Objeto con los filtros activos.
 </div>
 
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">Object</span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="paginaAnterior"><span class="type-signature"></span>paginaAnterior<span class="signature">()</span><span class="type-signature"> &rarr; {void}</span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    Retrocede a la página anterior si no estamos en la primera página.Recarga los datos correspondientes y desplaza la vista al inicio de forma suave.
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="script.js.html">script.js</a>, <a href="script.js.html#line85">line 85</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
 
 
 <dl>
@@ -1651,7 +3354,7 @@
 
 
 <div class="description">
-    Avanza a la siguiente página de resultados si no se ha alcanzado el total de páginas.Incrementa el contador de página actual (`numeroPagina`) si es menor que `totalPaginas`,recarga los datos llamando a `cargarDatos()` y desplaza la vista al inicio de la páginacon un scroll suave.
+    Avanza a la siguiente página si no se ha alcanzado el total de páginas.Recarga los datos y desplaza la vista al inicio de forma suave.
 </div>
 
 
@@ -1695,7 +3398,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="script.js.html">script.js</a>, <a href="script.js.html#line140">line 140</a>
+        <a href="script.js.html">script.js</a>, <a href="script.js.html#line69">line 69</a>
     </li></ul></dd>
     
 
@@ -1723,10 +3426,6 @@
 <h5>Returns:</h5>
 
         
-<div class="param-desc">
-    No retorna ningún valor.
-</div>
-
 
 
 <dl>
@@ -1761,7 +3460,7 @@
 
 
 <div class="description">
-    Renderiza tarjetas dinámicas en el contenedor principal según el tipo de datos.Limpia el contenido del contenedor y genera hasta un máximo de 12 elementos visualesa partir de los datos recibidos. Cada tarjeta incluye:- Imagen según el tipo (character, location, episode)- Información adicional específica de cada tipo- Botón para guardar el elemento en la base de datosTipos soportados:- character: muestra especie, estado, origen y última ubicación- location: muestra tipo y dimensión- episode: muestra fecha de emisión y código del episodio
+    Renderiza una lista de tarjetas (cards) en el contenedor principal según el tipo de dato.- Limpia el contenedor antes de renderizar- Genera la imagen según el tipo (character, location, episode)- Construye información extra dinámica según el tipo- Inserta cada tarjeta en el DOM- Incluye botón para guardar cada elemento en la base de datos
 </div>
 
 
@@ -1813,7 +3512,7 @@
 
             
 
-            <td class="description last">Lista de objetos a renderizar.</td>
+            <td class="description last">Lista de elementos a renderizar.</td>
         </tr>
 
     
@@ -1826,7 +3525,13 @@
             <td class="type">
             
                 
-<span class="param-type">string</span>
+<span class="param-type">"character"</span>
+|
+
+<span class="param-type">"location"</span>
+|
+
+<span class="param-type">"episode"</span>
 
 
             
@@ -1836,7 +3541,7 @@
 
             
 
-            <td class="description last">Tipo de datos (character, location o episode).</td>
+            <td class="description last">Tipo de dato a renderizar.</td>
         </tr>
 
     
@@ -1877,7 +3582,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="script.js.html">script.js</a>, <a href="script.js.html#line296">line 296</a>
+        <a href="script.js.html">script.js</a>, <a href="script.js.html#line694">line 694</a>
     </li></ul></dd>
     
 
@@ -1905,10 +3610,6 @@
 <h5>Returns:</h5>
 
         
-<div class="param-desc">
-    No retorna ningún valor.
-</div>
-
 
 
 <dl>
@@ -1943,7 +3644,7 @@
 
 
 <div class="description">
-    Alterna la visibilidad entre dos elementos del DOM: una cuadrícula SVG y una lista SVG.Esta función obtiene los elementos con los IDs "svgGrid" y "svgList"y les alterna la clase "oculto" para mostrar u ocultar cada uno.
+    Alterna dinámicamente la visibilidad de los iconos SVG de vista(grid y lista) cambiando la clase "oculto" en cada uno.
 </div>
 
 
@@ -1987,7 +3688,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="script.js.html">script.js</a>, <a href="script.js.html#line99">line 99</a>
+        <a href="script.js.html">script.js</a>, <a href="script.js.html#line136">line 136</a>
     </li></ul></dd>
     
 
@@ -2015,10 +3716,6 @@
 <h5>Returns:</h5>
 
         
-<div class="param-desc">
-    No retorna ningún valor.
-</div>
-
 
 
 <dl>
@@ -2053,7 +3750,7 @@
 
 
 <div class="description">
-    Redirige la aplicación para utilizar la fuente de datos "API".Cambia la URL actual del navegador a "app.html" pasando el parámetro`fuente=API` en la query string, lo que permite activar el modo deobtención de datos desde una API externa.
+    Redirige a la aplicación utilizando la API como fuente de datos.
 </div>
 
 
@@ -2097,7 +3794,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="script.js.html">script.js</a>, <a href="script.js.html#line176">line 176</a>
+        <a href="script.js.html">script.js</a>, <a href="script.js.html#line170">line 170</a>
     </li></ul></dd>
     
 
@@ -2125,10 +3822,6 @@
 <h5>Returns:</h5>
 
         
-<div class="param-desc">
-    No retorna ningún valor.
-</div>
-
 
 
 <dl>
@@ -2163,7 +3856,7 @@
 
 
 <div class="description">
-    Verifica la conexión con la base de datos a través de un endpoint local y,si la respuesta es correcta, redirige a la aplicación en modo BBDD.Realiza una petición HTTP al servidor local para comprobar si está activo.- Si la respuesta es correcta (`res.ok`), redirige a "app.html?fuente=BBDD".- Si el servidor responde con error, muestra una alerta indicando un problema.- Si la petición falla (servidor apagado o sin conexión), muestra una alerta distinta.
+    Intenta conectar con el servidor local para usar la base de datos como fuente.Si la conexión es exitosa, redirige a la aplicación con modo BBDD.En caso de error, muestra un mensaje al usuario.
 </div>
 
 
@@ -2207,7 +3900,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="script.js.html">script.js</a>, <a href="script.js.html#line220">line 220</a>
+        <a href="script.js.html">script.js</a>, <a href="script.js.html#line180">line 180</a>
     </li></ul></dd>
     
 
@@ -2235,10 +3928,6 @@
 <h5>Returns:</h5>
 
         
-<div class="param-desc">
-    No retorna valor; puede redirigir o mostrar alertas.
-</div>
-
 
 
 <dl>
@@ -2275,13 +3964,13 @@
 </div>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Global</h3><ul><li><a href="global.html#abrirNuevaVentana">abrirNuevaVentana</a></li><li><a href="global.html#btnvolver">btnvolver</a></li><li><a href="global.html#cambiarSeccion">cambiarSeccion</a></li><li><a href="global.html#cambiarVista">cambiarVista</a></li><li><a href="global.html#cargarDatos">cargarDatos</a></li><li><a href="global.html#fetchData">fetchData</a></li><li><a href="global.html#ficha">ficha</a></li><li><a href="global.html#generarNumerosPaginas">generarNumerosPaginas</a></li><li><a href="global.html#gestionarBBDD">gestionarBBDD</a></li><li><a href="global.html#guardarEnBD">guardarEnBD</a></li><li><a href="global.html#irAPagina">irAPagina</a></li><li><a href="global.html#paginaAnterior">paginaAnterior</a></li><li><a href="global.html#paginaSiguiente">paginaSiguiente</a></li><li><a href="global.html#renderCards">renderCards</a></li><li><a href="global.html#svgDinamico">svgDinamico</a></li><li><a href="global.html#usarAPI">usarAPI</a></li><li><a href="global.html#usarBBDD">usarBBDD</a></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Global</h3><ul><li><a href="global.html#abrirNuevaVentana">abrirNuevaVentana</a></li><li><a href="global.html#actualizarVisibilidadPaginacion">actualizarVisibilidadPaginacion</a></li><li><a href="global.html#btnvolver">btnvolver</a></li><li><a href="global.html#buscarEnBBDDLocal">buscarEnBBDDLocal</a></li><li><a href="global.html#cambiarSeccion">cambiarSeccion</a></li><li><a href="global.html#cambiarVista">cambiarVista</a></li><li><a href="global.html#cargarDatos">cargarDatos</a></li><li><a href="global.html#cargarDesdeBBDD">cargarDesdeBBDD</a></li><li><a href="global.html#construirUrlBusquedaAPI">construirUrlBusquedaAPI</a></li><li><a href="global.html#crearSelect">crearSelect</a></li><li><a href="global.html#fetchData">fetchData</a></li><li><a href="global.html#ficha">ficha</a></li><li><a href="global.html#generarDimension">generarDimension</a></li><li><a href="global.html#generarEpisodio">generarEpisodio</a></li><li><a href="global.html#generarEspecie">generarEspecie</a></li><li><a href="global.html#generarEstado">generarEstado</a></li><li><a href="global.html#generarGenero">generarGenero</a></li><li><a href="global.html#generarNumerosPaginas">generarNumerosPaginas</a></li><li><a href="global.html#generarTipoC">generarTipoC</a></li><li><a href="global.html#generarTipoL">generarTipoL</a></li><li><a href="global.html#guardarEnBD">guardarEnBD</a></li><li><a href="global.html#hayBusquedaActiva">hayBusquedaActiva</a></li><li><a href="global.html#irAPagina">irAPagina</a></li><li><a href="global.html#limpiarFiltros">limpiarFiltros</a></li><li><a href="global.html#mostrarOpcionesBusqueda">mostrarOpcionesBusqueda</a></li><li><a href="global.html#obtenerFiltrosActuales">obtenerFiltrosActuales</a></li><li><a href="global.html#paginaAnterior">paginaAnterior</a></li><li><a href="global.html#paginaSiguiente">paginaSiguiente</a></li><li><a href="global.html#renderCards">renderCards</a></li><li><a href="global.html#svgDinamico">svgDinamico</a></li><li><a href="global.html#usarAPI">usarAPI</a></li><li><a href="global.html#usarBBDD">usarBBDD</a></li></ul>
 </nav>
 
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.5</a> on Wed Apr 15 2026 16:26:51 GMT+0200 (hora de verano de Europa central)
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.5</a> on Thu Apr 16 2026 12:26:00 GMT+0200 (hora de verano de Europa central)
 </footer>
 
 <script> prettyPrint(); </script>

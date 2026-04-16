@@ -30,24 +30,20 @@
 let totalPaginas = 0;
 let seccionActual = "character";
 let modoFuente = "API";
+let cache = {};
 
-/* SCRIPT PARA MOSTRAR NUMERO DE PAGINAS */
+let searchInput = null;
+let filterType = null;
+let formBusqueda = null;
+
+/* -------------------- PAGINACIÓN -------------------- */
 /**
  * Genera dinámicamente los botones de paginación en el contenedor HTML.
- *
- * Esta función calcula el rango de páginas visibles alrededor de la página actual
- * y crea botones para navegar entre ellas. También añade accesos rápidos a la
- * primera y última página cuando están fuera del rango visible, incluyendo
- * puntos suspensivos para indicar páginas omitidas.
- *
- * Requiere que existan las variables globales:
- * - numeroPagina: número de la página actual
- * - totalPaginas: número total de páginas disponibles
- *
- * Además, utiliza un elemento del DOM con id "numerosPaginacion" como contenedor.
+ * Muestra un rango de páginas alrededor de la página actual, incluyendo
+ * la primera y última página con puntos suspensivos si es necesario.
  *
  * @function generarNumerosPaginas
- * @returns {void} No devuelve ningún valor
+ * @returns {void}
  */
 function generarNumerosPaginas() {
     const contenedor = document.getElementById("numerosPaginacion");
@@ -55,27 +51,29 @@ function generarNumerosPaginas() {
 
     contenedor.innerHTML = "";
 
-    // 🧠 si estamos en búsqueda, no mostramos paginación
+    // Si no hay páginas (0 resultados), no mostramos nada
+    if (totalPaginas &lt; 1) return;
 
+    // Calculamos el rango de páginas a mostrar (vecinas a la actual)
     let inicio = Math.max(1, numeroPagina - 2);
     let fin = Math.min(totalPaginas, numeroPagina + 2);
 
-    // ⬅️ botón primera página
+    // Botón de la primera página y puntos suspensivos si estamos lejos del inicio
     if (inicio > 1) {
         contenedor.innerHTML += `&lt;button class="numeroBtn" onclick="irAPagina(1)">1&lt;/button>`;
         if (inicio > 2) contenedor.innerHTML += `&lt;span class="dots">...&lt;/span>`;
     }
 
-    // 🔢 páginas centrales
+    // Dibujar el rango de páginas calculado
     for (let i = inicio; i &lt;= fin; i++) {
         contenedor.innerHTML += `
-            &lt;button class="numeroBtn ${i === numeroPagina ? 'activo' : ''}"
-            onclick="irAPagina(${i})">
+            &lt;button class="numeroBtn ${i === numeroPagina ? "activo" : ""}" onclick="irAPagina(${i})">
                 ${i}
-            &lt;/button>`;
+            &lt;/button>
+        `;
     }
 
-    // ➡️ última página
+    // Botón de la última página y puntos suspensivos si estamos lejos del final
     if (fin &lt; totalPaginas) {
         if (fin &lt; totalPaginas - 1) contenedor.innerHTML += `&lt;span class="dots">...&lt;/span>`;
         contenedor.innerHTML += `&lt;button class="numeroBtn" onclick="irAPagina(${totalPaginas})">${totalPaginas}&lt;/button>`;
@@ -83,299 +81,686 @@ function generarNumerosPaginas() {
 }
 
 /**
- * Cambia la página actual y recarga los datos correspondientes.
- *
- * Actualiza la variable global de página, ejecuta la función encargada
- * de cargar los datos de esa página y desplaza la vista al inicio
- * de la página con un desplazamiento suave.
- *
- * Requiere que existan:
- * - numeroPagina: variable global que almacena la página actual
- * - cargarDatos: función que carga los datos según la página actual
+ * Cambia a una página específica y recarga los datos correspondientes.
+ * También desplaza la vista al inicio de la página de forma suave.
  *
  * @function irAPagina
- * @param {number} num - Número de la página a la que se quiere navegar
- * @returns {void} No devuelve ningún valor
+ * @param {number} num - Número de la página a la que se desea navegar.
+ * @returns {void}
  */
 function irAPagina(num) {
     numeroPagina = num;
     cargarDatos();
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+    window.scrollTo({ top: 0, behavior: "smooth" });
 }
 
-/* VISTAS Y UI */
 /**
- * Alterna la vista del contenedor entre diferentes estilos (por ejemplo, grid y lista).
+ * Avanza a la siguiente página si no se ha alcanzado el total de páginas.
+ * Recarga los datos y desplaza la vista al inicio de forma suave.
  *
- * Añade o elimina la clase "contenedorLista" al elemento con id "contenedor",
- * permitiendo cambiar su apariencia visual. Después, actualiza el SVG dinámico
- * llamando a la función correspondiente.
+ * @function paginaSiguiente
+ * @returns {void}
+ */
+function paginaSiguiente() {
+    // Solo avanza si la página actual es menor al total
+    if (numeroPagina &lt; totalPaginas) {
+        numeroPagina++;
+        cargarDatos();
+        window.scrollTo({ top: 0, behavior: "smooth" });
+    }
+}
+
+/**
+ * Retrocede a la página anterior si no estamos en la primera página.
+ * Recarga los datos correspondientes y desplaza la vista al inicio de forma suave.
  *
- * Requiere que existan:
- * - Un elemento en el DOM con id "contenedor"
- * - La función svgDinamico definida
+ * @function paginaAnterior
+ * @returns {void}
+ */
+function paginaAnterior() {
+    // Solo retrocede si no estamos en la primera
+    if (numeroPagina > 1) {
+        numeroPagina--;
+        cargarDatos();
+        window.scrollTo({ top: 0, behavior: "smooth" });
+    }
+}
+
+/**
+ * Actualiza la visibilidad de los controles de paginación en la interfaz.
+ * Muestra u oculta los botones y números de paginación dependiendo
+ * de si el modo de fuente actual es "API".
+ *
+ * @function actualizarVisibilidadPaginacion
+ * @returns {void}
+ */
+function actualizarVisibilidadPaginacion() {
+    const botonesPag = document.querySelector(".botonesPaginacion");
+    const numerosPag = document.getElementById("numerosPaginacion");
+
+    // Ahora solo depende de si estamos en modo API, no de si hay búsqueda
+    const mostrar = modoFuente === "API";
+
+    if (botonesPag) botonesPag.style.display = mostrar ? "flex" : "none";
+    if (numerosPag) numerosPag.style.display = mostrar ? "flex" : "none";
+}
+
+/* -------------------- VISTAS Y UI -------------------- */
+
+/**
+ * Alterna la vista del contenedor entre modo lista y modo normal.
+ * También actualiza los elementos SVG dinámicos tras el cambio de vista.
  *
  * @function cambiarVista
- * @returns {void} No devuelve ningún valor
+ * @returns {void}
  */
 function cambiarVista() {
     const contenedor = document.getElementById("contenedor");
+    if (!contenedor) return;
     contenedor.classList.toggle("contenedorLista");
     svgDinamico();
 }
 
 /**
- * Alterna la visibilidad entre dos elementos del DOM: una cuadrícula SVG y una lista SVG.
- *
- * Esta función obtiene los elementos con los IDs "svgGrid" y "svgList"
- * y les alterna la clase "oculto" para mostrar u ocultar cada uno.
+ * Alterna dinámicamente la visibilidad de los iconos SVG de vista
+ * (grid y lista) cambiando la clase "oculto" en cada uno.
  *
  * @function svgDinamico
- * @returns {void} No retorna ningún valor.
+ * @returns {void}
  */
 function svgDinamico() {
     const grid = document.getElementById("svgGrid");
     const list = document.getElementById("svgList");
-    grid.classList.toggle("oculto");
-    list.classList.toggle("oculto");
+    if (grid) grid.classList.toggle("oculto");
+    if (list) list.classList.toggle("oculto");
 }
 
 /**
- * Gestiona la carga de datos según el modo de fuente y el estado de la búsqueda.
+ * Muestra las opciones de búsqueda correspondientes a la sección actual
+ * y oculta el resto de bloques de opciones.
  *
- * Si el modo de fuente es "BBDD", se llama a la función `gestionarBBDD()`.
- * En caso contrario, se comprueba si existe un valor en el input de búsqueda:
- * - Si hay texto, se ejecuta `fetchData()`.
- * - Si no hay texto, se ejecuta `ficha()`.
- *
- * @function cargarDatos
- * @returns {void} No retorna ningún valor.
+ * @function mostrarOpcionesBusqueda
+ * @returns {void}
  */
-function cargarDatos() {
-    if (modoFuente === "BBDD") {
-        gestionarBBDD();
-    } else {
-        const query = searchInput ? searchInput.value.trim() : "";
-        if (query !== "") {
-            fetchData();
-        } else {
-            ficha();
-        }
-    }
+function mostrarOpcionesBusqueda() {
+    const bloques = ["opciones-character", "opciones-location", "opciones-episode"];
+    bloques.forEach(id => {
+        const el = document.getElementById(id);
+        if (el) el.classList.add("oculto");
+    });
+
+    const actual = document.getElementById(`opciones-${seccionActual}`);
+    if (actual) actual.classList.remove("oculto");
 }
 
+/* -------------------- SELECCIÓN DE FUENTE -------------------- */
 
 /**
- * Avanza a la siguiente página de resultados si no se ha alcanzado el total de páginas.
- *
- * Incrementa el contador de página actual (`numeroPagina`) si es menor que `totalPaginas`,
- * recarga los datos llamando a `cargarDatos()` y desplaza la vista al inicio de la página
- * con un scroll suave.
- *
- * @function paginaSiguiente
- * @returns {void} No retorna ningún valor.
- */
-function paginaSiguiente() {
-    if (numeroPagina &lt; totalPaginas) {
-        numeroPagina++;
-        cargarDatos();
-        window.scrollTo({ top: 0, behavior: 'smooth' });
-    }
-}
-
-/**
- * Retrocede a la página anterior de resultados si no se encuentra en la primera página.
- *
- * Decrementa el contador de página actual (`numeroPagina`) si es mayor que 1,
- * recarga los datos llamando a `cargarDatos()` y desplaza la vista al inicio de la página
- * con un scroll suave.
- *
- * @function paginaAnterior
- * @returns {void} No retorna ningún valor.
- */
-function paginaAnterior() {
-    if (numeroPagina > 1) {
-        numeroPagina--;
-        cargarDatos();
-        window.scrollTo({ top: 0, behavior: 'smooth' });
-    }
-}
-
-/**
- * Redirige la aplicación para utilizar la fuente de datos "API".
- *
- * Cambia la URL actual del navegador a "app.html" pasando el parámetro
- * `fuente=API` en la query string, lo que permite activar el modo de
- * obtención de datos desde una API externa.
+ * Redirige a la aplicación utilizando la API como fuente de datos.
  *
  * @function usarAPI
- * @returns {void} No retorna ningún valor.
+ * @returns {void}
  */
 function usarAPI() {
     window.location.href = "app.html?fuente=API";
 }
 
-
 /**
- * Cambia la sección actual de la aplicación y reinicia el estado de paginación y búsqueda.
- *
- * Actualiza la variable global `seccionActual` con la nueva sección recibida,
- * reinicia la página a 1, limpia el input de búsqueda si existe y vacía la caché.
- * Después, vuelve a cargar los datos según el modo de fuente:
- * - Si `modoFuente` es "BBDD", llama a `gestionarBBDD()`.
- * - En caso contrario, llama a `ficha()`.
- *
- * @function cambiarSeccion
- * @param {string} nuevaSeccion - Nombre de la nueva sección a la que se quiere cambiar.
- * @returns {void} No retorna ningún valor.
- */
-function cambiarSeccion(nuevaSeccion) {
-    seccionActual = nuevaSeccion;
-    numeroPagina = 1;
-    //BORRA EL INPUT AL CAMBIAR EL SEARCH
-    if (searchInput) searchInput.value = "";
-    cache = {};
-    if (modoFuente === "BBDD") {
-        gestionarBBDD();
-    } else {
-        ficha();
-    }
-}
-
-
-/* LOGICA PARA FETCH DESDE BBDD */
-
-/**
- * Verifica la conexión con la base de datos a través de un endpoint local y,
- * si la respuesta es correcta, redirige a la aplicación en modo BBDD.
- *
- * Realiza una petición HTTP al servidor local para comprobar si está activo.
- * - Si la respuesta es correcta (`res.ok`), redirige a "app.html?fuente=BBDD".
- * - Si el servidor responde con error, muestra una alerta indicando un problema.
- * - Si la petición falla (servidor apagado o sin conexión), muestra una alerta distinta.
+ * Intenta conectar con el servidor local para usar la base de datos como fuente.
+ * Si la conexión es exitosa, redirige a la aplicación con modo BBDD.
+ * En caso de error, muestra un mensaje al usuario.
  *
  * @async
  * @function usarBBDD
- * @returns {Promise&lt;void>} No retorna valor; puede redirigir o mostrar alertas.
+ * @returns {Promise&lt;void>}
  */
 async function usarBBDD() {
     try {
         const res = await fetch(`http://localhost:8080/obtener?tipo=character`);
-        if (res.ok) return window.location.href = "app.html?fuente=BBDD";
-
+        if (res.ok) {
+            window.location.href = "app.html?fuente=BBDD";
+            return;
+        }
         alert("⚠️ Error en el servidor");
     } catch (e) {
         alert("🔌 Servidor apagado. ¿Está encendido?");
     }
 }
 
-/* LOGICA PARA FETCH DESDE BBDD */
-/* LÓGICA DE CARGA DE DATOS (FICHAS) */
-let cache = {};
+/* -------------------- CAMBIO DE SECCIÓN -------------------- */
+/**
+ * Cambia la sección actual de la aplicación (character, location, episode).
+ * Reinicia la paginación, limpia la caché y los filtros, actualiza la UI
+ * y carga los nuevos datos correspondientes a la sección seleccionada.
+ *
+ * @function cambiarSeccion
+ * @param {string} nuevaSeccion - Nueva sección a mostrar.
+ * @returns {void}
+ */
+function cambiarSeccion(nuevaSeccion) {
+    seccionActual = nuevaSeccion;
+    numeroPagina = 1;
+    cache = {};
+
+    if (searchInput) searchInput.value = "";
+    if (filterType) filterType.value = nuevaSeccion;
+
+    limpiarFiltros();
+    mostrarOpcionesBusqueda();
+    cargarDatos();
+}
 
 /**
- * Obtiene y muestra fichas de datos desde la API de Rick and Morty,
- * gestionando caché por páginas y renderizado de resultados.
+ * Limpia todos los filtros seleccionados en la interfaz,
+ * reseteando sus valores a vacío.
  *
- * Flujo de la función:
- * 1. Comprueba si la página actual ya está en caché.
- *    - Si no lo está, realiza una petición a la API.
- *    - Guarda los resultados en `cache` y actualiza `totalPaginas`.
- * 2. Obtiene los datos de la página actual desde la caché.
- * 3. Limita los resultados a 12 elementos.
- * 4. Renderiza las tarjetas en pantalla y genera la paginación.
- *
- * @async
- * @function ficha
- * @returns {Promise&lt;void>} No retorna valor; actualiza la interfaz.
+ * @function limpiarFiltros
+ * @returns {void}
  */
-async function ficha() {
-    const contenedor = document.getElementById("contenedor");
+function limpiarFiltros() {
+    const ids = ["estadoSelect", "especieSelect", "tipoCSelect", "generoSelect", "tipoLSelect", "dimensionSelect", "episodioSelect"];
+    ids.forEach(id => {
+        const el = document.getElementById(id);
+        if (el) el.value = "";
+    });
+}
 
-    try {
+/* -------------------- FILTROS -------------------- */
 
-        // 1. Si no tengo la página, la pido a la API
-        if (!cache[numeroPagina]) {
-            let url = `https://rickandmortyapi.com/api/${seccionActual}?page=${numeroPagina}`;
-            const response = await fetch(url);
-            const data = await response.json();
+/**
+ * Obtiene los filtros actualmente seleccionados según la sección activa.
+ * Devuelve un objeto con las propiedades correspondientes a cada tipo de filtro.
+ *
+ * @function obtenerFiltrosActuales
+ * @returns {Object} Objeto con los filtros activos.
+ */
+function obtenerFiltrosActuales() {
+    if (seccionActual === "character") {
+        return {
+            status: document.getElementById("estadoSelect")?.value || "",
+            species: document.getElementById("especieSelect")?.value || "",
+            type: document.getElementById("tipoCSelect")?.value || "",
+            gender: document.getElementById("generoSelect")?.value || ""
+        };
+    }
+    if (seccionActual === "location") {
+        return {
+            type: document.getElementById("tipoLSelect")?.value || "",
+            dimension: document.getElementById("dimensionSelect")?.value || ""
+        };
+    }
+    if (seccionActual === "episode") {
+        return {
+            episode: document.getElementById("episodioSelect")?.value || ""
+        };
+    }
+    return {};
+}
 
-            totalPaginas = data.info.pages;
+/**
+ * Comprueba si hay una búsqueda activa en el input de texto o en los filtros.
+ *
+ * Una búsqueda se considera activa si:
+ * - El input de búsqueda no está vacío
+ * - O al menos uno de los filtros tiene un valor distinto de vacío
+ *
+ * @function hayBusquedaActiva
+ * @returns {boolean} Devuelve true si hay texto en la búsqueda o algún filtro activo, false en caso contrario.
+ */
+function hayBusquedaActiva() {
+    const texto = searchInput?.value.trim() || "";
+    const filtros = obtenerFiltrosActuales();
+    return texto !== "" || Object.values(filtros).some(valor => valor !== "");
+}
 
-            cache[numeroPagina] = data.results;
-        }
+/**
+ * Construye la URL para realizar una petición a la API de Rick and Morty
+ * en base al texto de búsqueda, filtros activos y la página actual.
+ *
+ * - Incluye siempre el parámetro de paginación (?page)
+ * - Añade el filtro por nombre si hay texto en el input
+ * - Añade dinámicamente los filtros activos
+ *
+ * @function construirUrlBusquedaAPI
+ * @returns {string} URL completa lista para hacer la petición a la API.
+ */
+function construirUrlBusquedaAPI() {
+    const texto = searchInput?.value.trim() || "";
+    const filtros = obtenerFiltrosActuales();
 
-        // 2. Cojo los datos de esa página
-        let datos = cache[numeroPagina];
+    // IMPORTANTE: Se usa numeroPagina para que la paginación funcione en la búsqueda
+    let url = `https://rickandmortyapi.com/api/${seccionActual}/?page=${numeroPagina}`;
 
-        // 3. Muestro solo 12
-        let mostrar = datos.slice(0, 12);
+    if (texto !== "") url += `&amp;name=${encodeURIComponent(texto)}`;
 
-        // 4. Pinto en pantalla
-        renderCards(mostrar, seccionActual);
-        generarNumerosPaginas();
+    for (const [clave, valor] of Object.entries(filtros)) {
+        if (valor !== "") url += `&amp;${clave}=${encodeURIComponent(valor)}`;
+    }
 
-    } catch (error) {
-        console.error("Error cargando fichas:", error);
+    return url;
+}
+
+/* -------------------- GENERAR SELECTORES -------------------- */
+/**
+ * Crea un elemento &lt;select> dinámico con una lista de opciones.
+ *
+ * La primera opción es siempre una opción inicial (por ejemplo "Todos"),
+ * seguida de las opciones proporcionadas en el array.
+ *
+ * @function crearSelect
+ * @param {string} idSelect - ID que se asignará al elemento select creado.
+ * @param {string[]} opciones - Array de valores que se convertirán en opciones del select.
+ * @param {string} [textoInicial="Todos"] - Texto de la opción inicial por defecto.
+ * @returns {HTMLSelectElement} Elemento select completamente construido.
+ */
+function crearSelect(idSelect, opciones, textoInicial = "Todos") {
+    const select = document.createElement("select");
+    select.id = idSelect;
+    const opcionInicial = document.createElement("option");
+    opcionInicial.value = "";
+    opcionInicial.textContent = textoInicial;
+    select.appendChild(opcionInicial);
+
+    opciones.forEach(opcion => {
+        const option = document.createElement("option");
+        option.value = opcion;
+        option.textContent = opcion;
+        select.appendChild(option);
+    });
+    return select;
+}
+
+/**
+ * Genera y renderiza el selector de estado dentro del contenedor HTML con id "estado".
+ *
+ * Si el contenedor existe:
+ * - Se limpia su contenido
+ * - Se inserta un &lt;select> con los estados disponibles de personajes
+ *
+ * @function generarEstado
+ * @returns {void}
+ */
+function generarEstado() {
+    const contenedor = document.getElementById("estado");
+    if (contenedor) {
+        contenedor.innerHTML = "";
+        contenedor.appendChild(crearSelect("estadoSelect", ["alive", "dead", "unknown"], "Todos"));
     }
 }
 
-/* RENDERIZADO UNIFICADO (Usa tu diseño de botón + lógica de datos de tu compañero) */
 /**
- * Renderiza tarjetas dinámicas en el contenedor principal según el tipo de datos.
+ * Genera y renderiza el selector de especie dentro del contenedor HTML con id "especie".
  *
- * Limpia el contenido del contenedor y genera hasta un máximo de 12 elementos visuales
- * a partir de los datos recibidos. Cada tarjeta incluye:
- * - Imagen según el tipo (character, location, episode)
- * - Información adicional específica de cada tipo
- * - Botón para guardar el elemento en la base de datos
+ * Si el contenedor existe:
+ * - Se limpia su contenido
+ * - Se inserta un &lt;select> con las especies disponibles de personajes
  *
- * Tipos soportados:
- * - character: muestra especie, estado, origen y última ubicación
- * - location: muestra tipo y dimensión
- * - episode: muestra fecha de emisión y código del episodio
+ * @function generarEspecie
+ * @returns {void}
+ */
+function generarEspecie() {
+    const contenedor = document.getElementById("especie");
+    if (contenedor) {
+        contenedor.innerHTML = "";
+        contenedor.appendChild(crearSelect(
+            "especieSelect",
+            ["Human", "Alien", "Humanoid", "Robot", "Animal", "Mythological Creature", "Cronenberg"],
+            "Todas"
+        ));
+    }
+}
+
+/**
+ * Genera y renderiza el selector de tipo de criatura dentro del contenedor HTML con id "tipoC".
+ *
+ * Si el contenedor existe:
+ * - Se limpia su contenido
+ * - Se inserta un &lt;select> con tipos de criaturas disponibles
+ *
+ * @function generarTipoC
+ * @returns {void}
+ */
+function generarTipoC() {
+    const contenedor = document.getElementById("tipoC");
+    if (contenedor) {
+        contenedor.innerHTML = "";
+        contenedor.appendChild(crearSelect(
+            "tipoCSelect",
+            ["Genetic experiment", "Parasite", "Superhuman", "Clone"],
+            "Todos"
+        ));
+    }
+}
+
+/**
+ * Genera y renderiza el selector de género dentro del contenedor HTML con id "genero".
+ *
+ * Si el contenedor existe:
+ * - Se limpia su contenido
+ * - Se inserta un &lt;select> con géneros disponibles
+ *
+ * @function generarGenero
+ * @returns {void}
+ */
+function generarGenero() {
+    const contenedor = document.getElementById("genero");
+    if (contenedor) {
+        contenedor.innerHTML = "";
+        contenedor.appendChild(crearSelect(
+            "generoSelect",
+            ["Female", "Male", "Genderless", "unknown"],
+            "Todos"
+        ));
+    }
+}
+
+/**
+ * Genera y renderiza el selector de tipo de localización dentro del contenedor HTML con id "tipoL".
+ *
+ * Si el contenedor existe:
+ * - Se limpia su contenido
+ * - Se inserta un &lt;select> con tipos de localización disponibles
+ *
+ * @function generarTipoL
+ * @returns {void}
+ */
+function generarTipoL() {
+    const contenedor = document.getElementById("tipoL");
+    if (contenedor) {
+        contenedor.innerHTML = "";
+        contenedor.appendChild(crearSelect(
+            "tipoLSelect",
+            ["Planet", "Cluster", "Microverse", "TV", "Resort", "Fantasy town", "Dream"],
+            "Todos"
+        ));
+    }
+}
+
+/**
+ * Genera y renderiza el selector de dimensión dentro del contenedor HTML con id "dimension".
+ *
+ * Si el contenedor existe:
+ * - Se limpia su contenido
+ * - Se inserta un &lt;select> con dimensiones disponibles
+ *
+ * @function generarDimension
+ * @returns {void}
+ */
+function generarDimension() {
+    const contenedor = document.getElementById("dimension");
+    if (contenedor) {
+        contenedor.innerHTML = "";
+        contenedor.appendChild(crearSelect(
+            "dimensionSelect",
+            ["Dimension C-137", "Replacement Dimension", "Cronenberg Dimension", "Fantasy Dimension", "Unknown"],
+            "Todas"
+        ));
+    }
+}
+
+/**
+ * Genera y renderiza el selector de episodios dentro del contenedor HTML con id "episodio".
+ *
+ * Si el contenedor existe:
+ * - Se limpia su contenido
+ * - Se inserta un &lt;select> con episodios disponibles
+ *
+ * @function generarEpisodio
+ * @returns {void}
+ */
+function generarEpisodio() {
+    const contenedor = document.getElementById("episodio");
+    if (contenedor) {
+        contenedor.innerHTML = "";
+        contenedor.appendChild(crearSelect(
+            "episodioSelect",
+            ["S01E01", "S01E02", "S01E03", "S02E01", "S03E01", "S04E01", "S05E01"],
+            "Todos"
+        ));
+    }
+}
+/* -------------------- CARGA CENTRAL -------------------- */
+/**
+ * Controla el flujo principal de carga de datos según el estado de la aplicación.
+ *
+ * - Actualiza la visibilidad de la paginación
+ * - Si hay búsqueda activa, ejecuta búsqueda con filtros (fetchData)
+ * - Si no hay búsqueda activa:
+ *   - Carga desde BBDD si el modo es "BBDD"
+ *   - Si no, carga desde la API normal (ficha)
+ *
+ * @function cargarDatos
+ * @returns {void}
+ */
+function cargarDatos() {
+    actualizarVisibilidadPaginacion();
+
+    if (hayBusquedaActiva()) {
+        fetchData(); // Búsqueda con filtros
+    } else {
+        if (modoFuente === "BBDD") {
+            cargarDesdeBBDD();
+        } else {
+            ficha(); // Carga normal de la API
+        }
+    }
+}
+
+/* -------------------- BBDD -------------------- */
+
+/**
+ * Carga todos los datos desde la base de datos local (backend Java).
+ *
+ * - Obtiene datos desde el endpoint según la sección actual
+ * - Renderiza las tarjetas si hay datos
+ * - Muestra un mensaje si no hay datos
+ * - Redirige al index si ocurre un error de conexión
+ *
+ * @async
+ * @function cargarDesdeBBDD
+ * @returns {Promise&lt;void>}
+ */
+async function cargarDesdeBBDD() {
+    const contenedor = document.getElementById("contenedor");
+    if (!contenedor) return;
+
+    try {
+        const response = await fetch(`http://localhost:8080/obtener?tipo=${seccionActual}`);
+        const data = await response.json();
+
+        if (!Array.isArray(data) || data.length === 0) {
+            contenedor.innerHTML = `&lt;h2 class="nombre2" style="grid-column: 1/-1;">No hay datos guardados en este universo.&lt;/h2>`;
+        } else {
+            renderCards(data, seccionActual);
+        }
+    } catch (error) {
+        console.error("Error cargando desde BBDD:", error);
+        alert("🔌 No se pudo conectar con el servidor Java.");
+        window.location.replace("index.html");
+    }
+}
+
+/**
+ * Busca y filtra datos dentro de la base de datos local (backend Java)
+ * aplicando texto de búsqueda y filtros activos.
+ *
+ * - Obtiene todos los datos desde el backend
+ * - Filtra en frontend por nombre y criterios seleccionados
+ * - Renderiza resultados o muestra mensaje si no hay coincidencias
+ *
+ * @async
+ * @function buscarEnBBDDLocal
+ * @returns {Promise&lt;void>}
+ */
+async function buscarEnBBDDLocal() {
+    const contenedor = document.getElementById("contenedor");
+    if (!contenedor) return;
+
+    const texto = searchInput?.value.toLowerCase().trim() || "";
+    const filtros = obtenerFiltrosActuales();
+
+    try {
+        const response = await fetch(`http://localhost:8080/obtener?tipo=${seccionActual}`);
+        const data = await response.json();
+
+        const resultadosFiltrados = data.filter(item => {
+            const nombre = item.name?.toLowerCase() || item.nombre?.toLowerCase() || "";
+            const coincideTexto = nombre.includes(texto);
+            let coincideFiltros = true;
+
+            if (seccionActual === "character") {
+                if (filtros.status) coincideFiltros = coincideFiltros &amp;&amp; (item.status === filtros.status || item.estado === filtros.status);
+                if (filtros.species) coincideFiltros = coincideFiltros &amp;&amp; (item.species === filtros.species || item.especie === filtros.species);
+                if (filtros.type) coincideFiltros = coincideFiltros &amp;&amp; (item.type === filtros.type);
+                if (filtros.gender) coincideFiltros = coincideFiltros &amp;&amp; (item.gender === filtros.gender || item.genero === filtros.gender);
+            }
+            // ... (resto de filtros de location/episode iguales)
+            return coincideTexto &amp;&amp; coincideFiltros;
+        });
+
+        if (resultadosFiltrados.length === 0) {
+            contenedor.innerHTML = `&lt;h2 class="nombre2" style="grid-column: 1/-1;">No hay resultados en tu base de datos.&lt;/h2>`;
+        } else {
+            renderCards(resultadosFiltrados, seccionActual);
+        }
+    } catch (error) {
+        contenedor.innerHTML = `&lt;h2 class="nombre2" style="grid-column: 1/-1;">Error buscando en la base de datos.&lt;/h2>`;
+    }
+}
+
+/* -------------------- API -------------------- */
+/**
+ * Carga y renderiza datos de la API de Rick and Morty con sistema de caché.
+ *
+ * - Comprueba si existe el contenedor principal
+ * - Usa caché para evitar peticiones repetidas por página/sección
+ * - Si no hay datos en caché, los obtiene desde la API
+ * - Maneja el caso de no resultados
+ * - Actualiza la paginación
+ * - Renderiza un máximo de 12 elementos por página
+ *
+ * @async
+ * @function ficha
+ * @returns {Promise&lt;void>}
+ */
+async function ficha() {
+    const contenedor = document.getElementById("contenedor");
+    if (!contenedor) return;
+
+    try {
+        const claveCache = `${seccionActual}-${numeroPagina}`;
+
+        if (!cache[claveCache]) {
+            const url = `https://rickandmortyapi.com/api/${seccionActual}?page=${numeroPagina}`;
+            const response = await fetch(url);
+            const data = await response.json();
+
+            if (!data.results) {
+                contenedor.innerHTML = `&lt;h2 class="nombre2" style="grid-column: 1/-1;">No hay resultados&lt;/h2>`;
+                totalPaginas = 0;
+                generarNumerosPaginas();
+                return;
+            }
+
+            totalPaginas = data.info.pages;
+            cache[claveCache] = data.results;
+        }
+
+        renderCards(cache[claveCache].slice(0, 12), seccionActual);
+        generarNumerosPaginas();
+    } catch (error) {
+        contenedor.innerHTML = `&lt;h2 class="nombre2" style="grid-column: 1/-1;">Error cargando datos&lt;/h2>`;
+    }
+}
+
+/**
+ * Realiza una petición a la API o a la base de datos según el modo activo
+ * y renderiza los resultados filtrados o buscados.
+ *
+ * - Si el modo es "BBDD", delega la búsqueda local
+ * - Si no, construye la URL de búsqueda dinámica
+ * - Maneja respuestas vacías o errores
+ * - Actualiza la paginación y los resultados mostrados
+ *
+ * @async
+ * @function fetchData
+ * @returns {Promise&lt;void>}
+ */
+async function fetchData() {
+    const contenedor = document.getElementById("contenedor");
+    if (!contenedor) return;
+
+    if (modoFuente === "BBDD") {
+        buscarEnBBDDLocal();
+        return;
+    }
+
+    const url = construirUrlBusquedaAPI();
+
+    try {
+        const response = await fetch(url);
+        const data = await response.json();
+
+        if (data.results &amp;&amp; data.results.length > 0) {
+            // ACTUALIZAMOS TOTAL DE PÁGINAS PARA LA BÚSQUEDA
+            totalPaginas = data.info.pages;
+            renderCards(data.results.slice(0, 12), seccionActual);
+            generarNumerosPaginas(); // VOLVEMOS A DIBUJAR LA PAGINACIÓN
+        } else {
+            totalPaginas = 0;
+            contenedor.innerHTML = `&lt;h2 class="nombre2" style="grid-column: 1/-1;">No hay resultados&lt;/h2>`;
+            generarNumerosPaginas();
+        }
+    } catch (error) {
+        totalPaginas = 0;
+        contenedor.innerHTML = `&lt;h2 class="nombre2" style="grid-column: 1/-1;">No hay resultados&lt;/h2>`;
+        generarNumerosPaginas();
+    }
+}
+
+/* -------------------- RENDER -------------------- */
+/**
+ * Renderiza una lista de tarjetas (cards) en el contenedor principal según el tipo de dato.
+ *
+ * - Limpia el contenedor antes de renderizar
+ * - Genera la imagen según el tipo (character, location, episode)
+ * - Construye información extra dinámica según el tipo
+ * - Inserta cada tarjeta en el DOM
+ * - Incluye botón para guardar cada elemento en la base de datos
  *
  * @function renderCards
- * @param {Array&lt;Object>} items - Lista de objetos a renderizar.
- * @param {string} type - Tipo de datos (character, location o episode).
- * @returns {void} No retorna ningún valor.
+ * @param {Array&lt;Object>} items - Lista de elementos a renderizar.
+ * @param {"character"|"location"|"episode"} type - Tipo de dato a renderizar.
+ * @returns {void}
  */
 function renderCards(items, type) {
     const contenedor = document.getElementById("contenedor");
+    if (!contenedor) return;
+
     contenedor.innerHTML = "";
 
-    //Maximo 12 items
-    const itemsLimitados = items.slice(0, 12);
-
-    itemsLimitados.forEach(item => {
-        // Imagenes para cada seccion
+    items.forEach(item => {
         const imagenUrl =
-            type === 'character' ? item.image :
-            type === 'location' ? '../img/ubicacion.jpg' :
-            type === 'episode' ? '../img/episodio.jpg' : '';
+            type === "character" ? item.image :
+            type === "location" ? "../img/ubicacion.jpg" :
+            type === "episode" ? "../img/episodio.jpg" : "";
 
-        // Informacion extra
         let infoExtra = "";
-        if (type === 'character') {
+        if (type === "character") {
             infoExtra = `
-                &lt;p>Especie: ${item.species}&lt;/p>
-                &lt;p>Estado: ${item.status}&lt;/p>
-                &lt;p>Origen: ${item.origin.name}&lt;/p>
-                &lt;p>Última ubicación: ${item.location.name}&lt;/p>`;
-        } else if (type === 'location') {
-            infoExtra = `
-                &lt;p>Tipo: ${item.type}&lt;/p>
-                &lt;p>Dimensión: ${item.dimension}&lt;/p>`;
-        } else if (type === 'episode') {
-            infoExtra = `
-                &lt;p>Fecha: ${item.air_date}&lt;/p>
-                &lt;p>Código: ${item.episode}&lt;/p>`;
+                &lt;p>Especie: ${item.species ?? item.especie ?? "Desconocida"}&lt;/p>
+                &lt;p>Estado: ${item.status ?? item.estado ?? "Desconocido"}&lt;/p>
+                &lt;p>Origen: ${item.origin?.name ?? item.origen ?? "Desconocido"}&lt;/p>
+                &lt;p>Última ubicación: ${item.location?.name ?? item.genero ?? item.location ?? "Desconocida"}&lt;/p>
+            `;
+        } else if (type === "location") {
+            infoExtra = `&lt;p>Tipo: ${item.type ?? item.tipo ?? "Desconocido"}&lt;/p>&lt;p>Dimensión: ${item.dimension ?? "Desconocida"}&lt;/p>`;
+        } else if (type === "episode") {
+            infoExtra = `&lt;p>Fecha: ${item.air_date ?? "Desconocida"}&lt;/p>&lt;p>Código: ${item.episode ?? "Desconocido"}&lt;/p>`;
         }
 
-        //Convertimos el objeto a texto y reemplazamos la comilla con codigo html para no romper la query
         const itemString = JSON.stringify(item).replace(/'/g, "&amp;#39;");
 
-        // Estructura final con el botón de guardar
         contenedor.innerHTML += `
             &lt;div class="fichas">
                 &lt;div class="header-ficha">
@@ -388,277 +773,150 @@ function renderCards(items, type) {
                             &lt;/svg>
                         &lt;/button>
                     &lt;/div>
-                    &lt;p class="nombre">${item.name}&lt;/p>
+                    &lt;p class="nombre">${item.name ?? item.nombre ?? "Sin nombre"}&lt;/p>
                     &lt;div class="spacer">&lt;/div>
                 &lt;/div>
                 &lt;div class="imagen">
-                    &lt;img src="${imagenUrl}">
+                    &lt;img src="${imagenUrl}" alt="${item.name ?? item.nombre ?? "Imagen"}">
                 &lt;/div>
                 &lt;div class="info_fichas">
                     ${infoExtra}
                 &lt;/div>
-            &lt;/div>`;
+            &lt;/div>
+        `;
     });
 }
 
-/* FILTROS Y BUSCADOR */
-const searchInput = document.getElementById('searchInput'); // input de búsqueda
-const filterType = document.getElementById('filterType');   // tipo (personaje, etc.)
-
-// ejecuta búsqueda al escribir o cambiar tipo
-if (searchInput) {
-    searchInput.addEventListener('input', () => {
-        numeroPagina = 1;
-        fetchData();
-    });
-}
-
-if (filterType) {
-    filterType.addEventListener('change', () => {
-        numeroPagina = 1; // También reseteamos si cambiamos de Personaje a Episodio
-        fetchData();
-    });
-}
-
-
-//  BUSCADOR PRINCIPAL
 /**
- * Realiza una búsqueda en la API de Rick and Morty o redirige a la lógica de BBDD
- * según el modo de fuente activo.
+ * Guarda un elemento en la base de datos mediante una petición POST al backend Java.
  *
- * - Obtiene el texto del buscador y el tipo de filtro seleccionado.
- * - Si el modo es "BBDD", delega la búsqueda a `gestionarBBDD()`.
- * - Si el buscador está vacío, reinicia la paginación y carga la vista normal.
- * - Si hay texto, consulta la API con filtros por nombre y página actual.
- *
- * En caso de respuesta válida:
- * - Actualiza el número total de páginas.
- * - Renderiza los resultados (máximo 12).
- * - Genera la paginación.
- *
- * En caso de no encontrar resultados:
- * - Muestra un mensaje indicando que no existen coincidencias.
- * - Reinicia la paginación.
- *
- * @async
- * @function fetchData
- * @returns {Promise&lt;void>} No retorna valor; actualiza la interfaz.
- */
-async function fetchData() {
-    const query = searchInput.value.toLowerCase().trim();
-    const type = filterType.value;
-
-    if (modoFuente === "BBDD") {
-        gestionarBBDD();
-        return;
-    }
-
-    // Si el buscador está vacío, volvemos a la carga normal (página 1)
-    if (query === "") {
-        numeroPagina = 1;
-        ficha();
-        return;
-    }
-
-    // URL con filtro y pagina actual
-    const url = `https://rickandmortyapi.com/api/${type}/?name=${query}&amp;page=${numeroPagina}`;
-
-    try {
-        const response = await fetch(url);
-        const data = await response.json();
-
-        if (data.results) {
-            // Actualiza paginas totales
-            totalPaginas = data.info.pages;
-
-            renderCards(data.results.slice(0, 12), type);
-
-            // Genera pagiacion
-            generarNumerosPaginas();
-        } else {
-            totalPaginas = 0;
-            document.getElementById('contenedor').innerHTML =
-                `&lt;h2 class="nombre2" style="grid-column: 1/-1;">No hay ningún "${query}" en este universo.&lt;/h2>`;
-            generarNumerosPaginas();
-        }
-    } catch (error) {
-        console.error("Error buscando datos en API:", error);
-    }
-}
-
-/**
- * Gestiona la obtención, filtrado y paginación de datos desde la base de datos local (BBDD).
- *
- * - Obtiene los datos desde el servidor local según la sección actual.
- * - Aplica un filtrado local si existe texto en el buscador.
- * - Calcula el número total de páginas en base a 12 elementos por página.
- * - Ajusta la página actual si se sale del rango válido.
- *
- * Comportamiento:
- * - Si no hay resultados, muestra un mensaje informativo en pantalla.
- * - Si hay datos, aplica paginación manual y renderiza las tarjetas.
- * - Finalmente, actualiza la paginación visible.
- *
- * @async
- * @function gestionarBBDD
- * @returns {Promise&lt;void>} No retorna valor; actualiza la interfaz.
- */
-async function gestionarBBDD() {
-    const contenedor = document.getElementById("contenedor");
-    const query = searchInput?.value.toLowerCase().trim() || "";
-
-    try {
-        const response = await fetch(`http://localhost:8080/obtener?tipo=${seccionActual}`);
-        let data = await response.json();
-
-        // 1. Filtrado local
-        if (query) {
-            data = data.filter(item => item.name.toLowerCase().includes(query));
-        }
-
-        // 2. Cálculo de páginas
-        totalPaginas = Math.ceil(data.length / 12);
-
-        // Si al filtrar la página actual queda fuera de rango, volvemos a la 1
-        if (numeroPagina > totalPaginas &amp;&amp; totalPaginas > 0) {
-            numeroPagina = 1;
-        }
-
-        if (data.length === 0) {
-            totalPaginas = 0;
-            let mensaje = query
-                ? `No hay ningún "${query}" en tu base de datos.`
-                : `No hay ${seccionActual} guardados en tu base de datos.`;
-
-            contenedor.innerHTML = `&lt;h2 class="nombre2" style="grid-column: 1/-1;">${mensaje}&lt;/h2>`;
-        } else {
-            // 3. Paginación del array local
-            const inicio = (numeroPagina - 1) * 12;
-            const fin = inicio + 12;
-            const itemsParaMostrar = data.slice(inicio, fin);
-
-            renderCards(itemsParaMostrar, seccionActual);
-        }
-
-        // 4. Refrescar la botonera de números
-        generarNumerosPaginas();
-
-    } catch (error) {
-        console.error("Error:", error);
-        alert("🔌 No se pudo conectar con el servidor Java.");
-    }
-}
-
-
-/* SCRIPT PARA GUARDAR INFO EN BBDD (Tu funcionalidad intacta) */
-/**
- * Guarda un elemento en la base de datos mediante una petición POST al servidor local.
- *
- * Construye un objeto con la información del elemento según su tipo (character, location o episode)
- * y lo envía al endpoint `/guardar`.
- *
- * Campos enviados:
- * - tipo_dato, nombre, imagen
- * - Campos adicionales según el tipo:
- *   - character: especie, estado, origen, genero (ubicación actual)
- *   - location: tipo, dimensión
- *   - episode: fecha de emisión y código de episodio
- *
- * Respuesta del servidor:
- * - 200 OK: muestra mensaje de éxito.
- * - 409 Conflict: indica que el elemento ya existe.
- * - Otros errores: muestra mensaje genérico.
+ * - Construye un objeto según el tipo de dato
+ * - Envía los datos al endpoint /guardar
+ * - Muestra mensaje de éxito o error en alert
  *
  * @function guardarEnBD
  * @param {Object} item - Objeto con los datos del elemento a guardar.
- * @param {string} type - Tipo de elemento (character, location o episode).
- * @returns {void} No retorna valor; realiza una petición HTTP y muestra alertas.
+ * @param {"character"|"location"|"episode"} type - Tipo de elemento a guardar.
+ * @returns {void}
  */
 function guardarEnBD(item, type) {
     let datos = {
         tipo_dato: type,
         nombre: item.name,
-        imagen: type === 'character' ? item.image : (type === 'location' ? 'img/ubicacion.jpg' : 'img/episodio.jpg')
+        imagen: type === "character" ? item.image : (type === "location" ? "img/ubicacion.jpg" : "img/episodio.jpg")
     };
 
-    if (type === 'character') {
+    if (type === "character") {
         datos.especie = item.species;
         datos.estado = item.status;
         datos.origen = item.origin.name;
         datos.genero = item.location.name;
-    } else if (type === 'location') {
+    } else if (type === "location") {
         datos.tipo = item.type;
         datos.dimension = item.dimension;
-    } else if (type === 'episode') {
+    } else if (type === "episode") {
         datos.air_date = item.air_date;
         datos.episode = item.episode;
     }
 
-    fetch('http://localhost:8080/guardar', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+    fetch("http://localhost:8080/guardar", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify(datos)
     })
     .then(async respuesta => {
         const mensaje = await respuesta.text();
-        if (respuesta.ok) {
-            alert("💾 " + mensaje);
-        } else if (respuesta.status === 409) {
-            alert("❌ " + mensaje);
-        } else {
-            alert("❌ Error: " + mensaje);
-        }
+        alert(respuesta.ok ? "💾 " + mensaje : "❌ " + mensaje);
     })
-    .catch(error => {
-        alert("🔌 No se pudo conectar con el servidor Java. ¿Está encendido?");
-    });
+    .catch(() => alert("🔌 No se pudo conectar con el servidor Java."));
 }
 
+/* -------------------- UTILIDADES -------------------- */
 /**
  * Abre una nueva ventana o pestaña del navegador con la URL indicada.
  *
- * Si se proporciona una URL válida, se abre en una nueva pestaña usando
- * `window.open` con el objetivo `_blank`.
+ * - Solo ejecuta la acción si la URL es válida
+ * - Abre la página en una nueva pestaña (_blank)
  *
  * @function abrirNuevaVentana
  * @param {string} url - Dirección web que se abrirá en una nueva pestaña.
- * @returns {void} No retorna ningún valor.
+ * @returns {void}
  */
 function abrirNuevaVentana(url) {
-    if(url) window.open(url, '_blank');
+    if (url) window.open(url, "_blank");
 }
 
 /**
- * Vuelve a la página anterior en el historial del navegador.
+ * Navega hacia la página anterior en el historial del navegador.
  *
- * Utiliza `window.history.back()` para navegar hacia atrás en la sesión
- * del navegador, simulando el botón de “volver”.
+ * - Equivale a pulsar el botón "Atrás" del navegador
  *
  * @function btnvolver
- * @returns {void} No retorna ningún valor.
+ * @returns {void}
  */
-function btnvolver(){
+function btnvolver() {
     window.history.back();
 }
 
-
-//Funcion para cargar paginas al cambiar de index a app.html
-window.addEventListener('DOMContentLoaded', () => {
+/* -------------------- EVENT LISTENERS -------------------- */
+window.addEventListener("DOMContentLoaded", () => {
     const contenedor = document.getElementById("contenedor");
+    if (!contenedor) return;
 
-    if (contenedor) {
-        const urlParams = new URLSearchParams(window.location.search);
-        const fuente = urlParams.get('fuente');
+    const urlParams = new URLSearchParams(window.location.search);
+    modoFuente = urlParams.get("fuente") === "BBDD" ? "BBDD" : "API";
 
-        if (fuente === "BBDD") {
-            modoFuente = "BBDD";
-            gestionarBBDD();
-        } else {
-            modoFuente = "API";
-            ficha();
-        }
+    searchInput = document.getElementById("searchInput");
+    filterType = document.getElementById("filterType");
+    formBusqueda = document.getElementById("formBusqueda");
+
+    generarEstado(); generarEspecie(); generarTipoC(); generarGenero(); generarTipoL(); generarDimension(); generarEpisodio();
+
+    if (filterType) {
+        filterType.value = seccionActual;
+        filterType.addEventListener("change", (e) => {
+            seccionActual = e.target.value;
+
+            if (searchInput) searchInput.value = "";
+            limpiarFiltros();
+
+            numeroPagina = 1;
+            cache = {};
+            mostrarOpcionesBusqueda();
+            cargarDatos();
+        });
     }
-});</code></pre>
+
+    if (searchInput) {
+        searchInput.addEventListener("input", () => {
+            numeroPagina = 1;
+            cargarDatos();
+        });
+    }
+
+    const idsFiltros = ["estadoSelect", "especieSelect", "tipoCSelect", "generoSelect", "tipoLSelect", "dimensionSelect", "episodioSelect"];
+    idsFiltros.forEach(id => {
+        const elemento = document.getElementById(id);
+        if (elemento) {
+            elemento.addEventListener("change", () => {
+                numeroPagina = 1;
+                cargarDatos();
+            });
+        }
+    });
+
+    if (formBusqueda) {
+        formBusqueda.addEventListener("submit", (e) => {
+            e.preventDefault();
+            numeroPagina = 1;
+            cargarDatos();
+        });
+    }
+
+    mostrarOpcionesBusqueda();
+    cargarDatos();
+});
+</code></pre>
         </article>
     </section>
 
@@ -668,13 +926,13 @@ window.addEventListener('DOMContentLoaded', () => {
 </div>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Global</h3><ul><li><a href="global.html#abrirNuevaVentana">abrirNuevaVentana</a></li><li><a href="global.html#btnvolver">btnvolver</a></li><li><a href="global.html#cambiarSeccion">cambiarSeccion</a></li><li><a href="global.html#cambiarVista">cambiarVista</a></li><li><a href="global.html#cargarDatos">cargarDatos</a></li><li><a href="global.html#fetchData">fetchData</a></li><li><a href="global.html#ficha">ficha</a></li><li><a href="global.html#generarNumerosPaginas">generarNumerosPaginas</a></li><li><a href="global.html#gestionarBBDD">gestionarBBDD</a></li><li><a href="global.html#guardarEnBD">guardarEnBD</a></li><li><a href="global.html#irAPagina">irAPagina</a></li><li><a href="global.html#paginaAnterior">paginaAnterior</a></li><li><a href="global.html#paginaSiguiente">paginaSiguiente</a></li><li><a href="global.html#renderCards">renderCards</a></li><li><a href="global.html#svgDinamico">svgDinamico</a></li><li><a href="global.html#usarAPI">usarAPI</a></li><li><a href="global.html#usarBBDD">usarBBDD</a></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Global</h3><ul><li><a href="global.html#abrirNuevaVentana">abrirNuevaVentana</a></li><li><a href="global.html#actualizarVisibilidadPaginacion">actualizarVisibilidadPaginacion</a></li><li><a href="global.html#btnvolver">btnvolver</a></li><li><a href="global.html#buscarEnBBDDLocal">buscarEnBBDDLocal</a></li><li><a href="global.html#cambiarSeccion">cambiarSeccion</a></li><li><a href="global.html#cambiarVista">cambiarVista</a></li><li><a href="global.html#cargarDatos">cargarDatos</a></li><li><a href="global.html#cargarDesdeBBDD">cargarDesdeBBDD</a></li><li><a href="global.html#construirUrlBusquedaAPI">construirUrlBusquedaAPI</a></li><li><a href="global.html#crearSelect">crearSelect</a></li><li><a href="global.html#fetchData">fetchData</a></li><li><a href="global.html#ficha">ficha</a></li><li><a href="global.html#generarDimension">generarDimension</a></li><li><a href="global.html#generarEpisodio">generarEpisodio</a></li><li><a href="global.html#generarEspecie">generarEspecie</a></li><li><a href="global.html#generarEstado">generarEstado</a></li><li><a href="global.html#generarGenero">generarGenero</a></li><li><a href="global.html#generarNumerosPaginas">generarNumerosPaginas</a></li><li><a href="global.html#generarTipoC">generarTipoC</a></li><li><a href="global.html#generarTipoL">generarTipoL</a></li><li><a href="global.html#guardarEnBD">guardarEnBD</a></li><li><a href="global.html#hayBusquedaActiva">hayBusquedaActiva</a></li><li><a href="global.html#irAPagina">irAPagina</a></li><li><a href="global.html#limpiarFiltros">limpiarFiltros</a></li><li><a href="global.html#mostrarOpcionesBusqueda">mostrarOpcionesBusqueda</a></li><li><a href="global.html#obtenerFiltrosActuales">obtenerFiltrosActuales</a></li><li><a href="global.html#paginaAnterior">paginaAnterior</a></li><li><a href="global.html#paginaSiguiente">paginaSiguiente</a></li><li><a href="global.html#renderCards">renderCards</a></li><li><a href="global.html#svgDinamico">svgDinamico</a></li><li><a href="global.html#usarAPI">usarAPI</a></li><li><a href="global.html#usarBBDD">usarBBDD</a></li></ul>
 </nav>
 
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.5</a> on Wed Apr 15 2026 16:26:51 GMT+0200 (hora de verano de Europa central)
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.5</a> on Thu Apr 16 2026 12:26:00 GMT+0200 (hora de verano de Europa central)
 </footer>
 
 <script> prettyPrint(); </script>

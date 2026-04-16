@@ -9,6 +9,14 @@ let filterType = null;
 let formBusqueda = null;
 
 /* -------------------- PAGINACIÓN -------------------- */
+/**
+ * Genera dinámicamente los botones de paginación en el contenedor HTML.
+ * Muestra un rango de páginas alrededor de la página actual, incluyendo
+ * la primera y última página con puntos suspensivos si es necesario.
+ *
+ * @function generarNumerosPaginas
+ * @returns {void}
+ */
 function generarNumerosPaginas() {
     const contenedor = document.getElementById("numerosPaginacion");
     if (!contenedor) return;
@@ -44,12 +52,27 @@ function generarNumerosPaginas() {
     }
 }
 
+/**
+ * Cambia a una página específica y recarga los datos correspondientes.
+ * También desplaza la vista al inicio de la página de forma suave.
+ *
+ * @function irAPagina
+ * @param {number} num - Número de la página a la que se desea navegar.
+ * @returns {void}
+ */
 function irAPagina(num) {
     numeroPagina = num;
     cargarDatos();
     window.scrollTo({ top: 0, behavior: "smooth" });
 }
 
+/**
+ * Avanza a la siguiente página si no se ha alcanzado el total de páginas.
+ * Recarga los datos y desplaza la vista al inicio de forma suave.
+ *
+ * @function paginaSiguiente
+ * @returns {void}
+ */
 function paginaSiguiente() {
     // Solo avanza si la página actual es menor al total
     if (numeroPagina < totalPaginas) {
@@ -59,6 +82,13 @@ function paginaSiguiente() {
     }
 }
 
+/**
+ * Retrocede a la página anterior si no estamos en la primera página.
+ * Recarga los datos correspondientes y desplaza la vista al inicio de forma suave.
+ *
+ * @function paginaAnterior
+ * @returns {void}
+ */
 function paginaAnterior() {
     // Solo retrocede si no estamos en la primera
     if (numeroPagina > 1) {
@@ -68,6 +98,14 @@ function paginaAnterior() {
     }
 }
 
+/**
+ * Actualiza la visibilidad de los controles de paginación en la interfaz.
+ * Muestra u oculta los botones y números de paginación dependiendo
+ * de si el modo de fuente actual es "API".
+ *
+ * @function actualizarVisibilidadPaginacion
+ * @returns {void}
+ */
 function actualizarVisibilidadPaginacion() {
     const botonesPag = document.querySelector(".botonesPaginacion");
     const numerosPag = document.getElementById("numerosPaginacion");
@@ -80,6 +118,14 @@ function actualizarVisibilidadPaginacion() {
 }
 
 /* -------------------- VISTAS Y UI -------------------- */
+
+/**
+ * Alterna la vista del contenedor entre modo lista y modo normal.
+ * También actualiza los elementos SVG dinámicos tras el cambio de vista.
+ *
+ * @function cambiarVista
+ * @returns {void}
+ */
 function cambiarVista() {
     const contenedor = document.getElementById("contenedor");
     if (!contenedor) return;
@@ -87,6 +133,13 @@ function cambiarVista() {
     svgDinamico();
 }
 
+/**
+ * Alterna dinámicamente la visibilidad de los iconos SVG de vista
+ * (grid y lista) cambiando la clase "oculto" en cada uno.
+ *
+ * @function svgDinamico
+ * @returns {void}
+ */
 function svgDinamico() {
     const grid = document.getElementById("svgGrid");
     const list = document.getElementById("svgList");
@@ -94,6 +147,13 @@ function svgDinamico() {
     if (list) list.classList.toggle("oculto");
 }
 
+/**
+ * Muestra las opciones de búsqueda correspondientes a la sección actual
+ * y oculta el resto de bloques de opciones.
+ *
+ * @function mostrarOpcionesBusqueda
+ * @returns {void}
+ */
 function mostrarOpcionesBusqueda() {
     const bloques = ["opciones-character", "opciones-location", "opciones-episode"];
     bloques.forEach(id => {
@@ -106,10 +166,26 @@ function mostrarOpcionesBusqueda() {
 }
 
 /* -------------------- SELECCIÓN DE FUENTE -------------------- */
+
+/**
+ * Redirige a la aplicación utilizando la API como fuente de datos.
+ *
+ * @function usarAPI
+ * @returns {void}
+ */
 function usarAPI() {
     window.location.href = "app.html?fuente=API";
 }
 
+/**
+ * Intenta conectar con el servidor local para usar la base de datos como fuente.
+ * Si la conexión es exitosa, redirige a la aplicación con modo BBDD.
+ * En caso de error, muestra un mensaje al usuario.
+ *
+ * @async
+ * @function usarBBDD
+ * @returns {Promise<void>}
+ */
 async function usarBBDD() {
     try {
         const res = await fetch(`http://localhost:8080/obtener?tipo=character`);
@@ -124,6 +200,15 @@ async function usarBBDD() {
 }
 
 /* -------------------- CAMBIO DE SECCIÓN -------------------- */
+/**
+ * Cambia la sección actual de la aplicación (character, location, episode).
+ * Reinicia la paginación, limpia la caché y los filtros, actualiza la UI
+ * y carga los nuevos datos correspondientes a la sección seleccionada.
+ *
+ * @function cambiarSeccion
+ * @param {string} nuevaSeccion - Nueva sección a mostrar.
+ * @returns {void}
+ */
 function cambiarSeccion(nuevaSeccion) {
     seccionActual = nuevaSeccion;
     numeroPagina = 1;
@@ -137,6 +222,13 @@ function cambiarSeccion(nuevaSeccion) {
     cargarDatos();
 }
 
+/**
+ * Limpia todos los filtros seleccionados en la interfaz,
+ * reseteando sus valores a vacío.
+ *
+ * @function limpiarFiltros
+ * @returns {void}
+ */
 function limpiarFiltros() {
     const ids = ["estadoSelect", "especieSelect", "tipoCSelect", "generoSelect", "tipoLSelect", "dimensionSelect", "episodioSelect"];
     ids.forEach(id => {
@@ -146,6 +238,14 @@ function limpiarFiltros() {
 }
 
 /* -------------------- FILTROS -------------------- */
+
+/**
+ * Obtiene los filtros actualmente seleccionados según la sección activa.
+ * Devuelve un objeto con las propiedades correspondientes a cada tipo de filtro.
+ *
+ * @function obtenerFiltrosActuales
+ * @returns {Object} Objeto con los filtros activos.
+ */
 function obtenerFiltrosActuales() {
     if (seccionActual === "character") {
         return {
@@ -169,12 +269,33 @@ function obtenerFiltrosActuales() {
     return {};
 }
 
+/**
+ * Comprueba si hay una búsqueda activa en el input de texto o en los filtros.
+ *
+ * Una búsqueda se considera activa si:
+ * - El input de búsqueda no está vacío
+ * - O al menos uno de los filtros tiene un valor distinto de vacío
+ *
+ * @function hayBusquedaActiva
+ * @returns {boolean} Devuelve true si hay texto en la búsqueda o algún filtro activo, false en caso contrario.
+ */
 function hayBusquedaActiva() {
     const texto = searchInput?.value.trim() || "";
     const filtros = obtenerFiltrosActuales();
     return texto !== "" || Object.values(filtros).some(valor => valor !== "");
 }
 
+/**
+ * Construye la URL para realizar una petición a la API de Rick and Morty
+ * en base al texto de búsqueda, filtros activos y la página actual.
+ *
+ * - Incluye siempre el parámetro de paginación (?page)
+ * - Añade el filtro por nombre si hay texto en el input
+ * - Añade dinámicamente los filtros activos
+ *
+ * @function construirUrlBusquedaAPI
+ * @returns {string} URL completa lista para hacer la petición a la API.
+ */
 function construirUrlBusquedaAPI() {
     const texto = searchInput?.value.trim() || "";
     const filtros = obtenerFiltrosActuales();
@@ -192,6 +313,18 @@ function construirUrlBusquedaAPI() {
 }
 
 /* -------------------- GENERAR SELECTORES -------------------- */
+/**
+ * Crea un elemento <select> dinámico con una lista de opciones.
+ *
+ * La primera opción es siempre una opción inicial (por ejemplo "Todos"),
+ * seguida de las opciones proporcionadas en el array.
+ *
+ * @function crearSelect
+ * @param {string} idSelect - ID que se asignará al elemento select creado.
+ * @param {string[]} opciones - Array de valores que se convertirán en opciones del select.
+ * @param {string} [textoInicial="Todos"] - Texto de la opción inicial por defecto.
+ * @returns {HTMLSelectElement} Elemento select completamente construido.
+ */
 function crearSelect(idSelect, opciones, textoInicial = "Todos") {
     const select = document.createElement("select");
     select.id = idSelect;
@@ -209,6 +342,16 @@ function crearSelect(idSelect, opciones, textoInicial = "Todos") {
     return select;
 }
 
+/**
+ * Genera y renderiza el selector de estado dentro del contenedor HTML con id "estado".
+ *
+ * Si el contenedor existe:
+ * - Se limpia su contenido
+ * - Se inserta un <select> con los estados disponibles de personajes
+ *
+ * @function generarEstado
+ * @returns {void}
+ */
 function generarEstado() {
     const contenedor = document.getElementById("estado");
     if (contenedor) {
@@ -217,55 +360,150 @@ function generarEstado() {
     }
 }
 
+/**
+ * Genera y renderiza el selector de especie dentro del contenedor HTML con id "especie".
+ *
+ * Si el contenedor existe:
+ * - Se limpia su contenido
+ * - Se inserta un <select> con las especies disponibles de personajes
+ *
+ * @function generarEspecie
+ * @returns {void}
+ */
 function generarEspecie() {
     const contenedor = document.getElementById("especie");
     if (contenedor) {
         contenedor.innerHTML = "";
-        contenedor.appendChild(crearSelect("especieSelect", ["Human", "Alien", "Humanoid", "Robot", "Animal", "Mythological Creature", "Cronenberg"], "Todas"));
+        contenedor.appendChild(crearSelect(
+            "especieSelect",
+            ["Human", "Alien", "Humanoid", "Robot", "Animal", "Mythological Creature", "Cronenberg"],
+            "Todas"
+        ));
     }
 }
 
+/**
+ * Genera y renderiza el selector de tipo de criatura dentro del contenedor HTML con id "tipoC".
+ *
+ * Si el contenedor existe:
+ * - Se limpia su contenido
+ * - Se inserta un <select> con tipos de criaturas disponibles
+ *
+ * @function generarTipoC
+ * @returns {void}
+ */
 function generarTipoC() {
     const contenedor = document.getElementById("tipoC");
     if (contenedor) {
         contenedor.innerHTML = "";
-        contenedor.appendChild(crearSelect("tipoCSelect", ["Genetic experiment", "Parasite", "Superhuman", "Clone"], "Todos"));
+        contenedor.appendChild(crearSelect(
+            "tipoCSelect",
+            ["Genetic experiment", "Parasite", "Superhuman", "Clone"],
+            "Todos"
+        ));
     }
 }
 
+/**
+ * Genera y renderiza el selector de género dentro del contenedor HTML con id "genero".
+ *
+ * Si el contenedor existe:
+ * - Se limpia su contenido
+ * - Se inserta un <select> con géneros disponibles
+ *
+ * @function generarGenero
+ * @returns {void}
+ */
 function generarGenero() {
     const contenedor = document.getElementById("genero");
     if (contenedor) {
         contenedor.innerHTML = "";
-        contenedor.appendChild(crearSelect("generoSelect", ["Female", "Male", "Genderless", "unknown"], "Todos"));
+        contenedor.appendChild(crearSelect(
+            "generoSelect",
+            ["Female", "Male", "Genderless", "unknown"],
+            "Todos"
+        ));
     }
 }
 
+/**
+ * Genera y renderiza el selector de tipo de localización dentro del contenedor HTML con id "tipoL".
+ *
+ * Si el contenedor existe:
+ * - Se limpia su contenido
+ * - Se inserta un <select> con tipos de localización disponibles
+ *
+ * @function generarTipoL
+ * @returns {void}
+ */
 function generarTipoL() {
     const contenedor = document.getElementById("tipoL");
     if (contenedor) {
         contenedor.innerHTML = "";
-        contenedor.appendChild(crearSelect("tipoLSelect", ["Planet", "Cluster", "Microverse", "TV", "Resort", "Fantasy town", "Dream"], "Todos"));
+        contenedor.appendChild(crearSelect(
+            "tipoLSelect",
+            ["Planet", "Cluster", "Microverse", "TV", "Resort", "Fantasy town", "Dream"],
+            "Todos"
+        ));
     }
 }
 
+/**
+ * Genera y renderiza el selector de dimensión dentro del contenedor HTML con id "dimension".
+ *
+ * Si el contenedor existe:
+ * - Se limpia su contenido
+ * - Se inserta un <select> con dimensiones disponibles
+ *
+ * @function generarDimension
+ * @returns {void}
+ */
 function generarDimension() {
     const contenedor = document.getElementById("dimension");
     if (contenedor) {
         contenedor.innerHTML = "";
-        contenedor.appendChild(crearSelect("dimensionSelect", ["Dimension C-137", "Replacement Dimension", "Cronenberg Dimension", "Fantasy Dimension", "Unknown"], "Todas"));
+        contenedor.appendChild(crearSelect(
+            "dimensionSelect",
+            ["Dimension C-137", "Replacement Dimension", "Cronenberg Dimension", "Fantasy Dimension", "Unknown"],
+            "Todas"
+        ));
     }
 }
 
+/**
+ * Genera y renderiza el selector de episodios dentro del contenedor HTML con id "episodio".
+ *
+ * Si el contenedor existe:
+ * - Se limpia su contenido
+ * - Se inserta un <select> con episodios disponibles
+ *
+ * @function generarEpisodio
+ * @returns {void}
+ */
 function generarEpisodio() {
     const contenedor = document.getElementById("episodio");
     if (contenedor) {
         contenedor.innerHTML = "";
-        contenedor.appendChild(crearSelect("episodioSelect", ["S01E01", "S01E02", "S01E03", "S02E01", "S03E01", "S04E01", "S05E01"], "Todos"));
+        contenedor.appendChild(crearSelect(
+            "episodioSelect",
+            ["S01E01", "S01E02", "S01E03", "S02E01", "S03E01", "S04E01", "S05E01"],
+            "Todos"
+        ));
     }
 }
-
 /* -------------------- CARGA CENTRAL -------------------- */
+/**
+ * Controla el flujo principal de carga de datos según el estado de la aplicación.
+ *
+ * - Actualiza la visibilidad de la paginación
+ * - Si hay búsqueda activa, ejecuta búsqueda con filtros (fetchData)
+ * - Si no hay búsqueda activa:
+ *   - Carga desde BBDD si el modo es "BBDD"
+ *   - Si no, carga desde la API normal (ficha)
+ *
+ * @function cargarDatos
+ * @returns {void}
+ */
 function cargarDatos() {
     actualizarVisibilidadPaginacion();
 
@@ -281,6 +519,19 @@ function cargarDatos() {
 }
 
 /* -------------------- BBDD -------------------- */
+
+/**
+ * Carga todos los datos desde la base de datos local (backend Java).
+ *
+ * - Obtiene datos desde el endpoint según la sección actual
+ * - Renderiza las tarjetas si hay datos
+ * - Muestra un mensaje si no hay datos
+ * - Redirige al index si ocurre un error de conexión
+ *
+ * @async
+ * @function cargarDesdeBBDD
+ * @returns {Promise<void>}
+ */
 async function cargarDesdeBBDD() {
     const contenedor = document.getElementById("contenedor");
     if (!contenedor) return;
@@ -301,6 +552,18 @@ async function cargarDesdeBBDD() {
     }
 }
 
+/**
+ * Busca y filtra datos dentro de la base de datos local (backend Java)
+ * aplicando texto de búsqueda y filtros activos.
+ *
+ * - Obtiene todos los datos desde el backend
+ * - Filtra en frontend por nombre y criterios seleccionados
+ * - Renderiza resultados o muestra mensaje si no hay coincidencias
+ *
+ * @async
+ * @function buscarEnBBDDLocal
+ * @returns {Promise<void>}
+ */
 async function buscarEnBBDDLocal() {
     const contenedor = document.getElementById("contenedor");
     if (!contenedor) return;
@@ -338,6 +601,20 @@ async function buscarEnBBDDLocal() {
 }
 
 /* -------------------- API -------------------- */
+/**
+ * Carga y renderiza datos de la API de Rick and Morty con sistema de caché.
+ *
+ * - Comprueba si existe el contenedor principal
+ * - Usa caché para evitar peticiones repetidas por página/sección
+ * - Si no hay datos en caché, los obtiene desde la API
+ * - Maneja el caso de no resultados
+ * - Actualiza la paginación
+ * - Renderiza un máximo de 12 elementos por página
+ *
+ * @async
+ * @function ficha
+ * @returns {Promise<void>}
+ */
 async function ficha() {
     const contenedor = document.getElementById("contenedor");
     if (!contenedor) return;
@@ -368,6 +645,19 @@ async function ficha() {
     }
 }
 
+/**
+ * Realiza una petición a la API o a la base de datos según el modo activo
+ * y renderiza los resultados filtrados o buscados.
+ *
+ * - Si el modo es "BBDD", delega la búsqueda local
+ * - Si no, construye la URL de búsqueda dinámica
+ * - Maneja respuestas vacías o errores
+ * - Actualiza la paginación y los resultados mostrados
+ *
+ * @async
+ * @function fetchData
+ * @returns {Promise<void>}
+ */
 async function fetchData() {
     const contenedor = document.getElementById("contenedor");
     if (!contenedor) return;
@@ -401,6 +691,20 @@ async function fetchData() {
 }
 
 /* -------------------- RENDER -------------------- */
+/**
+ * Renderiza una lista de tarjetas (cards) en el contenedor principal según el tipo de dato.
+ *
+ * - Limpia el contenedor antes de renderizar
+ * - Genera la imagen según el tipo (character, location, episode)
+ * - Construye información extra dinámica según el tipo
+ * - Inserta cada tarjeta en el DOM
+ * - Incluye botón para guardar cada elemento en la base de datos
+ *
+ * @function renderCards
+ * @param {Array<Object>} items - Lista de elementos a renderizar.
+ * @param {"character"|"location"|"episode"} type - Tipo de dato a renderizar.
+ * @returns {void}
+ */
 function renderCards(items, type) {
     const contenedor = document.getElementById("contenedor");
     if (!contenedor) return;
@@ -455,7 +759,18 @@ function renderCards(items, type) {
     });
 }
 
-/* -------------------- GUARDAR EN BBDD -------------------- */
+/**
+ * Guarda un elemento en la base de datos mediante una petición POST al backend Java.
+ *
+ * - Construye un objeto según el tipo de dato
+ * - Envía los datos al endpoint /guardar
+ * - Muestra mensaje de éxito o error en alert
+ *
+ * @function guardarEnBD
+ * @param {Object} item - Objeto con los datos del elemento a guardar.
+ * @param {"character"|"location"|"episode"} type - Tipo de elemento a guardar.
+ * @returns {void}
+ */
 function guardarEnBD(item, type) {
     let datos = {
         tipo_dato: type,
@@ -489,8 +804,31 @@ function guardarEnBD(item, type) {
 }
 
 /* -------------------- UTILIDADES -------------------- */
-function abrirNuevaVentana(url) { if (url) window.open(url, "_blank"); }
-function btnvolver() { window.history.back(); }
+/**
+ * Abre una nueva ventana o pestaña del navegador con la URL indicada.
+ *
+ * - Solo ejecuta la acción si la URL es válida
+ * - Abre la página en una nueva pestaña (_blank)
+ *
+ * @function abrirNuevaVentana
+ * @param {string} url - Dirección web que se abrirá en una nueva pestaña.
+ * @returns {void}
+ */
+function abrirNuevaVentana(url) {
+    if (url) window.open(url, "_blank");
+}
+
+/**
+ * Navega hacia la página anterior en el historial del navegador.
+ *
+ * - Equivale a pulsar el botón "Atrás" del navegador
+ *
+ * @function btnvolver
+ * @returns {void}
+ */
+function btnvolver() {
+    window.history.back();
+}
 
 /* -------------------- EVENT LISTENERS -------------------- */
 window.addEventListener("DOMContentLoaded", () => {
