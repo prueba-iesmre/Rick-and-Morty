@@ -44,14 +44,98 @@
     <path d="M15 18l-6-6 6-6"/>
   </svg>
 </button>
-    <div class="search-container">
-        <input type="text" id="searchInput" placeholder="Escribe para buscar...">
-        <select id="filterType" onchange="cambiarSeccion(this.value)">
-            <option value="character">Personajes</option>
-            <option value="location">Ubicaciones</option>
-            <option value="episode">Episodios</option>
-        </select>
-    </div>
+      <form id="formBusqueda" class="form-busqueda">
+        <fieldset class="fieldset-busqueda">
+          <legend class="tituloOpciones">Búsqueda</legend>
+
+          <div class="fila-principal-busqueda">
+            <div class="campo-busqueda campo-grande">
+              <label for="searchInput">Buscar</label>
+              <input type="text" id="searchInput" placeholder="Escribe para buscar...">
+            </div>
+
+            <div class="campo-busqueda">
+              <label for="filterType">Tipo</label>
+              <select id="filterType">
+                <option value="character">Personajes</option>
+                <option value="location">Ubicaciones</option>
+                <option value="episode">Episodios</option>
+              </select>
+            </div>
+
+            <div class="campo-busqueda campo-boton-vista">
+              <label>&nbsp;</label>
+              <button type="button" id="cambiar_ficha" onclick="cambiarVista()" aria-label="Cambiar vista">
+                <svg id="svgGrid" class="icono" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16">
+                  <path d="M3 1H1V3H3V1Z"/>
+                  <path d="M3 5H1V7H3V5Z"/>
+                  <path d="M1 9H3V11H1V9Z"/>
+                  <path d="M3 13H1V15H3V13Z"/>
+                  <path d="M15 1H5V3H15V1Z"/>
+                  <path d="M15 5H5V7H15V5Z"/>
+                  <path d="M5 9H15V11H5V9Z"/>
+                  <path d="M15 13H5V15H15V13Z"/>
+                </svg>
+
+                <svg id="svgList" class="icono oculto" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                  <path d="M4 6h16v2H4zm0 5h16v2H4zm0 5h16v2H4z"/>
+                </svg>
+              </button>
+            </div>
+          </div>
+
+          <div id="opciones-character" class="opciones-dinamicas">
+            <h3 class="subtitulo-opciones">Opciones de personajes</h3>
+            <div class="grupo-campos">
+              <div class="campo-busqueda">
+                <label for="estadoSelect">Estado</label>
+                <div id="estado"></div>
+              </div>
+
+              <div class="campo-busqueda">
+                <label for="especieSelect">Especie</label>
+                <div id="especie"></div>
+              </div>
+
+              <div class="campo-busqueda">
+                <label for="tipoCSelect">Tipo</label>
+                <div id="tipoC"></div>
+              </div>
+
+              <div class="campo-busqueda">
+                <label for="generoSelect">Género</label>
+                <div id="genero"></div>
+              </div>
+            </div>
+          </div>
+
+          <div id="opciones-location" class="opciones-dinamicas oculto">
+            <h3 class="subtitulo-opciones">Opciones de ubicación</h3>
+            <div class="grupo-campos">
+              <div class="campo-busqueda">
+                <label for="tipoLSelect">Tipo</label>
+                <div id="tipoL"></div>
+              </div>
+
+              <div class="campo-busqueda">
+                <label for="dimensionSelect">Dimensión</label>
+                <div id="dimension"></div>
+              </div>
+            </div>
+          </div>
+
+          <div id="opciones-episode" class="opciones-dinamicas oculto">
+            <h3 class="subtitulo-opciones">Opciones de episodios</h3>
+            <div class="grupo-campos">
+              <div class="campo-busqueda">
+                <label for="episodioSelect">Episodio</label>
+                <div id="episodio"></div>
+              </div>
+            </div>
+          </div>
+
+        </fieldset>
+      </form>
     <button id="cambiar_ficha" onclick="cambiarVista()">
 
         <svg id="svgList" width="50px" height="50px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
