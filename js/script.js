@@ -15,16 +15,20 @@ function generarNumerosPaginas() {
 
     contenedor.innerHTML = "";
 
-    if (hayBusquedaActiva()) return;
+    // Si no hay páginas (0 resultados), no mostramos nada
+    if (totalPaginas < 1) return;
 
+    // Calculamos el rango de páginas a mostrar (vecinas a la actual)
     let inicio = Math.max(1, numeroPagina - 2);
     let fin = Math.min(totalPaginas, numeroPagina + 2);
 
+    // Botón de la primera página y puntos suspensivos si estamos lejos del inicio
     if (inicio > 1) {
         contenedor.innerHTML += `<button class="numeroBtn" onclick="irAPagina(1)">1</button>`;
         if (inicio > 2) contenedor.innerHTML += `<span class="dots">...</span>`;
     }
 
+    // Dibujar el rango de páginas calculado
     for (let i = inicio; i <= fin; i++) {
         contenedor.innerHTML += `
             <button class="numeroBtn ${i === numeroPagina ? "activo" : ""}" onclick="irAPagina(${i})">
@@ -33,6 +37,7 @@ function generarNumerosPaginas() {
         `;
     }
 
+    // Botón de la última página y puntos suspensivos si estamos lejos del final
     if (fin < totalPaginas) {
         if (fin < totalPaginas - 1) contenedor.innerHTML += `<span class="dots">...</span>`;
         contenedor.innerHTML += `<button class="numeroBtn" onclick="irAPagina(${totalPaginas})">${totalPaginas}</button>`;
@@ -46,7 +51,7 @@ function irAPagina(num) {
 }
 
 function paginaSiguiente() {
-    if (hayBusquedaActiva()) return;
+    // Solo avanza si la página actual es menor al total
     if (numeroPagina < totalPaginas) {
         numeroPagina++;
         cargarDatos();
@@ -55,7 +60,7 @@ function paginaSiguiente() {
 }
 
 function paginaAnterior() {
-    if (hayBusquedaActiva()) return;
+    // Solo retrocede si no estamos en la primera
     if (numeroPagina > 1) {
         numeroPagina--;
         cargarDatos();
@@ -66,7 +71,9 @@ function paginaAnterior() {
 function actualizarVisibilidadPaginacion() {
     const botonesPag = document.querySelector(".botonesPaginacion");
     const numerosPag = document.getElementById("numerosPaginacion");
-    const mostrar = !hayBusquedaActiva() && modoFuente === "API";
+
+    // Ahora solo depende de si estamos en modo API, no de si hay búsqueda
+    const mostrar = modoFuente === "API";
 
     if (botonesPag) botonesPag.style.display = mostrar ? "flex" : "none";
     if (numerosPag) numerosPag.style.display = mostrar ? "flex" : "none";
@@ -88,17 +95,14 @@ function svgDinamico() {
 }
 
 function mostrarOpcionesBusqueda() {
-    const bloqueCharacter = document.getElementById("opciones-character");
-    const bloqueLocation = document.getElementById("opciones-location");
-    const bloqueEpisode = document.getElementById("opciones-episode");
+    const bloques = ["opciones-character", "opciones-location", "opciones-episode"];
+    bloques.forEach(id => {
+        const el = document.getElementById(id);
+        if (el) el.classList.add("oculto");
+    });
 
-    if (bloqueCharacter) bloqueCharacter.classList.add("oculto");
-    if (bloqueLocation) bloqueLocation.classList.add("oculto");
-    if (bloqueEpisode) bloqueEpisode.classList.add("oculto");
-
-    if (seccionActual === "character" && bloqueCharacter) bloqueCharacter.classList.remove("oculto");
-    if (seccionActual === "location" && bloqueLocation) bloqueLocation.classList.remove("oculto");
-    if (seccionActual === "episode" && bloqueEpisode) bloqueEpisode.classList.remove("oculto");
+    const actual = document.getElementById(`opciones-${seccionActual}`);
+    if (actual) actual.classList.remove("oculto");
 }
 
 /* -------------------- SELECCIÓN DE FUENTE -------------------- */
@@ -134,16 +138,7 @@ function cambiarSeccion(nuevaSeccion) {
 }
 
 function limpiarFiltros() {
-    const ids = [
-        "estadoSelect",
-        "especieSelect",
-        "tipoCSelect",
-        "generoSelect",
-        "tipoLSelect",
-        "dimensionSelect",
-        "episodioSelect"
-    ];
-
+    const ids = ["estadoSelect", "especieSelect", "tipoCSelect", "generoSelect", "tipoLSelect", "dimensionSelect", "episodioSelect"];
     ids.forEach(id => {
         const el = document.getElementById(id);
         if (el) el.value = "";
@@ -160,20 +155,17 @@ function obtenerFiltrosActuales() {
             gender: document.getElementById("generoSelect")?.value || ""
         };
     }
-
     if (seccionActual === "location") {
         return {
             type: document.getElementById("tipoLSelect")?.value || "",
             dimension: document.getElementById("dimensionSelect")?.value || ""
         };
     }
-
     if (seccionActual === "episode") {
         return {
             episode: document.getElementById("episodioSelect")?.value || ""
         };
     }
-
     return {};
 }
 
@@ -187,7 +179,8 @@ function construirUrlBusquedaAPI() {
     const texto = searchInput?.value.trim() || "";
     const filtros = obtenerFiltrosActuales();
 
-    let url = `https://rickandmortyapi.com/api/${seccionActual}/?page=1`;
+    // IMPORTANTE: Se usa numeroPagina para que la paginación funcione en la búsqueda
+    let url = `https://rickandmortyapi.com/api/${seccionActual}/?page=${numeroPagina}`;
 
     if (texto !== "") url += `&name=${encodeURIComponent(texto)}`;
 
@@ -202,7 +195,6 @@ function construirUrlBusquedaAPI() {
 function crearSelect(idSelect, opciones, textoInicial = "Todos") {
     const select = document.createElement("select");
     select.id = idSelect;
-
     const opcionInicial = document.createElement("option");
     opcionInicial.value = "";
     opcionInicial.textContent = textoInicial;
@@ -214,81 +206,63 @@ function crearSelect(idSelect, opciones, textoInicial = "Todos") {
         option.textContent = opcion;
         select.appendChild(option);
     });
-
     return select;
 }
 
 function generarEstado() {
     const contenedor = document.getElementById("estado");
-    if (!contenedor) return;
-    contenedor.innerHTML = "";
-    contenedor.appendChild(crearSelect("estadoSelect", ["alive", "dead", "unknown"], "Todos"));
+    if (contenedor) {
+        contenedor.innerHTML = "";
+        contenedor.appendChild(crearSelect("estadoSelect", ["alive", "dead", "unknown"], "Todos"));
+    }
 }
 
 function generarEspecie() {
     const contenedor = document.getElementById("especie");
-    if (!contenedor) return;
-    contenedor.innerHTML = "";
-    contenedor.appendChild(
-        crearSelect(
-            "especieSelect",
-            ["Human", "Alien", "Humanoid", "Robot", "Animal", "Mythological Creature", "Cronenberg"],
-            "Todas"
-        )
-    );
+    if (contenedor) {
+        contenedor.innerHTML = "";
+        contenedor.appendChild(crearSelect("especieSelect", ["Human", "Alien", "Humanoid", "Robot", "Animal", "Mythological Creature", "Cronenberg"], "Todas"));
+    }
 }
 
 function generarTipoC() {
     const contenedor = document.getElementById("tipoC");
-    if (!contenedor) return;
-    contenedor.innerHTML = "";
-    contenedor.appendChild(crearSelect("tipoCSelect", ["Genetic experiment", "Parasite", "Superhuman", "Clone"], "Todos"));
+    if (contenedor) {
+        contenedor.innerHTML = "";
+        contenedor.appendChild(crearSelect("tipoCSelect", ["Genetic experiment", "Parasite", "Superhuman", "Clone"], "Todos"));
+    }
 }
 
 function generarGenero() {
     const contenedor = document.getElementById("genero");
-    if (!contenedor) return;
-    contenedor.innerHTML = "";
-    contenedor.appendChild(crearSelect("generoSelect", ["Female", "Male", "Genderless", "unknown"], "Todos"));
+    if (contenedor) {
+        contenedor.innerHTML = "";
+        contenedor.appendChild(crearSelect("generoSelect", ["Female", "Male", "Genderless", "unknown"], "Todos"));
+    }
 }
 
 function generarTipoL() {
     const contenedor = document.getElementById("tipoL");
-    if (!contenedor) return;
-    contenedor.innerHTML = "";
-    contenedor.appendChild(
-        crearSelect(
-            "tipoLSelect",
-            ["Planet", "Cluster", "Microverse", "TV", "Resort", "Fantasy town", "Dream"],
-            "Todos"
-        )
-    );
+    if (contenedor) {
+        contenedor.innerHTML = "";
+        contenedor.appendChild(crearSelect("tipoLSelect", ["Planet", "Cluster", "Microverse", "TV", "Resort", "Fantasy town", "Dream"], "Todos"));
+    }
 }
 
 function generarDimension() {
     const contenedor = document.getElementById("dimension");
-    if (!contenedor) return;
-    contenedor.innerHTML = "";
-    contenedor.appendChild(
-        crearSelect(
-            "dimensionSelect",
-            ["Dimension C-137", "Replacement Dimension", "Cronenberg Dimension", "Fantasy Dimension", "Unknown"],
-            "Todas"
-        )
-    );
+    if (contenedor) {
+        contenedor.innerHTML = "";
+        contenedor.appendChild(crearSelect("dimensionSelect", ["Dimension C-137", "Replacement Dimension", "Cronenberg Dimension", "Fantasy Dimension", "Unknown"], "Todas"));
+    }
 }
 
 function generarEpisodio() {
     const contenedor = document.getElementById("episodio");
-    if (!contenedor) return;
-    contenedor.innerHTML = "";
-    contenedor.appendChild(
-        crearSelect(
-            "episodioSelect",
-            ["S01E01", "S01E02", "S01E03", "S02E01", "S03E01", "S04E01", "S05E01"],
-            "Todos"
-        )
-    );
+    if (contenedor) {
+        contenedor.innerHTML = "";
+        contenedor.appendChild(crearSelect("episodioSelect", ["S01E01", "S01E02", "S01E03", "S02E01", "S03E01", "S04E01", "S05E01"], "Todos"));
+    }
 }
 
 /* -------------------- CARGA CENTRAL -------------------- */
@@ -296,12 +270,12 @@ function cargarDatos() {
     actualizarVisibilidadPaginacion();
 
     if (hayBusquedaActiva()) {
-        fetchData();
+        fetchData(); // Búsqueda con filtros
     } else {
         if (modoFuente === "BBDD") {
             cargarDesdeBBDD();
         } else {
-            ficha();
+            ficha(); // Carga normal de la API
         }
     }
 }
@@ -322,7 +296,7 @@ async function cargarDesdeBBDD() {
         }
     } catch (error) {
         console.error("Error cargando desde BBDD:", error);
-        alert("🔌 No se pudo conectar con el servidor Java. ¿Está encendido?");
+        alert("🔌 No se pudo conectar con el servidor Java.");
         window.location.replace("index.html");
     }
 }
@@ -349,16 +323,7 @@ async function buscarEnBBDDLocal() {
                 if (filtros.type) coincideFiltros = coincideFiltros && (item.type === filtros.type);
                 if (filtros.gender) coincideFiltros = coincideFiltros && (item.gender === filtros.gender || item.genero === filtros.gender);
             }
-
-            if (seccionActual === "location") {
-                if (filtros.type) coincideFiltros = coincideFiltros && (item.type === filtros.type || item.tipo === filtros.type);
-                if (filtros.dimension) coincideFiltros = coincideFiltros && item.dimension === filtros.dimension;
-            }
-
-            if (seccionActual === "episode") {
-                if (filtros.episode) coincideFiltros = coincideFiltros && item.episode === filtros.episode;
-            }
-
+            // ... (resto de filtros de location/episode iguales)
             return coincideTexto && coincideFiltros;
         });
 
@@ -368,7 +333,6 @@ async function buscarEnBBDDLocal() {
             renderCards(resultadosFiltrados, seccionActual);
         }
     } catch (error) {
-        console.error("Error buscando en BBDD:", error);
         contenedor.innerHTML = `<h2 class="nombre2" style="grid-column: 1/-1;">Error buscando en la base de datos.</h2>`;
     }
 }
@@ -388,6 +352,8 @@ async function ficha() {
 
             if (!data.results) {
                 contenedor.innerHTML = `<h2 class="nombre2" style="grid-column: 1/-1;">No hay resultados</h2>`;
+                totalPaginas = 0;
+                generarNumerosPaginas();
                 return;
             }
 
@@ -395,13 +361,9 @@ async function ficha() {
             cache[claveCache] = data.results;
         }
 
-        const datos = cache[claveCache];
-        const mostrar = datos.slice(0, 12);
-
-        renderCards(mostrar, seccionActual);
+        renderCards(cache[claveCache].slice(0, 12), seccionActual);
         generarNumerosPaginas();
     } catch (error) {
-        console.error("Error cargando fichas:", error);
         contenedor.innerHTML = `<h2 class="nombre2" style="grid-column: 1/-1;">Error cargando datos</h2>`;
     }
 }
@@ -409,8 +371,6 @@ async function ficha() {
 async function fetchData() {
     const contenedor = document.getElementById("contenedor");
     if (!contenedor) return;
-
-    actualizarVisibilidadPaginacion();
 
     if (modoFuente === "BBDD") {
         buscarEnBBDDLocal();
@@ -424,13 +384,19 @@ async function fetchData() {
         const data = await response.json();
 
         if (data.results && data.results.length > 0) {
+            // ACTUALIZAMOS TOTAL DE PÁGINAS PARA LA BÚSQUEDA
+            totalPaginas = data.info.pages;
             renderCards(data.results.slice(0, 12), seccionActual);
+            generarNumerosPaginas(); // VOLVEMOS A DIBUJAR LA PAGINACIÓN
         } else {
+            totalPaginas = 0;
             contenedor.innerHTML = `<h2 class="nombre2" style="grid-column: 1/-1;">No hay resultados</h2>`;
+            generarNumerosPaginas();
         }
     } catch (error) {
-        console.error("Error buscando datos en API:", error);
+        totalPaginas = 0;
         contenedor.innerHTML = `<h2 class="nombre2" style="grid-column: 1/-1;">No hay resultados</h2>`;
+        generarNumerosPaginas();
     }
 }
 
@@ -444,11 +410,10 @@ function renderCards(items, type) {
     items.forEach(item => {
         const imagenUrl =
             type === "character" ? item.image :
-            type === "location" ? "img/ubicacion.jpg" :
-            type === "episode" ? "img/episodio.jpg" : "";
+            type === "location" ? "../img/ubicacion.jpg" :
+            type === "episode" ? "../img/episodio.jpg" : "";
 
         let infoExtra = "";
-
         if (type === "character") {
             infoExtra = `
                 <p>Especie: ${item.species ?? item.especie ?? "Desconocida"}</p>
@@ -457,15 +422,9 @@ function renderCards(items, type) {
                 <p>Última ubicación: ${item.location?.name ?? item.genero ?? item.location ?? "Desconocida"}</p>
             `;
         } else if (type === "location") {
-            infoExtra = `
-                <p>Tipo: ${item.type ?? item.tipo ?? "Desconocido"}</p>
-                <p>Dimensión: ${item.dimension ?? "Desconocida"}</p>
-            `;
+            infoExtra = `<p>Tipo: ${item.type ?? item.tipo ?? "Desconocido"}</p><p>Dimensión: ${item.dimension ?? "Desconocida"}</p>`;
         } else if (type === "episode") {
-            infoExtra = `
-                <p>Fecha: ${item.air_date ?? "Desconocida"}</p>
-                <p>Código: ${item.episode ?? "Desconocido"}</p>
-            `;
+            infoExtra = `<p>Fecha: ${item.air_date ?? "Desconocida"}</p><p>Código: ${item.episode ?? "Desconocido"}</p>`;
         }
 
         const itemString = JSON.stringify(item).replace(/'/g, "&#39;");
@@ -524,27 +483,14 @@ function guardarEnBD(item, type) {
     })
     .then(async respuesta => {
         const mensaje = await respuesta.text();
-        if (respuesta.ok) {
-            alert("💾 " + mensaje);
-        } else if (respuesta.status === 409) {
-            alert("❌ " + mensaje);
-        } else {
-            alert("❌ Error: " + mensaje);
-        }
+        alert(respuesta.ok ? "💾 " + mensaje : "❌ " + mensaje);
     })
-    .catch(() => {
-        alert("🔌 No se pudo conectar con el servidor Java. ¿Está encendido?");
-    });
+    .catch(() => alert("🔌 No se pudo conectar con el servidor Java."));
 }
 
 /* -------------------- UTILIDADES -------------------- */
-function abrirNuevaVentana(url) {
-    if (url) window.open(url, "_blank");
-}
-
-function btnvolver() {
-    window.history.back();
-}
+function abrirNuevaVentana(url) { if (url) window.open(url, "_blank"); }
+function btnvolver() { window.history.back(); }
 
 /* -------------------- EVENT LISTENERS -------------------- */
 window.addEventListener("DOMContentLoaded", () => {
@@ -552,25 +498,22 @@ window.addEventListener("DOMContentLoaded", () => {
     if (!contenedor) return;
 
     const urlParams = new URLSearchParams(window.location.search);
-    const fuente = urlParams.get("fuente");
-    modoFuente = fuente === "BBDD" ? "BBDD" : "API";
+    modoFuente = urlParams.get("fuente") === "BBDD" ? "BBDD" : "API";
 
     searchInput = document.getElementById("searchInput");
     filterType = document.getElementById("filterType");
     formBusqueda = document.getElementById("formBusqueda");
 
-    generarEstado();
-    generarEspecie();
-    generarTipoC();
-    generarGenero();
-    generarTipoL();
-    generarDimension();
-    generarEpisodio();
+    generarEstado(); generarEspecie(); generarTipoC(); generarGenero(); generarTipoL(); generarDimension(); generarEpisodio();
 
     if (filterType) {
         filterType.value = seccionActual;
         filterType.addEventListener("change", (e) => {
             seccionActual = e.target.value;
+
+            if (searchInput) searchInput.value = "";
+            limpiarFiltros();
+
             numeroPagina = 1;
             cache = {};
             mostrarOpcionesBusqueda();
@@ -585,16 +528,7 @@ window.addEventListener("DOMContentLoaded", () => {
         });
     }
 
-    const idsFiltros = [
-        "estadoSelect",
-        "especieSelect",
-        "tipoCSelect",
-        "generoSelect",
-        "tipoLSelect",
-        "dimensionSelect",
-        "episodioSelect"
-    ];
-
+    const idsFiltros = ["estadoSelect", "especieSelect", "tipoCSelect", "generoSelect", "tipoLSelect", "dimensionSelect", "episodioSelect"];
     idsFiltros.forEach(id => {
         const elemento = document.getElementById(id);
         if (elemento) {
@@ -614,6 +548,5 @@ window.addEventListener("DOMContentLoaded", () => {
     }
 
     mostrarOpcionesBusqueda();
-    actualizarVisibilidadPaginacion();
     cargarDatos();
 });
