@@ -2,6 +2,7 @@ package backend;
 import java.sql.*;
 public class BBDD {
 
+    //Metodo de insertar personajes
     public void insertarPersonajes(String nombre, String especie, String estado, String origen, String imagen, String ultima_ubicacion) throws SQLException{
         Connection con = DbConnect.getInstance().getConnection();
         String sql = "INSERT INTO personajes(nombre, especie, estado, origen, imagen, ultima_ubicacion) VALUES(?, ?, ?, ?, ?, ?)";
@@ -25,7 +26,7 @@ public class BBDD {
         }
     }
 
-
+    //Metodo de insertarEpisodios
     public void insertarEpisodio(String nombre, String fecha, String codigo, String img) throws SQLException {
         Connection con = DbConnect.getConnection();
         String sql = "INSERT INTO episodios(nombre, fecha, codigo, imagen) VALUES(?, ?, ?, ?)";
@@ -46,7 +47,7 @@ public class BBDD {
             }
         }
     }
-
+    //Metodo insertar ubicaiones
     public void insertarUbicacion(String nombre, String tipo, String dimension, String img) throws SQLException {
         Connection con = DbConnect.getConnection();
         String sql = "INSERT INTO ubicaciones(nombre, tipo, dimension, imagen) VALUES(?, ?, ?, ?)";
@@ -67,8 +68,10 @@ public class BBDD {
         }
     }
 
+    //Metodo para obtener datos de la base de datos
     public String obtenerDatos(String tipo) throws SQLException {
     Connection con = DbConnect.getInstance().getConnection();
+    //Ternaria
     String sql = "SELECT * FROM " + (tipo.equals("character") ? "personajes" : tipo.equals("location") ? "ubicaciones" : "episodios");
 
     StringBuilder json = new StringBuilder("[");

@@ -11,6 +11,8 @@ public class ServidorRick {
         // CREAMOS SERVIDOR PUERTO 8080
         HttpServer server = HttpServer.create(new InetSocketAddress(8080), 0);
 
+
+        //Creamos el path de obtener para cuando queramos solicitar informacion de la bbdd
         server.createContext("/obtener", exchange -> {
             // PERMISOS PARA EL NAVEGADOR
             exchange.getResponseHeaders().add("Access-Control-Allow-Origin", "*");
@@ -19,6 +21,7 @@ public class ServidorRick {
         String query = exchange.getRequestURI().getQuery();
         String tipo = query.split("=")[1];
 
+        //Creamos nuestro objeto db
         BBDD db = new BBDD();
         try {
             String respuestaJson = db.obtenerDatos(tipo);
@@ -32,20 +35,23 @@ public class ServidorRick {
             e.printStackTrace();
             exchange.sendResponseHeaders(500, 0);
         }
+        //Cerramos la llamada
         exchange.close();
     });
-
+        //Otro path para guardar la informacion
         server.createContext("/guardar", exchange -> {
             // CONFIGURACI0N DE CORS (Para que el navegador no bloquee la conexión)
             exchange.getResponseHeaders().add("Access-Control-Allow-Origin", "*");
             exchange.getResponseHeaders().add("Access-Control-Allow-Methods", "POST, OPTIONS");
             exchange.getResponseHeaders().add("Access-Control-Allow-Headers", "Content-Type");
 
+            //Pregunta de envio
             if ("OPTIONS".equals(exchange.getRequestMethod())) {
                 exchange.sendResponseHeaders(204, -1);
                 return;
             }
 
+            //Metodo de envio POST
             if ("POST".equals(exchange.getRequestMethod())) {
                 // LEER EL JSON QUE VIENE DEL NAVEGADOR (JS FETCH)
                 InputStream is = exchange.getRequestBody();
@@ -54,11 +60,13 @@ public class ServidorRick {
 
                 System.out.println("📥 Solicitud recibida: " + json);
 
+                //Extraemos el archivo json por tipo (episodio,ubi,personaje)
                 String tipoDato = extraer(json, "tipo_dato");
                 BBDD db = new BBDD();
                 String mensajeRespuesta = "";
                 int codigoEstado = 200;
 
+                //Comprobamos tipo y ejecutamos
                 try {
                     // DEPENDIENDO DEL TIPO INSERTAMOS X
                     if (tipoDato.equals("character")) {
@@ -66,7 +74,7 @@ public class ServidorRick {
                         db.insertarPersonajes(
                             extraer(json, "nombre"), extraer(json, "especie"),
                             extraer(json, "estado"), extraer(json, "origen"),
-                            extraer(json, "imagen"), extraer(json, "genero") // En JS mandamos 'genero' para la ubicación
+                            extraer(json, "imagen"), extraer(json, "genero")
                         );
                         mensajeRespuesta =  nombre + " guardado en la base de datos";
                     }
@@ -103,7 +111,7 @@ public class ServidorRick {
                         codigoEstado = 500;
                     }
                 }
-                //  ENVIAR RESPUESTA AL NAVEGADOR
+                //  ENVIAR RESPUESTA AL NAVEGADOR transformando a binario
                 byte[] respuestaBytes = mensajeRespuesta.getBytes(StandardCharsets.UTF_8);
                 exchange.sendResponseHeaders(codigoEstado, respuestaBytes.length);
                 try (OutputStream os = exchange.getResponseBody()) {
@@ -114,13 +122,14 @@ public class ServidorRick {
             exchange.close();
         });
 
+        //Mostrar mensaje consola
         server.start();
         System.out.println("---------------------------------------------");
         System.out.println(" SERVIDOR RICK & MORTY ACTIVO EN PUERTO 8080");
         System.out.println("---------------------------------------------");
     }
 
-    //(SPLIT)
+    //Metodo para extraer informacion del json
     public static String extraer(String textoJSON, String etiqueta) {
         try {
             // Buscamos la etiqueta. Ejemplo: "nombre":"
