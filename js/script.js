@@ -345,6 +345,7 @@ async function ficha() {
     try {
         const claveCache = `${seccionActual}-${numeroPagina}`;
 
+        // 1. Si NO está en caché, pedimos los datos
         if (!cache[claveCache]) {
             const url = `https://rickandmortyapi.com/api/${seccionActual}?page=${numeroPagina}`;
             const response = await fetch(url);
@@ -357,13 +358,29 @@ async function ficha() {
                 return;
             }
 
-            totalPaginas = data.info.pages;
-            cache[claveCache] = data.results;
+            // GUARDAMOS AMBAS COSAS EN LA CACHÉ
+            cache[claveCache] = {
+                personajes: data.results,
+                total: data.info.pages
+            };
         }
 
-        renderCards(cache[claveCache].slice(0, 12), seccionActual);
+        // 2. RECUPERAMOS de la caché (sea nueva o antigua)
+        const datosEnCache = cache[claveCache];
+
+        // ACTUALIZAMOS SIEMPRE LA VARIABLE GLOBAL
+        totalPaginas = datosEnCache.total;
+
+        // 3. RENDERIZAMOS
+        // Nota: Si quieres ver los 42, recuerda que la API trae 20 por página.
+        // Con .slice(0, 12) solo muestras 12 de esos 20.
+        renderCards(datosEnCache.personajes.slice(0, 12), seccionActual);
+
+        // 4. REGENERAMOS PAGINACIÓN (Ahora sí sabrá que totalPaginas es 3)
         generarNumerosPaginas();
+
     } catch (error) {
+        console.error("Error en ficha:", error);
         contenedor.innerHTML = `<h2 class="nombre2" style="grid-column: 1/-1;">Error cargando datos</h2>`;
     }
 }
