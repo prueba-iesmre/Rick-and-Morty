@@ -2,356 +2,474 @@ let numeroPagina = 1;
 let totalPaginas = 0;
 let seccionActual = "character";
 let modoFuente = "API";
+let cache = {};
 
-/* SCRIPT PARA MOSTRAR NUMERO DE PAGINAS */
-/**
- * Genera dinámicamente los botones de paginación en el contenedor HTML.
- *
- * Esta función calcula el rango de páginas visibles alrededor de la página actual
- * y crea botones para navegar entre ellas. También añade accesos rápidos a la
- * primera y última página cuando están fuera del rango visible, incluyendo
- * puntos suspensivos para indicar páginas omitidas.
- *
- * Requiere que existan las variables globales:
- * - numeroPagina: número de la página actual
- * - totalPaginas: número total de páginas disponibles
- *
- * Además, utiliza un elemento del DOM con id "numerosPaginacion" como contenedor.
- *
- * @function generarNumerosPaginas
- * @returns {void} No devuelve ningún valor
- */
+let searchInput = null;
+let filterType = null;
+let formBusqueda = null;
+
+/* -------------------- PAGINACIÓN -------------------- */
 function generarNumerosPaginas() {
     const contenedor = document.getElementById("numerosPaginacion");
     if (!contenedor) return;
 
     contenedor.innerHTML = "";
 
-    // 🧠 si estamos en búsqueda, no mostramos paginación
+    if (hayBusquedaActiva()) return;
 
     let inicio = Math.max(1, numeroPagina - 2);
     let fin = Math.min(totalPaginas, numeroPagina + 2);
 
-    // ⬅️ botón primera página
     if (inicio > 1) {
         contenedor.innerHTML += `<button class="numeroBtn" onclick="irAPagina(1)">1</button>`;
         if (inicio > 2) contenedor.innerHTML += `<span class="dots">...</span>`;
     }
 
-    // 🔢 páginas centrales
     for (let i = inicio; i <= fin; i++) {
         contenedor.innerHTML += `
-            <button class="numeroBtn ${i === numeroPagina ? 'activo' : ''}"
-            onclick="irAPagina(${i})">
+            <button class="numeroBtn ${i === numeroPagina ? "activo" : ""}" onclick="irAPagina(${i})">
                 ${i}
-            </button>`;
+            </button>
+        `;
     }
 
-    // ➡️ última página
     if (fin < totalPaginas) {
         if (fin < totalPaginas - 1) contenedor.innerHTML += `<span class="dots">...</span>`;
         contenedor.innerHTML += `<button class="numeroBtn" onclick="irAPagina(${totalPaginas})">${totalPaginas}</button>`;
     }
 }
 
-/**
- * Cambia la página actual y recarga los datos correspondientes.
- *
- * Actualiza la variable global de página, ejecuta la función encargada
- * de cargar los datos de esa página y desplaza la vista al inicio
- * de la página con un desplazamiento suave.
- *
- * Requiere que existan:
- * - numeroPagina: variable global que almacena la página actual
- * - cargarDatos: función que carga los datos según la página actual
- *
- * @function irAPagina
- * @param {number} num - Número de la página a la que se quiere navegar
- * @returns {void} No devuelve ningún valor
- */
 function irAPagina(num) {
     numeroPagina = num;
     cargarDatos();
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+    window.scrollTo({ top: 0, behavior: "smooth" });
 }
 
-/* VISTAS Y UI */
-/**
- * Alterna la vista del contenedor entre diferentes estilos (por ejemplo, grid y lista).
- *
- * Añade o elimina la clase "contenedorLista" al elemento con id "contenedor",
- * permitiendo cambiar su apariencia visual. Después, actualiza el SVG dinámico
- * llamando a la función correspondiente.
- *
- * Requiere que existan:
- * - Un elemento en el DOM con id "contenedor"
- * - La función svgDinamico definida
- *
- * @function cambiarVista
- * @returns {void} No devuelve ningún valor
- */
+function paginaSiguiente() {
+    if (hayBusquedaActiva()) return;
+    if (numeroPagina < totalPaginas) {
+        numeroPagina++;
+        cargarDatos();
+        window.scrollTo({ top: 0, behavior: "smooth" });
+    }
+}
+
+function paginaAnterior() {
+    if (hayBusquedaActiva()) return;
+    if (numeroPagina > 1) {
+        numeroPagina--;
+        cargarDatos();
+        window.scrollTo({ top: 0, behavior: "smooth" });
+    }
+}
+
+function actualizarVisibilidadPaginacion() {
+    const botonesPag = document.querySelector(".botonesPaginacion");
+    const numerosPag = document.getElementById("numerosPaginacion");
+    const mostrar = !hayBusquedaActiva() && modoFuente === "API";
+
+    if (botonesPag) botonesPag.style.display = mostrar ? "flex" : "none";
+    if (numerosPag) numerosPag.style.display = mostrar ? "flex" : "none";
+}
+
+/* -------------------- VISTAS Y UI -------------------- */
 function cambiarVista() {
     const contenedor = document.getElementById("contenedor");
+    if (!contenedor) return;
     contenedor.classList.toggle("contenedorLista");
     svgDinamico();
 }
 
-/**
- * Alterna la visibilidad entre dos elementos del DOM: una cuadrícula SVG y una lista SVG.
- *
- * Esta función obtiene los elementos con los IDs "svgGrid" y "svgList"
- * y les alterna la clase "oculto" para mostrar u ocultar cada uno.
- *
- * @function svgDinamico
- * @returns {void} No retorna ningún valor.
- */
 function svgDinamico() {
     const grid = document.getElementById("svgGrid");
     const list = document.getElementById("svgList");
-    grid.classList.toggle("oculto");
-    list.classList.toggle("oculto");
+    if (grid) grid.classList.toggle("oculto");
+    if (list) list.classList.toggle("oculto");
 }
 
-/**
- * Gestiona la carga de datos según el modo de fuente y el estado de la búsqueda.
- *
- * Si el modo de fuente es "BBDD", se llama a la función `gestionarBBDD()`.
- * En caso contrario, se comprueba si existe un valor en el input de búsqueda:
- * - Si hay texto, se ejecuta `fetchData()`.
- * - Si no hay texto, se ejecuta `ficha()`.
- *
- * @function cargarDatos
- * @returns {void} No retorna ningún valor.
- */
+function mostrarOpcionesBusqueda() {
+    const bloqueCharacter = document.getElementById("opciones-character");
+    const bloqueLocation = document.getElementById("opciones-location");
+    const bloqueEpisode = document.getElementById("opciones-episode");
+
+    if (bloqueCharacter) bloqueCharacter.classList.add("oculto");
+    if (bloqueLocation) bloqueLocation.classList.add("oculto");
+    if (bloqueEpisode) bloqueEpisode.classList.add("oculto");
+
+    if (seccionActual === "character" && bloqueCharacter) bloqueCharacter.classList.remove("oculto");
+    if (seccionActual === "location" && bloqueLocation) bloqueLocation.classList.remove("oculto");
+    if (seccionActual === "episode" && bloqueEpisode) bloqueEpisode.classList.remove("oculto");
+}
+
+/* -------------------- SELECCIÓN DE FUENTE -------------------- */
+function usarAPI() {
+    window.location.href = "app.html?fuente=API";
+}
+
+async function usarBBDD() {
+    try {
+        const res = await fetch(`http://localhost:8080/obtener?tipo=character`);
+        if (res.ok) {
+            window.location.href = "app.html?fuente=BBDD";
+            return;
+        }
+        alert("⚠️ Error en el servidor");
+    } catch (e) {
+        alert("🔌 Servidor apagado. ¿Está encendido?");
+    }
+}
+
+/* -------------------- CAMBIO DE SECCIÓN -------------------- */
+function cambiarSeccion(nuevaSeccion) {
+    seccionActual = nuevaSeccion;
+    numeroPagina = 1;
+    cache = {};
+
+    if (searchInput) searchInput.value = "";
+    if (filterType) filterType.value = nuevaSeccion;
+
+    limpiarFiltros();
+    mostrarOpcionesBusqueda();
+    cargarDatos();
+}
+
+function limpiarFiltros() {
+    const ids = [
+        "estadoSelect",
+        "especieSelect",
+        "tipoCSelect",
+        "generoSelect",
+        "tipoLSelect",
+        "dimensionSelect",
+        "episodioSelect"
+    ];
+
+    ids.forEach(id => {
+        const el = document.getElementById(id);
+        if (el) el.value = "";
+    });
+}
+
+/* -------------------- FILTROS -------------------- */
+function obtenerFiltrosActuales() {
+    if (seccionActual === "character") {
+        return {
+            status: document.getElementById("estadoSelect")?.value || "",
+            species: document.getElementById("especieSelect")?.value || "",
+            type: document.getElementById("tipoCSelect")?.value || "",
+            gender: document.getElementById("generoSelect")?.value || ""
+        };
+    }
+
+    if (seccionActual === "location") {
+        return {
+            type: document.getElementById("tipoLSelect")?.value || "",
+            dimension: document.getElementById("dimensionSelect")?.value || ""
+        };
+    }
+
+    if (seccionActual === "episode") {
+        return {
+            episode: document.getElementById("episodioSelect")?.value || ""
+        };
+    }
+
+    return {};
+}
+
+function hayBusquedaActiva() {
+    const texto = searchInput?.value.trim() || "";
+    const filtros = obtenerFiltrosActuales();
+    return texto !== "" || Object.values(filtros).some(valor => valor !== "");
+}
+
+function construirUrlBusquedaAPI() {
+    const texto = searchInput?.value.trim() || "";
+    const filtros = obtenerFiltrosActuales();
+
+    let url = `https://rickandmortyapi.com/api/${seccionActual}/?page=1`;
+
+    if (texto !== "") url += `&name=${encodeURIComponent(texto)}`;
+
+    for (const [clave, valor] of Object.entries(filtros)) {
+        if (valor !== "") url += `&${clave}=${encodeURIComponent(valor)}`;
+    }
+
+    return url;
+}
+
+/* -------------------- GENERAR SELECTORES -------------------- */
+function crearSelect(idSelect, opciones, textoInicial = "Todos") {
+    const select = document.createElement("select");
+    select.id = idSelect;
+
+    const opcionInicial = document.createElement("option");
+    opcionInicial.value = "";
+    opcionInicial.textContent = textoInicial;
+    select.appendChild(opcionInicial);
+
+    opciones.forEach(opcion => {
+        const option = document.createElement("option");
+        option.value = opcion;
+        option.textContent = opcion;
+        select.appendChild(option);
+    });
+
+    return select;
+}
+
+function generarEstado() {
+    const contenedor = document.getElementById("estado");
+    if (!contenedor) return;
+    contenedor.innerHTML = "";
+    contenedor.appendChild(crearSelect("estadoSelect", ["alive", "dead", "unknown"], "Todos"));
+}
+
+function generarEspecie() {
+    const contenedor = document.getElementById("especie");
+    if (!contenedor) return;
+    contenedor.innerHTML = "";
+    contenedor.appendChild(
+        crearSelect(
+            "especieSelect",
+            ["Human", "Alien", "Humanoid", "Robot", "Animal", "Mythological Creature", "Cronenberg"],
+            "Todas"
+        )
+    );
+}
+
+function generarTipoC() {
+    const contenedor = document.getElementById("tipoC");
+    if (!contenedor) return;
+    contenedor.innerHTML = "";
+    contenedor.appendChild(crearSelect("tipoCSelect", ["Genetic experiment", "Parasite", "Superhuman", "Clone"], "Todos"));
+}
+
+function generarGenero() {
+    const contenedor = document.getElementById("genero");
+    if (!contenedor) return;
+    contenedor.innerHTML = "";
+    contenedor.appendChild(crearSelect("generoSelect", ["Female", "Male", "Genderless", "unknown"], "Todos"));
+}
+
+function generarTipoL() {
+    const contenedor = document.getElementById("tipoL");
+    if (!contenedor) return;
+    contenedor.innerHTML = "";
+    contenedor.appendChild(
+        crearSelect(
+            "tipoLSelect",
+            ["Planet", "Cluster", "Microverse", "TV", "Resort", "Fantasy town", "Dream"],
+            "Todos"
+        )
+    );
+}
+
+function generarDimension() {
+    const contenedor = document.getElementById("dimension");
+    if (!contenedor) return;
+    contenedor.innerHTML = "";
+    contenedor.appendChild(
+        crearSelect(
+            "dimensionSelect",
+            ["Dimension C-137", "Replacement Dimension", "Cronenberg Dimension", "Fantasy Dimension", "Unknown"],
+            "Todas"
+        )
+    );
+}
+
+function generarEpisodio() {
+    const contenedor = document.getElementById("episodio");
+    if (!contenedor) return;
+    contenedor.innerHTML = "";
+    contenedor.appendChild(
+        crearSelect(
+            "episodioSelect",
+            ["S01E01", "S01E02", "S01E03", "S02E01", "S03E01", "S04E01", "S05E01"],
+            "Todos"
+        )
+    );
+}
+
+/* -------------------- CARGA CENTRAL -------------------- */
 function cargarDatos() {
-    if (modoFuente === "BBDD") {
-        gestionarBBDD();
+    actualizarVisibilidadPaginacion();
+
+    if (hayBusquedaActiva()) {
+        fetchData();
     } else {
-        const query = searchInput ? searchInput.value.trim() : "";
-        if (query !== "") {
-            fetchData();
+        if (modoFuente === "BBDD") {
+            cargarDesdeBBDD();
         } else {
             ficha();
         }
     }
 }
 
+/* -------------------- BBDD -------------------- */
+async function cargarDesdeBBDD() {
+    const contenedor = document.getElementById("contenedor");
+    if (!contenedor) return;
 
-/**
- * Avanza a la siguiente página de resultados si no se ha alcanzado el total de páginas.
- *
- * Incrementa el contador de página actual (`numeroPagina`) si es menor que `totalPaginas`,
- * recarga los datos llamando a `cargarDatos()` y desplaza la vista al inicio de la página
- * con un scroll suave.
- *
- * @function paginaSiguiente
- * @returns {void} No retorna ningún valor.
- */
-function paginaSiguiente() {
-    if (numeroPagina < totalPaginas) {
-        numeroPagina++;
-        cargarDatos();
-        window.scrollTo({ top: 0, behavior: 'smooth' });
-    }
-}
-
-/**
- * Retrocede a la página anterior de resultados si no se encuentra en la primera página.
- *
- * Decrementa el contador de página actual (`numeroPagina`) si es mayor que 1,
- * recarga los datos llamando a `cargarDatos()` y desplaza la vista al inicio de la página
- * con un scroll suave.
- *
- * @function paginaAnterior
- * @returns {void} No retorna ningún valor.
- */
-function paginaAnterior() {
-    if (numeroPagina > 1) {
-        numeroPagina--;
-        cargarDatos();
-        window.scrollTo({ top: 0, behavior: 'smooth' });
-    }
-}
-
-/**
- * Redirige la aplicación para utilizar la fuente de datos "API".
- *
- * Cambia la URL actual del navegador a "app.html" pasando el parámetro
- * `fuente=API` en la query string, lo que permite activar el modo de
- * obtención de datos desde una API externa.
- *
- * @function usarAPI
- * @returns {void} No retorna ningún valor.
- */
-function usarAPI() {
-    window.location.href = "app.html?fuente=API";
-}
-
-
-/**
- * Cambia la sección actual de la aplicación y reinicia el estado de paginación y búsqueda.
- *
- * Actualiza la variable global `seccionActual` con la nueva sección recibida,
- * reinicia la página a 1, limpia el input de búsqueda si existe y vacía la caché.
- * Después, vuelve a cargar los datos según el modo de fuente:
- * - Si `modoFuente` es "BBDD", llama a `gestionarBBDD()`.
- * - En caso contrario, llama a `ficha()`.
- *
- * @function cambiarSeccion
- * @param {string} nuevaSeccion - Nombre de la nueva sección a la que se quiere cambiar.
- * @returns {void} No retorna ningún valor.
- */
-function cambiarSeccion(nuevaSeccion) {
-    seccionActual = nuevaSeccion;
-    numeroPagina = 1;
-    //BORRA EL INPUT AL CAMBIAR EL SEARCH
-    if (searchInput) searchInput.value = "";
-    cache = {};
-    if (modoFuente === "BBDD") {
-        gestionarBBDD();
-    } else {
-        ficha();
-    }
-}
-
-
-/* LOGICA PARA FETCH DESDE BBDD */
-
-/**
- * Verifica la conexión con la base de datos a través de un endpoint local y,
- * si la respuesta es correcta, redirige a la aplicación en modo BBDD.
- *
- * Realiza una petición HTTP al servidor local para comprobar si está activo.
- * - Si la respuesta es correcta (`res.ok`), redirige a "app.html?fuente=BBDD".
- * - Si el servidor responde con error, muestra una alerta indicando un problema.
- * - Si la petición falla (servidor apagado o sin conexión), muestra una alerta distinta.
- *
- * @async
- * @function usarBBDD
- * @returns {Promise<void>} No retorna valor; puede redirigir o mostrar alertas.
- */
-async function usarBBDD() {
     try {
-        const res = await fetch(`http://localhost:8080/obtener?tipo=character`);
-        if (res.ok) return window.location.href = "app.html?fuente=BBDD";
+        const response = await fetch(`http://localhost:8080/obtener?tipo=${seccionActual}`);
+        const data = await response.json();
 
-        alert("⚠️ Error en el servidor");
-    } catch (e) {
+        if (!Array.isArray(data) || data.length === 0) {
+            contenedor.innerHTML = `<h2 class="nombre2" style="grid-column: 1/-1;">No hay datos guardados en este universo.</h2>`;
+        } else {
+            renderCards(data, seccionActual);
+        }
+    } catch (error) {
+        console.error("Error cargando desde BBDD:", error);
         alert("🔌 No se pudo conectar con el servidor Java. ¿Está encendido?");
+        window.location.replace("index.html");
     }
 }
 
-/* LOGICA PARA FETCH DESDE BBDD */
-/* LÓGICA DE CARGA DE DATOS (FICHAS) */
-let cache = {};
+async function buscarEnBBDDLocal() {
+    const contenedor = document.getElementById("contenedor");
+    if (!contenedor) return;
 
-/**
- * Obtiene y muestra fichas de datos desde la API de Rick and Morty,
- * gestionando caché por páginas y renderizado de resultados.
- *
- * Flujo de la función:
- * 1. Comprueba si la página actual ya está en caché.
- *    - Si no lo está, realiza una petición a la API.
- *    - Guarda los resultados en `cache` y actualiza `totalPaginas`.
- * 2. Obtiene los datos de la página actual desde la caché.
- * 3. Limita los resultados a 12 elementos.
- * 4. Renderiza las tarjetas en pantalla y genera la paginación.
- *
- * @async
- * @function ficha
- * @returns {Promise<void>} No retorna valor; actualiza la interfaz.
- */
+    const texto = searchInput?.value.toLowerCase().trim() || "";
+    const filtros = obtenerFiltrosActuales();
+
+    try {
+        const response = await fetch(`http://localhost:8080/obtener?tipo=${seccionActual}`);
+        const data = await response.json();
+
+        const resultadosFiltrados = data.filter(item => {
+            const nombre = item.name?.toLowerCase() || item.nombre?.toLowerCase() || "";
+            const coincideTexto = nombre.includes(texto);
+            let coincideFiltros = true;
+
+            if (seccionActual === "character") {
+                if (filtros.status) coincideFiltros = coincideFiltros && (item.status === filtros.status || item.estado === filtros.status);
+                if (filtros.species) coincideFiltros = coincideFiltros && (item.species === filtros.species || item.especie === filtros.species);
+                if (filtros.type) coincideFiltros = coincideFiltros && (item.type === filtros.type);
+                if (filtros.gender) coincideFiltros = coincideFiltros && (item.gender === filtros.gender || item.genero === filtros.gender);
+            }
+
+            if (seccionActual === "location") {
+                if (filtros.type) coincideFiltros = coincideFiltros && (item.type === filtros.type || item.tipo === filtros.type);
+                if (filtros.dimension) coincideFiltros = coincideFiltros && item.dimension === filtros.dimension;
+            }
+
+            if (seccionActual === "episode") {
+                if (filtros.episode) coincideFiltros = coincideFiltros && item.episode === filtros.episode;
+            }
+
+            return coincideTexto && coincideFiltros;
+        });
+
+        if (resultadosFiltrados.length === 0) {
+            contenedor.innerHTML = `<h2 class="nombre2" style="grid-column: 1/-1;">No hay resultados en tu base de datos.</h2>`;
+        } else {
+            renderCards(resultadosFiltrados, seccionActual);
+        }
+    } catch (error) {
+        console.error("Error buscando en BBDD:", error);
+        contenedor.innerHTML = `<h2 class="nombre2" style="grid-column: 1/-1;">Error buscando en la base de datos.</h2>`;
+    }
+}
+
+/* -------------------- API -------------------- */
 async function ficha() {
     const contenedor = document.getElementById("contenedor");
+    if (!contenedor) return;
 
     try {
-        // 1. Si no tengo la página, la pido a la API
-        if (!cache[numeroPagina]) {
-            let url = `https://rickandmortyapi.com/api/${seccionActual}?page=${numeroPagina}`;
+        const claveCache = `${seccionActual}-${numeroPagina}`;
+
+        if (!cache[claveCache]) {
+            const url = `https://rickandmortyapi.com/api/${seccionActual}?page=${numeroPagina}`;
             const response = await fetch(url);
             const data = await response.json();
 
-            totalPaginas = data.info.pages;
-            cache[numeroPagina] = data.results;
+            if (!data.results) {
+                contenedor.innerHTML = `<h2 class="nombre2" style="grid-column: 1/-1;">No hay resultados</h2>`;
+                return;
+            }
 
-            // Guardamos el total de páginas para esta sección en la caché
-            cache[`total_${seccionActual}`] = data.info.pages;
-        } else {
-            // SI YA EXISTE EN CACHÉ: Recuperamos el total de páginas guardado
-            totalPaginas = cache[`total_${seccionActual}`];
+            totalPaginas = data.info.pages;
+            cache[claveCache] = data.results;
         }
 
-        // 2. Cojo los datos de esa página
-        let datos = cache[numeroPagina];
+        const datos = cache[claveCache];
+        const mostrar = datos.slice(0, 12);
 
-        // 3. Muestro solo 12
-        let mostrar = datos.slice(0, 12);
-
-        // 4. Pinto en pantalla
         renderCards(mostrar, seccionActual);
         generarNumerosPaginas();
-
     } catch (error) {
         console.error("Error cargando fichas:", error);
+        contenedor.innerHTML = `<h2 class="nombre2" style="grid-column: 1/-1;">Error cargando datos</h2>`;
     }
 }
 
-/* RENDERIZADO UNIFICADO (Usa tu diseño de botón + lógica de datos de tu compañero) */
-/**
- * Renderiza tarjetas dinámicas en el contenedor principal según el tipo de datos.
- *
- * Limpia el contenido del contenedor y genera hasta un máximo de 12 elementos visuales
- * a partir de los datos recibidos. Cada tarjeta incluye:
- * - Imagen según el tipo (character, location, episode)
- * - Información adicional específica de cada tipo
- * - Botón para guardar el elemento en la base de datos
- *
- * Tipos soportados:
- * - character: muestra especie, estado, origen y última ubicación
- * - location: muestra tipo y dimensión
- * - episode: muestra fecha de emisión y código del episodio
- *
- * @function renderCards
- * @param {Array<Object>} items - Lista de objetos a renderizar.
- * @param {string} type - Tipo de datos (character, location o episode).
- * @returns {void} No retorna ningún valor.
- */
+async function fetchData() {
+    const contenedor = document.getElementById("contenedor");
+    if (!contenedor) return;
+
+    actualizarVisibilidadPaginacion();
+
+    if (modoFuente === "BBDD") {
+        buscarEnBBDDLocal();
+        return;
+    }
+
+    const url = construirUrlBusquedaAPI();
+
+    try {
+        const response = await fetch(url);
+        const data = await response.json();
+
+        if (data.results && data.results.length > 0) {
+            renderCards(data.results.slice(0, 12), seccionActual);
+        } else {
+            contenedor.innerHTML = `<h2 class="nombre2" style="grid-column: 1/-1;">No hay resultados</h2>`;
+        }
+    } catch (error) {
+        console.error("Error buscando datos en API:", error);
+        contenedor.innerHTML = `<h2 class="nombre2" style="grid-column: 1/-1;">No hay resultados</h2>`;
+    }
+}
+
+/* -------------------- RENDER -------------------- */
 function renderCards(items, type) {
     const contenedor = document.getElementById("contenedor");
+    if (!contenedor) return;
+
     contenedor.innerHTML = "";
 
-    //Maximo 12 items
-    const itemsLimitados = items.slice(0, 12);
-
-    itemsLimitados.forEach(item => {
-        // Imagenes para cada seccion
+    items.forEach(item => {
         const imagenUrl =
-            type === 'character' ? item.image :
-            type === 'location' ? '../img/ubicacion.jpg' :
-            type === 'episode' ? '../img/episodio.jpg' : '';
+            type === "character" ? item.image :
+            type === "location" ? "img/ubicacion.jpg" :
+            type === "episode" ? "img/episodio.jpg" : "";
 
-        // Informacion extra
         let infoExtra = "";
-        if (type === 'character') {
+
+        if (type === "character") {
             infoExtra = `
-                <p>Especie: ${item.species}</p>
-                <p>Estado: ${item.status}</p>
-                <p>Origen: ${item.origin.name}</p>
-                <p>Última ubicación: ${item.location.name}</p>`;
-        } else if (type === 'location') {
+                <p>Especie: ${item.species ?? item.especie ?? "Desconocida"}</p>
+                <p>Estado: ${item.status ?? item.estado ?? "Desconocido"}</p>
+                <p>Origen: ${item.origin?.name ?? item.origen ?? "Desconocido"}</p>
+                <p>Última ubicación: ${item.location?.name ?? item.genero ?? item.location ?? "Desconocida"}</p>
+            `;
+        } else if (type === "location") {
             infoExtra = `
-                <p>Tipo: ${item.type}</p>
-                <p>Dimensión: ${item.dimension}</p>`;
-        } else if (type === 'episode') {
+                <p>Tipo: ${item.type ?? item.tipo ?? "Desconocido"}</p>
+                <p>Dimensión: ${item.dimension ?? "Desconocida"}</p>
+            `;
+        } else if (type === "episode") {
             infoExtra = `
-                <p>Fecha: ${item.air_date}</p>
-                <p>Código: ${item.episode}</p>`;
+                <p>Fecha: ${item.air_date ?? "Desconocida"}</p>
+                <p>Código: ${item.episode ?? "Desconocido"}</p>
+            `;
         }
 
-        //Convertimos el objeto a texto y reemplazamos la comilla con codigo html para no romper la query
         const itemString = JSON.stringify(item).replace(/'/g, "&#39;");
 
-        // Estructura final con el botón de guardar
         contenedor.innerHTML += `
             <div class="fichas">
                 <div class="header-ficha">
@@ -364,223 +482,44 @@ function renderCards(items, type) {
                             </svg>
                         </button>
                     </div>
-                    <p class="nombre">${item.name}</p>
+                    <p class="nombre">${item.name ?? item.nombre ?? "Sin nombre"}</p>
                     <div class="spacer"></div>
                 </div>
                 <div class="imagen">
-                    <img src="${imagenUrl}">
+                    <img src="${imagenUrl}" alt="${item.name ?? item.nombre ?? "Imagen"}">
                 </div>
                 <div class="info_fichas">
                     ${infoExtra}
                 </div>
-            </div>`;
+            </div>
+        `;
     });
 }
 
-/* FILTROS Y BUSCADOR */
-const searchInput = document.getElementById('searchInput'); // input de búsqueda
-const filterType = document.getElementById('filterType');   // tipo (personaje, etc.)
-
-// ejecuta búsqueda al escribir o cambiar tipo
-if (searchInput) {
-    searchInput.addEventListener('input', () => {
-        numeroPagina = 1;
-        fetchData();
-    });
-}
-
-if (filterType) {
-    filterType.addEventListener('change', () => {
-        numeroPagina = 1; // También reseteamos si cambiamos de Personaje a Episodio
-        fetchData();
-    });
-}
-
-
-//  BUSCADOR PRINCIPAL
-/**
- * Realiza una búsqueda en la API de Rick and Morty o redirige a la lógica de BBDD
- * según el modo de fuente activo.
- *
- * - Obtiene el texto del buscador y el tipo de filtro seleccionado.
- * - Si el modo es "BBDD", delega la búsqueda a `gestionarBBDD()`.
- * - Si el buscador está vacío, reinicia la paginación y carga la vista normal.
- * - Si hay texto, consulta la API con filtros por nombre y página actual.
- *
- * En caso de respuesta válida:
- * - Actualiza el número total de páginas.
- * - Renderiza los resultados (máximo 12).
- * - Genera la paginación.
- *
- * En caso de no encontrar resultados:
- * - Muestra un mensaje indicando que no existen coincidencias.
- * - Reinicia la paginación.
- *
- * @async
- * @function fetchData
- * @returns {Promise<void>} No retorna valor; actualiza la interfaz.
- */
-async function fetchData() {
-    const query = searchInput.value.toLowerCase().trim();
-    const type = filterType.value;
-
-    if (modoFuente === "BBDD") {
-        gestionarBBDD();
-        return;
-    }
-
-    // Si el buscador está vacío, volvemos a la carga normal (página 1)
-    if (query === "") {
-        numeroPagina = 1;
-        ficha();
-        return;
-    }
-
-    // URL con filtro y pagina actual
-    const url = `https://rickandmortyapi.com/api/${type}/?name=${query}&page=${numeroPagina}`;
-
-    try {
-        const response = await fetch(url);
-        const data = await response.json();
-
-        if (data.results) {
-            // Actualiza paginas totales
-            totalPaginas = data.info.pages;
-
-            renderCards(data.results.slice(0, 12), type);
-
-            // Genera pagiacion
-            generarNumerosPaginas();
-        } else {
-            totalPaginas = 0;
-            document.getElementById('contenedor').innerHTML =
-                `<h2 class="nombre2" style="grid-column: 1/-1;">No hay ningún "${query}" en este universo.</h2>`;
-            generarNumerosPaginas();
-        }
-    } catch (error) {
-        console.error("Error buscando datos en API:", error);
-    }
-}
-
-/**
- * Gestiona la obtención, filtrado y paginación de datos desde la base de datos local (BBDD).
- *
- * - Obtiene los datos desde el servidor local según la sección actual.
- * - Aplica un filtrado local si existe texto en el buscador.
- * - Calcula el número total de páginas en base a 12 elementos por página.
- * - Ajusta la página actual si se sale del rango válido.
- *
- * Comportamiento:
- * - Si no hay resultados, muestra un mensaje informativo en pantalla.
- * - Si hay datos, aplica paginación manual y renderiza las tarjetas.
- * - Finalmente, actualiza la paginación visible.
- *
- * @async
- * @function gestionarBBDD
- * @returns {Promise<void>} No retorna valor; actualiza la interfaz.
- */
-async function gestionarBBDD() {
-    const contenedor = document.getElementById("contenedor");
-    const query = searchInput?.value.toLowerCase().trim() || "";
-
-    const traducciones = {
-        "character": "personajes",
-        "location": "ubicaciones",
-        "episode": "episodios"
-    };
-
-    try {
-        const response = await fetch(`http://localhost:8080/obtener?tipo=${seccionActual}`);
-        let data = await response.json();
-
-        // 1. Filtrado local
-        if (query) {
-            data = data.filter(item => item.name.toLowerCase().includes(query));
-        }
-
-        // 2. Cálculo de páginas
-        totalPaginas = Math.ceil(data.length / 12);
-
-        // Si al filtrar la página actual queda fuera de rango, volvemos a la 1
-        if (numeroPagina > totalPaginas && totalPaginas > 0) {
-            numeroPagina = 1;
-        }
-
-        if (data.length === 0) {
-            totalPaginas = 0;
-
-            const nombreSeccion = traducciones[seccionActual] || seccionActual;
-            let mensaje = query
-                ? `No hay ningún "${query}" en tu base de datos.`
-                : `No hay ${nombreSeccion} en tu base de datos.`;
-
-            contenedor.innerHTML = `<h2 class="nombre2" style="grid-column: 1/-1;">${mensaje}</h2>`;
-        } else {
-            // 3. Paginación del array local
-            const inicio = (numeroPagina - 1) * 12;
-            const fin = inicio + 12;
-            const itemsParaMostrar = data.slice(inicio, fin);
-
-            renderCards(itemsParaMostrar, seccionActual);
-        }
-
-        // 4. Refrescar la botonera de números
-        generarNumerosPaginas();
-
-    } catch (error) {
-        console.error("Error:", error);
-        alert("🔌 No se pudo conectar con el servidor Java.");
-    }
-}
-
-
-/* SCRIPT PARA GUARDAR INFO EN BBDD (Tu funcionalidad intacta) */
-/**
- * Guarda un elemento en la base de datos mediante una petición POST al servidor local.
- *
- * Construye un objeto con la información del elemento según su tipo (character, location o episode)
- * y lo envía al endpoint `/guardar`.
- *
- * Campos enviados:
- * - tipo_dato, nombre, imagen
- * - Campos adicionales según el tipo:
- *   - character: especie, estado, origen, genero (ubicación actual)
- *   - location: tipo, dimensión
- *   - episode: fecha de emisión y código de episodio
- *
- * Respuesta del servidor:
- * - 200 OK: muestra mensaje de éxito.
- * - 409 Conflict: indica que el elemento ya existe.
- * - Otros errores: muestra mensaje genérico.
- *
- * @function guardarEnBD
- * @param {Object} item - Objeto con los datos del elemento a guardar.
- * @param {string} type - Tipo de elemento (character, location o episode).
- * @returns {void} No retorna valor; realiza una petición HTTP y muestra alertas.
- */
+/* -------------------- GUARDAR EN BBDD -------------------- */
 function guardarEnBD(item, type) {
     let datos = {
         tipo_dato: type,
         nombre: item.name,
-        imagen: type === 'character' ? item.image : (type === 'location' ? 'img/ubicacion.jpg' : 'img/episodio.jpg')
+        imagen: type === "character" ? item.image : (type === "location" ? "img/ubicacion.jpg" : "img/episodio.jpg")
     };
 
-    if (type === 'character') {
+    if (type === "character") {
         datos.especie = item.species;
         datos.estado = item.status;
         datos.origen = item.origin.name;
         datos.genero = item.location.name;
-    } else if (type === 'location') {
+    } else if (type === "location") {
         datos.tipo = item.type;
         datos.dimension = item.dimension;
-    } else if (type === 'episode') {
+    } else if (type === "episode") {
         datos.air_date = item.air_date;
         datos.episode = item.episode;
     }
 
-    fetch('http://localhost:8080/guardar', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+    fetch("http://localhost:8080/guardar", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify(datos)
     })
     .then(async respuesta => {
@@ -593,53 +532,88 @@ function guardarEnBD(item, type) {
             alert("❌ Error: " + mensaje);
         }
     })
-    .catch(error => {
+    .catch(() => {
         alert("🔌 No se pudo conectar con el servidor Java. ¿Está encendido?");
     });
 }
 
-/**
- * Abre una nueva ventana o pestaña del navegador con la URL indicada.
- *
- * Si se proporciona una URL válida, se abre en una nueva pestaña usando
- * `window.open` con el objetivo `_blank`.
- *
- * @function abrirNuevaVentana
- * @param {string} url - Dirección web que se abrirá en una nueva pestaña.
- * @returns {void} No retorna ningún valor.
- */
+/* -------------------- UTILIDADES -------------------- */
 function abrirNuevaVentana(url) {
-    if(url) window.open(url, '_blank');
+    if (url) window.open(url, "_blank");
 }
 
-/**
- * Vuelve a la página anterior en el historial del navegador.
- *
- * Utiliza `window.history.back()` para navegar hacia atrás en la sesión
- * del navegador, simulando el botón de “volver”.
- *
- * @function btnvolver
- * @returns {void} No retorna ningún valor.
- */
-function btnvolver(){
+function btnvolver() {
     window.history.back();
 }
 
-
-//Funcion para cargar paginas al cambiar de index a app.html
-window.addEventListener('DOMContentLoaded', () => {
+/* -------------------- EVENT LISTENERS -------------------- */
+window.addEventListener("DOMContentLoaded", () => {
     const contenedor = document.getElementById("contenedor");
+    if (!contenedor) return;
 
-    if (contenedor) {
-        const urlParams = new URLSearchParams(window.location.search);
-        const fuente = urlParams.get('fuente');
+    const urlParams = new URLSearchParams(window.location.search);
+    const fuente = urlParams.get("fuente");
+    modoFuente = fuente === "BBDD" ? "BBDD" : "API";
 
-        if (fuente === "BBDD") {
-            modoFuente = "BBDD";
-            gestionarBBDD();
-        } else {
-            modoFuente = "API";
-            ficha();
-        }
+    searchInput = document.getElementById("searchInput");
+    filterType = document.getElementById("filterType");
+    formBusqueda = document.getElementById("formBusqueda");
+
+    generarEstado();
+    generarEspecie();
+    generarTipoC();
+    generarGenero();
+    generarTipoL();
+    generarDimension();
+    generarEpisodio();
+
+    if (filterType) {
+        filterType.value = seccionActual;
+        filterType.addEventListener("change", (e) => {
+            seccionActual = e.target.value;
+            numeroPagina = 1;
+            cache = {};
+            mostrarOpcionesBusqueda();
+            cargarDatos();
+        });
     }
+
+    if (searchInput) {
+        searchInput.addEventListener("input", () => {
+            numeroPagina = 1;
+            cargarDatos();
+        });
+    }
+
+    const idsFiltros = [
+        "estadoSelect",
+        "especieSelect",
+        "tipoCSelect",
+        "generoSelect",
+        "tipoLSelect",
+        "dimensionSelect",
+        "episodioSelect"
+    ];
+
+    idsFiltros.forEach(id => {
+        const elemento = document.getElementById(id);
+        if (elemento) {
+            elemento.addEventListener("change", () => {
+                numeroPagina = 1;
+                cargarDatos();
+            });
+        }
+    });
+
+    if (formBusqueda) {
+        formBusqueda.addEventListener("submit", (e) => {
+            e.preventDefault();
+            numeroPagina = 1;
+            cargarDatos();
+        });
+    }
+
+    mostrarOpcionesBusqueda();
+    actualizarVisibilidadPaginacion();
+    cargarDatos();
 });
