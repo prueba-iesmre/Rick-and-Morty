@@ -238,7 +238,7 @@ img{
     align-items: center;
     justify-content: center;
     margin-left: auto;
-    margin-right: 25%;
+    margin-right: 16%;
     border: none;
     border: 1px solid transparent;
 }
@@ -270,7 +270,7 @@ img{
     width: 45px;
     height: 45px;
     background-color: #39ff14;
-    margin-left: 25%;
+    margin-left: 16%;
     border-radius: 8px;
     margin-right: auto;
 }
@@ -599,59 +599,143 @@ margin-top: 15px;
 }
 
 /*FILTROS*/
-.search-container {
-    margin-top: 1rem;
+.buscador {
+    margin: 0 auto 25px auto;
     display: flex;
-    justify-content: center;
-    gap: 10px;
+    align-items: flex-end;
+    margin-top: 50px;
+    margin-bottom: 50px;
+
 }
 
-.search-container input::placeholder{
-    color: black;
+.fieldset-busqueda {
+    border: 2px solid #39ff14;
+    border-radius: 16px;
+    padding: 20px;
+    margin: 0px 20px 0 20px;
+
+    background:
+        linear-gradient(rgba(0,0,0,0.82), rgba(0,0,0,0.82)),
+        url('img/portal.jpg') center/cover no-repeat;
+    box-shadow: 0 0 18px rgba(57, 255, 20, 0.35);
 }
 
-input, select {
+.tituloOpciones {
+    font-family: 'Creepster', cursive;
+    color: #39ff14;
+    font-size: 2rem;
+    padding: 0 10px;
+}
+
+.fila-principal-busqueda {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 16px;
+    align-items: end;
+    margin-bottom: 20px;
+}
+
+.grupo-campos {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 16px;
+}
+
+.campo-busqueda {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.campo-grande {
+    flex: 1 1 320px;
+}
+
+.campo-busqueda label {
+    color: white;
+    font-weight: 700;
+    font-size: 0.95rem;
+}
+
+.campo-busqueda input,
+.campo-busqueda select,
+.campo-busqueda div select {
+    min-width: 210px;
     padding: 12px;
-    border-radius: 8px;
-    border: 2px solid var(--rm-green);
-    background: #39ff14; /*Color fondo*/
-    color: black; /*Color letras filtro*/
+    border-radius: 12px;
+    border: 2px solid #39ff14;
+    background: #39ff14;
+    color: black;
     font-size: 1rem;
-    border: 1px solid transparent;
+    font-family: 'Inter', sans-serif;
+    box-shadow: 0 0 0 2px rgba(0, 255, 255, 0.45) inset;
 }
 
-.contenedor_boton {
+.campo-busqueda input::placeholder {
+    color: #5c5c5c;
+}
+
+.campo-grande input {
+    width: 100%;
+}
+
+.opciones-dinamicas {
+    margin-top: 10px;
+    padding: 16px;
+    border-radius: 16px;
+    background: rgba(57, 255, 20, 0.08);
+}
+
+.subtitulo-opciones {
+    color: #39ff14;
+    margin-bottom: 14px;
+    font-family: 'Creepster', cursive;
+    font-size: 1.8rem;
+    font-weight: normal;
+}
+
+.oculto {
+    display: none !important;
+}
+
+.acciones-busqueda {
+    margin-top: 20px;
     display: flex;
     justify-content: center;
-    align-items: self-end;
-    gap: 15px;
 }
 
-.search-container {
-    position: absolute;
-    left: 50%;
-    transform: translateX(-50%); /* El truco para el centrado perfecto */
-    display: flex;
-    gap: 10px;
-}
-
-input:hover, select:hover {
-    color: #00FFFF;
-    border: 1px solid #00FFFF;
-    background: linear-gradient(
-    180deg,
-    #000000 0%,
-    #031b03 25%,
-    #0f3d0f 50%,
-    #1b5e20 75%,
-    #39FF14 100%
-);
+.btn-buscar {
+    padding: 12px 28px;
+    border: 2px solid #e905fe;
+    border-radius: 10px;
+    background-color: #39ff14;
+    color: black;
+    font-family: 'Creepster', cursive;
+    font-size: 1.5rem;
     cursor: pointer;
 }
 
-input:hover::placeholder{
-    color: #00FFFF;
+.btn-buscar:hover,
+#cambiar_ficha:hover,
+.campo-busqueda input:hover,
+.campo-busqueda select:hover,
+.campo-busqueda div select:hover {
+    color: white;
+    border-color: #00FFFF;
+    background: linear-gradient(
+        150deg,
+        #000000 0%,
+        #031b03 25%,
+        #0f3d0f 50%,
+        #1b5e20 75%,
+        #39FF14 100%
+    );
 }
+
+.campo-busqueda input:hover::placeholder {
+    color: #c8ffff;
+}
+
 /*FIN FILTROS*/
 
 

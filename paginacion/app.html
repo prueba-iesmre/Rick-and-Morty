@@ -1,113 +1,176 @@
 <!DOCTYPE html>
 <html lang="es">
-  <head>
-    <meta charset="utf-8">
-    <title>RICK Y MORTY</title>
-  </head>
-  <!--Fuentes-->
-  <link href="https://fonts.googleapis.com/css2?family=Creepster&display=swap" rel="stylesheet">
-  <link href="https://fonts.googleapis.com/css2?family=Poppins&display=swap" rel="stylesheet">
-  <link href="https://fonts.googleapis.com/css2?family=Montserrat&display=swap" rel="stylesheet">
-  <link href="https://fonts.googleapis.com/css2?family=Bangers&family=Orbitron&family=Luckiest+Guy&display=swap" rel="stylesheet">
-  <!--Fin Fuentes-->
-  <link rel="stylesheet" href="../styles/styles.css">
-  <body>
-</div>
-    <header class="main-header space-bg">
-        <div class="header-content">
-            <img src="../img/Portal-Nave.png" class="header-img left">
-            <h1>
-              <a href="index.html" class="header-link">
-                <span class="t-green">Rick</span>
-                <span class="t-and">&</span>
-                <span class="t-cyan">Morty</span>
-                </a>
-            </h1>
-            <img src="../img/Pepinillo.png" class="header-img right">
-        </div>
-    </header>
-    <main>
-      <div class="contenedor-navbar">
-    <a href="index.html">Inicio</a>
-    <a href="https://rickandmortyapi.com/" target="_blank">API</a>
-    <a href="terminos-condiciones.html">Aviso Legal</a>
-    <a href="aboutus.html">Sobre Nosotros</a>
-    <a href="/js/out/index.html">Documentación</a>
+<head>
+  <meta charset="utf-8">
+  <title>RICK Y MORTY</title>
+</head>
+<!--Fuentes-->
+<link href="https://fonts.googleapis.com/css2?family=Creepster&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Poppins&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Montserrat&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Bangers&family=Orbitron&family=Luckiest+Guy&display=swap" rel="stylesheet">
+<!--Fin Fuentes-->
+<link rel="stylesheet" href="../styles/styles.css">
+
+<body>
   </div>
-  <div class="contenedor_boton">
-    <button class="btn-volver" onclick="btnvolver()">
-      <svg xmlns="http://www.w3.org/2000/svg"
-       width="18" height="18"
-       viewBox="0 0 24 24"
-       fill="none" stroke="currentColor"
-       stroke-width="2">
-    <path d="M15 18l-6-6 6-6"/>
-  </svg>
-</button>
-    <div class="search-container">
-        <input type="text" id="searchInput" placeholder="Escribe para buscar...">
-        <select id="filterType" onchange="cambiarSeccion(this.value)">
-            <option value="character">Personajes</option>
-            <option value="location">Ubicaciones</option>
-            <option value="episode">Episodios</option>
-        </select>
+  <header class="main-header space-bg">
+    <div class="header-content">
+      <img src="../img/Portal-Nave.png" class="header-img left">
+      <h1>
+        <a href="index.html" class="header-link">
+          <span class="t-green">Rick</span>
+          <span class="t-and">&</span>
+          <span class="t-cyan">Morty</span>
+        </a>
+      </h1>
+      <img src="../img/Pepinillo.png" class="header-img right">
     </div>
-    <button id="cambiar_ficha" onclick="cambiarVista()">
+  </header>
+  <main>
+    <div class="contenedor-navbar">
+      <a href="index.html">Inicio</a>
+      <a href="https://rickandmortyapi.com/" target="_blank">API</a>
+      <a href="terminos-condiciones.html">Aviso Legal</a>
+      <a href="aboutus.html">Sobre Nosotros</a>
+      <a href="/js/out/index.html">Documentación</a>
+    </div>
+    <div class="buscador">
+      <button class="btn-volver" onclick="btnvolver()">
+        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M15 18l-6-6 6-6" />
+        </svg>
+      </button>
+      <form id="formBusqueda" class="form-busqueda">
+        <fieldset class="fieldset-busqueda">
+          <legend class="tituloOpciones">Búsqueda</legend>
+
+          <div class="fila-principal-busqueda">
+            <div class="campo-busqueda campo-grande">
+              <label for="searchInput">Buscar</label>
+              <input type="text" id="searchInput" placeholder="Escribe para buscar...">
+            </div>
+
+            <div class="campo-busqueda">
+              <label for="filterType">Tipo</label>
+              <select id="filterType">
+                <option value="character">Personajes</option>
+                <option value="location">Ubicaciones</option>
+                <option value="episode">Episodios</option>
+              </select>
+            </div>
+          </div>
+
+          <div id="opciones-character" class="opciones-dinamicas">
+            <h3 class="subtitulo-opciones">Opciones de personajes</h3>
+            <div class="grupo-campos">
+              <div class="campo-busqueda">
+                <label for="estadoSelect">Estado</label>
+                <div id="estado"></div>
+              </div>
+
+              <div class="campo-busqueda">
+                <label for="especieSelect">Especie</label>
+                <div id="especie"></div>
+              </div>
+
+              <div class="campo-busqueda">
+                <label for="tipoCSelect">Tipo</label>
+                <div id="tipoC"></div>
+              </div>
+
+              <div class="campo-busqueda">
+                <label for="generoSelect">Género</label>
+                <div id="genero"></div>
+              </div>
+            </div>
+          </div>
+
+          <div id="opciones-location" class="opciones-dinamicas oculto">
+            <h3 class="subtitulo-opciones">Opciones de ubicación</h3>
+            <div class="grupo-campos">
+              <div class="campo-busqueda">
+                <label for="tipoLSelect">Tipo</label>
+                <div id="tipoL"></div>
+              </div>
+
+              <div class="campo-busqueda">
+                <label for="dimensionSelect">Dimensión</label>
+                <div id="dimension"></div>
+              </div>
+            </div>
+          </div>
+
+          <div id="opciones-episode" class="opciones-dinamicas oculto">
+            <h3 class="subtitulo-opciones">Opciones de episodios</h3>
+            <div class="grupo-campos">
+              <div class="campo-busqueda">
+                <label for="episodioSelect">Episodio</label>
+                <div id="episodio"></div>
+              </div>
+            </div>
+          </div>
+
+        </fieldset>
+      </form>
+      <button id="cambiar_ficha" onclick="cambiarVista()">
 
         <svg id="svgList" width="50px" height="50px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-<path d="M6 7H18V9H6V7Z" fill="#000000"/>
-<path d="M6 11H18V13H6V11Z" fill="#000000"/>
-<path d="M18 15H6V17H18V15Z" fill="#000000"/>
-</svg>
+          <path d="M6 7H18V9H6V7Z" fill="#000000" />
+          <path d="M6 11H18V13H6V11Z" fill="#000000" />
+          <path d="M18 15H6V17H18V15Z" fill="#000000" />
+        </svg>
 
-      <svg id="svgGrid" class="oculto" width="30px" height="30px" viewBox="0 0 1024 1024"  xmlns="http://www.w3.org/2000/svg"><path fill="#000000" d="M640 384v256H384V384h256zm64 0h192v256H704V384zm-64 512H384V704h256v192zm64 0V704h192v192H704zm-64-768v192H384V128h256zm64 0h192v192H704V128zM320 384v256H128V384h192zm0 512H128V704h192v192zm0-768v192H128V128h192z"/></svg>
+        <svg id="svgGrid" class="oculto" width="30px" height="30px" viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg">
+          <path fill="#000000" d="M640 384v256H384V384h256zm64 0h192v256H704V384zm-64 512H384V704h256v192zm64 0V704h192v192H704zm-64-768v192H384V128h256zm64 0h192v192H704V128zM320 384v256H128V384h192zm0 512H128V704h192v192zm0-768v192H128V128h192z" />
+        </svg>
 
-    </button>
-      </div>
+      </button>
+    </div>
 
-      <div id="contenedor" class="contenedor">
+    <div id="contenedor" class="contenedor">
     </div>
     <div class="botonesPaginacion">
       <button class="btn-icono" onclick="paginaAnterior()">
-  <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 16 16">
-    <path d="M8 10L8 14L6 14L0 8L6 2L8 2L8 6L16 6L16 10L8 10Z" fill=""/>
-  </svg>
-</button>
-<button class="btn-icono" onclick="paginaSiguiente()">
-  <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 16 16">
-    <path d="M8 6L8 2L10 2L16 8L10 14L8 14L8 10L0 10L0 6L8 6Z" fill=""/>
-  </svg>
-</button>
+        <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 16 16">
+          <path d="M8 10L8 14L6 14L0 8L6 2L8 2L8 6L16 6L16 10L8 10Z" fill="" />
+        </svg>
+      </button>
+      <button class="btn-icono" onclick="paginaSiguiente()">
+        <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 16 16">
+          <path d="M8 6L8 2L10 2L16 8L10 14L8 14L8 10L0 10L0 6L8 6Z" fill="" />
+        </svg>
+      </button>
     </div>
     <div class="numerosPaginacion" id="numerosPaginacion"></div>
-    </main>
-    <script src="../js/script.js"></script>
-    <footer class="piedepagina">
-      <ul class="redes">
-        <li>
-          <a href="https://github.com/prueba-iesmre/Rick-and-Morty" target="_blank">
-            <img src="../img/github.png" alt="Github">
-          </a>
-        </li>
-          <li>
-          <a href="https://www.instagram.com/rickandmorty/" target="_blank">
-            <img src="../img/instagram.png" alt="Instagram">
-          </a>
-                </li>
-                <li>
-          <a href="https://rickandmortyapi.com/" target="_blank">
-            <img src="../img/api.png" alt="RICK Y MORTY API">
-          </a>
-                </li>
+  </main>
+  <script src="../js/script.js"></script>
+  <footer class="piedepagina">
+    <ul class="redes">
+      <li>
+        <a href="https://github.com/prueba-iesmre/Rick-and-Morty" target="_blank">
+          <img src="../img/github.png" alt="Github">
+        </a>
+      </li>
+      <li>
+        <a href="https://www.instagram.com/rickandmorty/" target="_blank">
+          <img src="../img/instagram.png" alt="Instagram">
+        </a>
+      </li>
+      <li>
+        <a href="https://rickandmortyapi.com/" target="_blank">
+          <img src="../img/api.png" alt="RICK Y MORTY API">
+        </a>
+      </li>
 
-                <li>
-                  <a href="aboutus.html">
-                    <img src="../img/about.png" alt="about us">
-                  </a>
-                </li>
-      </ul>
-      <p>© 2026 Página web de Multiverse | Inspirada en Rick y Morty</p>
-      <p><a class="termin" href="terminos-condiciones.html">Términos y condiciones</a></p>
-    </footer>
-  </body>
+      <li>
+        <a href="aboutus.html">
+          <img src="../img/about.png" alt="about us">
+        </a>
+      </li>
+    </ul>
+    <p>© 2026 Página web de Multiverse | Inspirada en Rick y Morty</p>
+    <p><a class="termin" href="terminos-condiciones.html">Términos y condiciones</a></p>
+  </footer>
+</body>
 </html>
